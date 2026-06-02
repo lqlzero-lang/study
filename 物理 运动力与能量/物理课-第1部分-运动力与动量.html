@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物理 · 运动、力与动量（1.1–1.6）| IGCSE Physics 0625</title>
+<style>
+  :root{--bg:#f5f6fb;--card:#fff;--ink:#222b3d;--muted:#6b7689;--brand:#e8554e;--brand2:#f08c00;
+    --accent:#3a86ff;--good:#23b26d;--bad:#e8554e;--line:#e7e9f0;--soft:#fdecea;--shadow:0 8px 28px rgba(40,60,120,.10);}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:16px}
+  code,.mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .en{color:var(--accent);font-style:normal}
+  header.top{background:linear-gradient(120deg,#e8554e,#f08c00);color:#fff;padding:26px 20px 22px}
+  header.top .wrap{max-width:1040px;margin:0 auto}
+  header.top h1{margin:0;font-size:25px}header.top p{margin:6px 0 0;opacity:.93;font-size:14px}
+  nav.tabs{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+  nav.tabs .wrap{max-width:1040px;margin:0 auto;display:flex;gap:4px;padding:8px 12px}
+  nav.tabs button{border:0;background:transparent;color:var(--muted);font-size:13.5px;font-weight:600;padding:8px 11px;border-radius:10px;cursor:pointer;flex:0 0 auto}
+  nav.tabs button:hover{background:var(--soft);color:var(--ink)}nav.tabs button.active{background:var(--brand);color:#fff}
+  main{max-width:1040px;margin:0 auto;padding:20px 16px 80px}
+  section{display:none;animation:fade .25s ease}section.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2.title{font-size:22px;margin:6px 0 4px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}h2.title .en{font-size:15px}
+  .lead{color:var(--muted);margin:0 0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:var(--shadow)}
+  .card h3{margin:2px 0 10px;font-size:17px}
+  .grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+  .frame{border:1.5px solid var(--brand);background:var(--soft);border-radius:14px;padding:12px 16px;margin:10px 0}
+  .frame h4{margin:0 0 6px;color:#c2362f;font-size:15px}
+  .defbox{border-left:4px solid var(--brand);background:var(--soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}.defbox b{color:#c2362f}
+  .warn{border-left:4px solid var(--brand2);background:#fff7e6;padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}
+  ul.clean{margin:8px 0;padding-left:20px}ul.clean li{margin:4px 0}
+  table.t{width:100%;border-collapse:collapse;margin:8px 0;font-size:15px}
+  table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:center}table.t th{background:var(--soft)}
+  .tip{font-size:13px;color:var(--muted);margin-top:6px}
+  .btn{border:0;border-radius:10px;padding:9px 15px;font-size:14px;font-weight:700;cursor:pointer;color:#fff;background:var(--brand)}
+  .btn:hover{filter:brightness(1.05)}.btn.ghost{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}.btn.dim{background:#eef1f7;color:var(--muted)}.btn.sm{padding:6px 11px;font-size:13px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  details.acc{border:1px solid var(--line);border-radius:12px;padding:6px 14px;margin:8px 0;background:#fff}
+  details.acc summary{cursor:pointer;font-weight:700;padding:6px 0}details.acc[open]{box-shadow:var(--shadow)}
+  .ctl{margin:11px 0}.ctl label{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:4px}
+  .ctl label .val{color:var(--brand);font-family:"SF Mono",monospace}
+  input[type=range]{width:100%;accent-color:var(--brand)}
+  select.sel,input.num{padding:7px 10px;border-radius:10px;border:1.5px solid var(--line);font-size:15px;background:#fff}
+  input.num{width:90px;font-family:"SF Mono",monospace}
+  .formula{background:#0f1730;color:#e9edff;border-radius:12px;padding:12px 16px;font-size:18px;text-align:center;font-family:"SF Mono",monospace;margin:8px 0}
+  .formula b{color:#ffd9a8}.formula .res{color:#7CFFB2;font-weight:800}
+  canvas.cv{width:100%;height:auto;background:#0f1730;border-radius:12px;border:1px solid var(--line);display:block}
+  .readout{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+  .ro{background:#0f1730;color:#e9edff;border-radius:10px;padding:8px 14px;min-width:90px;text-align:center}
+  .ro .lab{font-size:11px;color:#9fb0ff}.ro .v{font-size:20px;font-weight:800;font-family:"SF Mono",monospace}
+  .ro .v.g{color:#7CFFB2}
+  /* triangle formula */
+  .tri{display:inline-flex;flex-direction:column;align-items:center;background:var(--soft);border-radius:12px;padding:8px 18px;font-weight:800;font-size:18px}
+  .tri .top{border-bottom:2px solid var(--brand);padding:0 16px 4px}.tri .bot{display:flex;gap:18px;padding-top:4px}
+  /* scalar vector game */
+  .qchip{display:inline-block;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;margin:5px;cursor:pointer;font-weight:700;background:#fff}
+  .qchip.s{border-color:var(--accent);background:#eef4ff}.qchip.v{border-color:var(--brand);background:var(--soft)}
+  /* quiz */
+  .q{margin:14px 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.q .qh{font-weight:700;margin-bottom:8px}
+  .q .opt{display:block;padding:8px 12px;margin:6px 0;border:1.5px solid var(--line);border-radius:10px;cursor:pointer}.q .opt:hover{background:var(--soft)}
+  .q .opt.right{border-color:var(--good);background:#e9f9f1}.q .opt.wrong{border-color:var(--bad);background:#fdeceb}
+  .q .fb{margin-top:8px;font-size:14px;display:none}.q .fb.show{display:block}.q .fb.ok{color:var(--good)}.q .fb.no{color:var(--bad)}
+  .parent{background:#fff7ed;border:1px dashed var(--brand2);border-radius:14px;padding:14px 18px;margin:16px 0}
+  footer{max-width:1040px;margin:0 auto;padding:20px 16px 60px;color:var(--muted);font-size:13px}footer a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <h1>物理 · 运动、力与动量</h1>
+  <p>Motion, Forces &amp; Momentum（主题 1 的 1.1–1.6）· Cambridge IGCSE Physics 0625 · 拖滑块、放动画，自己玩出物理 ⚙️</p>
+</div></header>
+<nav class="tabs"><div class="wrap" id="tabbar"></div></nav>
+
+<main>
+<!-- 0 框架 -->
+<section id="s-map" class="show">
+  <h2 class="title">先看地图 <span class="en">The Big Picture</span></h2>
+  <p class="lead">这一整块叫 <b>“运动、力与能量”</b>，是 IGCSE 物理最大的一章。我们这次学它的前半（1.1–1.6），主线是一条因果链：</p>
+  <div class="card">
+    <div style="font-size:17px;text-align:center;line-height:2.2">
+      📏 <b>怎么测量</b>(1.1) ➜ 🏃 <b>描述运动</b>(1.2) ➜ ⚖️ <b>质量/重量</b>(1.3) ➜ 🧊 <b>密度</b>(1.4) ➜ ➡️ <b>力改变运动</b>(1.5) ➜ 💥 <b>动量</b>(1.6)
+    </div>
+  </div>
+  <div class="grid g3">
+    <div class="card"><h3>📏 1.1 测量</h3>物理量、单位、标量与矢量、测量工具与提高精度的方法。</div>
+    <div class="card"><h3>🏃 1.2 运动</h3>速度、加速度，以及最关键的<b>运动图象</b>（距离-时间、速度-时间）。</div>
+    <div class="card"><h3>⚖️ 1.3 质量与重量</h3>质量 ≠ 重量，W = m g。</div>
+    <div class="card"><h3>🧊 1.4 密度</h3>ρ = m / V，谁浮谁沉。</div>
+    <div class="card"><h3>➡️ 1.5 力</h3>合力、F = m a、摩擦、胡克定律、力矩。</div>
+    <div class="card"><h3>💥 1.6 动量</h3>p = m v 与动量守恒（Extended）。</div>
+  </div>
+  <div class="parent"><b>👋 给家长：</b>这是第一版框架课件，离线可玩。每节先给"地图"建立整体认识，再用动画/滑块把概念讲透。等拿到孩子辅导班的讲义，我们再对齐符号、补充例题。中文为主、英文术语对照（考试全英文）。</div>
+</section>
+
+<!-- 1.1 测量 -->
+<section id="s-meas">
+  <h2 class="title">1.1 · 物理量与测量 <span class="en">Measurement</span></h2>
+  <div class="frame"><h4>这一节要建立的框架</h4>物理研究"可测量的量"。每个物理量 = <b>数值 + 单位</b>。量分两类：<b>标量</b>（只有大小）和<b>矢量</b>（大小 + 方向）。测量要讲<b>准确</b>，常用"测多个再平均/相除"的技巧。</div>
+  <div class="card"><h3>SI 基本单位 &amp; 常用前缀</h3>
+    <div class="grid g2">
+      <table class="t"><tr><th>量</th><th>单位</th><th>符号</th></tr>
+        <tr><td>长度 length</td><td>米 metre</td><td>m</td></tr>
+        <tr><td>质量 mass</td><td>千克 kilogram</td><td>kg</td></tr>
+        <tr><td>时间 time</td><td>秒 second</td><td>s</td></tr>
+        <tr><td>电流 current</td><td>安培 ampere</td><td>A</td></tr>
+        <tr><td>温度 temperature</td><td>开尔文 kelvin</td><td>K</td></tr></table>
+      <table class="t"><tr><th>前缀</th><th>符号</th><th>倍数</th></tr>
+        <tr><td>kilo 千</td><td>k</td><td>×1000</td></tr>
+        <tr><td>centi 厘</td><td>c</td><td>÷100</td></tr>
+        <tr><td>milli 毫</td><td>m</td><td>÷1000</td></tr>
+        <tr><td>micro 微</td><td>μ</td><td>÷1,000,000</td></tr>
+        <tr><td>nano 纳</td><td>n</td><td>÷10⁹</td></tr></table>
+    </div>
+  </div>
+  <div class="card"><h3>🎯 标量 vs 矢量（点一下分类）</h3>
+    <p class="tip"><span style="color:var(--accent);font-weight:700">标量 scalar</span>=只有大小；<span style="color:var(--brand);font-weight:700">矢量 vector</span>=大小+方向。点每个量，把它判成标量或矢量。</p>
+    <div id="svGame"></div>
+    <div class="tip" id="svScore" style="margin-top:8px"></div>
+  </div>
+  <div class="card"><h3>🔬 测量技巧：测"很多"来得到"一个"</h3>
+    <p class="tip">一张纸太薄、一次摆动太快，直接量误差大。<b>测一摞/测多次再除</b>能大大提高精度。</p>
+    <div class="row"><label>一摞纸总厚度 (mm)：<input class="num" id="paperT" value="9.6"></label><label>张数：<input class="num" id="paperN" value="120"></label></div>
+    <div class="formula" id="paperOut"></div>
+    <div class="warn">同理：要测单摆<b>一次</b>摆动的周期，可量<b>20 次</b>的总时间再 ÷20——读表误差被摊薄了。</div>
+  </div>
+</section>
+
+<!-- 1.2 运动 -->
+<section id="s-motion">
+  <h2 class="title">1.2 · 运动 <span class="en">Motion</span></h2>
+  <div class="frame"><h4>这一节要建立的框架</h4><b>速度 velocity</b> = 位移/时间（多快+往哪）；<b>加速度 acceleration</b> = 速度变化/时间（速度变多快）。会读两种图：<b>距离-时间图</b>（斜率=速度）和<b>速度-时间图</b>（斜率=加速度，面积=距离）。</div>
+  <div class="card"><h3>🏎️ 运动模拟器（设好初速度和加速度，按播放看图自己画出来）</h3>
+    <canvas id="track" class="cv" width="560" height="90"></canvas>
+    <div class="grid g2" style="margin-top:10px">
+      <div><div class="tip" style="text-align:center">距离-时间图 (d–t)　斜率=速度</div><canvas id="dt" class="cv" width="280" height="180"></canvas></div>
+      <div><div class="tip" style="text-align:center">速度-时间图 (v–t)　斜率=加速度，面积=距离</div><canvas id="vt" class="cv" width="280" height="180"></canvas></div>
+    </div>
+    <div class="ctl"><label>初速度 u <span class="val"><span id="uV">8</span> m/s</span></label><input type="range" id="uR" min="0" max="20" step="1" value="8"></div>
+    <div class="ctl"><label>加速度 a <span class="val"><span id="aV">2</span> m/s²</span></label><input type="range" id="aR" min="-3" max="6" step="1" value="2"></div>
+    <div class="row"><button class="btn" id="mPlay">▶ 播放</button><button class="btn dim" id="mReset">↺ 重置</button></div>
+    <div class="readout"><div class="ro"><div class="lab">时间 t</div><div class="v" id="roT">0.0</div></div>
+      <div class="ro"><div class="lab">距离 d</div><div class="v g" id="roD">0</div></div>
+      <div class="ro"><div class="lab">速度 v</div><div class="v g" id="roV">8</div></div></div>
+    <div class="formula" style="margin-top:10px">v = u + a t　｜　d = u t + ½ a t²</div>
+  </div>
+  <div class="card"><h3>速度公式</h3>
+    <div class="row" style="gap:24px;align-items:center">
+      <div class="tri"><div class="top">d</div><div class="bot"><span>v</span><span>t</span></div></div>
+      <div><div class="row"><label>距离 d (m)：<input class="num" id="spD" value="100"></label><label>时间 t (s)：<input class="num" id="spT" value="20"></label></div>
+        <div class="formula" id="spOut" style="margin-top:8px"></div></div>
+    </div>
+    <p class="tip">遮住要求的量，剩下的就是算法：v=d/t，d=v·t，t=d/v。</p>
+  </div>
+</section>
+
+<!-- 1.3 质量与重量 -->
+<section id="s-mw">
+  <h2 class="title">1.3 · 质量与重量 <span class="en">Mass &amp; Weight</span></h2>
+  <div class="frame"><h4>这一节要建立的框架</h4><b>质量 mass</b>：物体含有多少物质，单位 kg，<b>到哪都不变</b>。<b>重量 weight</b>：物体受到的<b>重力</b>，单位 N（牛顿），随所在天体的引力 g 变。关系：<b>W = m g</b>。</div>
+  <div class="card"><h3>🪐 换个星球称体重（质量不变，重量变）</h3>
+    <div class="row" id="planetBtns" style="margin-bottom:10px"></div>
+    <div class="ctl"><label>质量 m <span class="val"><span id="mwM">50</span> kg</span></label><input type="range" id="mwR" min="1" max="100" step="1" value="50"></div>
+    <div class="readout">
+      <div class="ro"><div class="lab">所在地</div><div class="v" id="roPl" style="font-size:15px">地球</div></div>
+      <div class="ro"><div class="lab">g (N/kg)</div><div class="v" id="roG">9.8</div></div>
+      <div class="ro"><div class="lab">质量 mass</div><div class="v" id="roM">50 kg</div></div>
+      <div class="ro"><div class="lab">重量 weight</div><div class="v g" id="roW">490 N</div></div>
+    </div>
+    <div class="formula" id="mwOut" style="margin-top:10px"></div>
+    <div class="warn"><b>易错点：</b>质量永远是 <b>50 kg</b>（物质没变多没变少）；只有<b>重量</b>在月球变小、在木星变大。日常说的"体重"其实多指质量。</div>
+  </div>
+</section>
+
+<!-- 1.4 密度 -->
+<section id="s-density">
+  <h2 class="title">1.4 · 密度 <span class="en">Density</span></h2>
+  <div class="frame"><h4>这一节要建立的框架</h4><b>密度 density</b> = 单位体积的质量，<b>ρ = m / V</b>，单位 kg/m³ 或 g/cm³。密度比水小(&lt;1 g/cm³)会<b>浮</b>，比水大会<b>沉</b>。</div>
+  <div class="card"><h3>🧊 密度实验台（选材料、改体积，看质量与浮沉）</h3>
+    <div class="row"><label>材料：<select class="sel" id="matSel"></select></label></div>
+    <div class="ctl"><label>体积 V <span class="val"><span id="dV">100</span> cm³</span></label><input type="range" id="dR" min="10" max="500" step="10" value="100"></div>
+    <div class="row" style="align-items:flex-start;gap:20px;flex-wrap:wrap">
+      <canvas id="tank" class="cv" width="240" height="200" style="max-width:240px"></canvas>
+      <div style="flex:1;min-width:220px">
+        <div class="tri" style="margin-bottom:10px"><div class="top">m</div><div class="bot"><span>ρ</span><span>V</span></div></div>
+        <div class="formula" id="dOut"></div>
+        <div class="readout"><div class="ro"><div class="lab">密度 ρ</div><div class="v" id="roRho">—</div></div>
+          <div class="ro"><div class="lab">质量 m</div><div class="v g" id="roMass">—</div></div></div>
+        <div class="warn" id="floatNote" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <p class="tip">水的密度 = 1.0 g/cm³。比它小→浮，比它大→沉。</p>
+  </div>
+</section>
+
+<!-- 1.5 力 -->
+<section id="s-force">
+  <h2 class="title">1.5 · 力 <span class="en">Forces</span></h2>
+  <div class="frame"><h4>这一节要建立的框架</h4>力 force（单位 N）能改变物体的<b>速度、方向或形状</b>。要点：① 多个力求<b>合力</b>；② <b>F = m a</b>（合力使物体加速）；③ <b>摩擦力</b>阻碍运动；④ 弹簧<b>胡克定律 F = k x</b>；⑤ 转动用<b>力矩 moment = 力 × 力臂</b>。</div>
+
+  <div class="card"><h3>🚀 牛顿第二定律 F = m a</h3>
+    <div class="ctl"><label>合力 F <span class="val"><span id="fV">20</span> N</span></label><input type="range" id="fR" min="0" max="100" step="5" value="20"></div>
+    <div class="ctl"><label>质量 m <span class="val"><span id="fmV">5</span> kg</span></label><input type="range" id="fmR" min="1" max="50" step="1" value="5"></div>
+    <div class="formula" id="fmaOut"></div>
+    <div class="tip">同样的力，物体越重加速度越小。a = F / m。</div>
+  </div>
+
+  <div class="card"><h3>🪝 胡克定律 F = k x（拉弹簧）</h3>
+    <div class="row" style="align-items:flex-start;gap:20px;flex-wrap:wrap">
+      <canvas id="spring" class="cv" width="150" height="220" style="max-width:150px"></canvas>
+      <div style="flex:1;min-width:240px">
+        <div class="ctl"><label>挂的力 F <span class="val"><span id="hkF">4</span> N</span></label><input type="range" id="hkR" min="0" max="12" step="1" value="4"></div>
+        <canvas id="hookeG" class="cv" width="300" height="170"></canvas>
+        <div class="formula" id="hkOut" style="margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="warn">在<b>比例极限 limit of proportionality</b> 以内，伸长 x 与力 F 成正比；拉太大超过极限，弹簧就拉不回去了（图线变弯）。</div>
+  </div>
+
+  <div class="card"><h3>⚖️ 力矩与平衡（跷跷板）moment = F × d</h3>
+    <canvas id="seesaw" class="cv" width="560" height="180"></canvas>
+    <div class="grid g2" style="margin-top:10px">
+      <div><div class="ctl"><label>左边 重 <span class="val"><span id="lwV">20</span> N</span></label><input type="range" id="lwR" min="5" max="50" step="5" value="20"></div>
+        <div class="ctl"><label>左边 力臂 <span class="val"><span id="ldV">2</span> m</span></label><input type="range" id="ldR" min="1" max="3" step="0.5" value="2"></div></div>
+      <div><div class="ctl"><label>右边 重 <span class="val"><span id="rwV">20</span> N</span></label><input type="range" id="rwR" min="5" max="50" step="5" value="20"></div>
+        <div class="ctl"><label>右边 力臂 <span class="val"><span id="rdV">2</span> m</span></label><input type="range" id="rdR" min="1" max="3" step="0.5" value="2"></div></div>
+    </div>
+    <div class="formula" id="seesawOut"></div>
+    <div class="tip">平衡条件（principle of moments）：左力矩 = 右力矩，即 W_左 × d_左 = W_右 × d_右。</div>
+  </div>
+</section>
+
+<!-- 1.6 动量 -->
+<section id="s-mom">
+  <h2 class="title">1.6 · 动量 <span class="en">Momentum</span> <span style="font-size:13px;color:var(--brand2)">(Extended)</span></h2>
+  <div class="frame"><h4>这一节要建立的框架</h4><b>动量 momentum p = m v</b>（单位 kg·m/s），是"运动的多少"。<b>动量守恒</b>：没有外力时，碰撞前后总动量不变 —— p₁+p₂（前）= p（后）。</div>
+  <div class="card"><h3>💥 碰撞模拟器（两车相撞后粘在一起，看动量守恒）</h3>
+    <canvas id="collide" class="cv" width="560" height="140"></canvas>
+    <div class="grid g2" style="margin-top:10px">
+      <div><div class="ctl"><label>🔵 车1 质量 <span class="val"><span id="m1V">2</span> kg</span></label><input type="range" id="m1R" min="1" max="6" step="1" value="2"></div>
+        <div class="ctl"><label>🔵 车1 速度 <span class="val"><span id="u1V">4</span> m/s</span></label><input type="range" id="u1R" min="0" max="6" step="1" value="4"></div></div>
+      <div><div class="ctl"><label>🔴 车2 质量 <span class="val"><span id="m2V">1</span> kg</span></label><input type="range" id="m2R" min="1" max="6" step="1" value="1"></div>
+        <div class="ctl"><label>🔴 车2 速度 <span class="val"><span id="u2V">0</span> m/s</span></label><input type="range" id="u2R" min="-6" max="0" step="1" value="0"></div></div>
+    </div>
+    <div class="row"><button class="btn" id="cPlay">▶ 撞！</button><button class="btn dim" id="cReset">↺ 重置</button></div>
+    <div class="formula" id="momOut"></div>
+    <div class="tip">车2 速度可设为负（朝左开来，迎面相撞）。碰后两车一起以速度 v 运动：v = (m₁u₁ + m₂u₂) / (m₁+m₂)。</div>
+  </div>
+</section>
+
+<!-- 测验 -->
+<section id="s-quiz">
+  <h2 class="title">小测验 <span class="en">Quiz</span></h2>
+  <p class="lead">选答案点一下，错了会告诉你为什么。</p>
+  <div id="quizbox"></div>
+  <div class="card" id="quizscore" style="text-align:center;font-size:18px;font-weight:700"></div>
+</section>
+</main>
+<footer>© 给孩子的物理课 · 基于 Cambridge IGCSE Physics 0625 主题 1（1.1–1.6）· 第一版框架，待对齐讲义后更新 · 全部本地运行。<br>
+  返回 <a href="../index.html">📚 学习小站首页</a></footer>
+
+<script>
+const TABS=[['s-map','地图'],['s-meas','1.1 测量'],['s-motion','1.2 运动'],['s-mw','1.3 质量重量'],['s-density','1.4 密度'],['s-force','1.5 力'],['s-mom','1.6 动量'],['s-quiz','测验']];
+const tabbar=document.getElementById('tabbar');
+TABS.forEach(([id,n])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>show(id,b);tabbar.appendChild(b);});
+function show(id,btn){document.querySelectorAll('main section').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');
+  tabbar.querySelectorAll('button').forEach(x=>x.classList.remove('active'));(btn||tabbar.children[0]).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+tabbar.children[0].classList.add('active');
+const $=id=>document.getElementById(id);
+function r1(x){return Math.round(x*10)/10;}
+function r2(x){return Math.round(x*100)/100;}
+
+/* ===== 1.1 标量矢量 ===== */
+const QUANT=[['距离 distance',0],['位移 displacement',1],['速率 speed',0],['速度 velocity',1],['质量 mass',0],['重量 weight',1],['力 force',1],['时间 time',0],['加速度 acceleration',1],['能量 energy',0],['动量 momentum',1],['温度 temperature',0]];
+const svGame=$('svGame');let svDone=0,svRight=0;
+QUANT.forEach(([name,isV],i)=>{const c=document.createElement('span');c.className='qchip';c.textContent=name;c.dataset.v=isV;c.dataset.done=0;
+  c.onclick=()=>{if(c.dataset.done==1)return;c.dataset.done=1;svDone++;
+    const correct=isV?'v':'s';c.classList.add(correct); // reveal: 标量蓝/矢量红
+    c.textContent=name+(isV?'（矢量 vector）':'（标量 scalar）');svRight++;
+    $('svScore').textContent='已分类 '+svDone+' / '+QUANT.length+'（点开即显示答案）';};
+  svGame.appendChild(c);});
+
+/* ===== 1.1 测纸 ===== */
+function paper(){const t=parseFloat($('paperT').value),n=parseFloat($('paperN').value);
+  if(!t||!n){$('paperOut').textContent='请输入数字';return;}
+  $('paperOut').innerHTML='一张纸 = '+t+' mm ÷ '+n+' = <span class="res">'+r2(t/n)+' mm</span>　（≈ '+r2(t/n*1000)+' μm）';}
+['paperT','paperN'].forEach(id=>$(id).addEventListener('input',paper));paper();
+
+/* ===== 1.2 运动模拟 ===== */
+const track=$('track'),tx=track.getContext('2d'),dt=$('dt'),dtx=dt.getContext('2d'),vt=$('vt'),vtx=vt.getContext('2d');
+let mAnim=null,mt=0,mData=[];const MAXT=10,TRACKLEN=120;
+function uVal(){return +$('uR').value;}function aVal(){return +$('aR').value;}
+function drawTrackFrame(d,v){tx.clearRect(0,0,560,90);
+  tx.fillStyle='#1a2647';tx.fillRect(0,60,560,6);
+  const x=Math.min(540,d/TRACKLEN*540);
+  tx.fillStyle='#ff922b';tx.fillRect(x,40,22,18);tx.fillStyle='#0f1730';
+  tx.beginPath();tx.arc(x+5,60,4,0,7);tx.arc(x+17,60,4,0,7);tx.fill();
+  tx.fillStyle='#9fb0ff';tx.font='12px monospace';tx.fillText('0 m',2,80);tx.fillText(TRACKLEN+' m',505,80);}
+function axes(ctx,xl,yl){ctx.clearRect(0,0,280,180);ctx.strokeStyle='#445';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(34,10);ctx.lineTo(34,158);ctx.lineTo(272,158);ctx.stroke();
+  ctx.fillStyle='#9fb0ff';ctx.font='11px sans-serif';ctx.fillText(yl,4,16);ctx.fillText(xl,250,172);}
+function plot(ctx,data,key,maxY,color){
+  ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.beginPath();
+  data.forEach((p,i)=>{const x=34+p.t/MAXT*238,y=158-Math.max(0,p[key])/maxY*148;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.stroke();}
+function curState(t){const u=uVal(),a=aVal();let v=u+a*t;if(v<0)v=0;const d=Math.max(0,u*t+0.5*a*t*t);return{t,v,d};}
+function redrawGraphs(){axes(dtx,'t(s)','d(m)');axes(vtx,'t(s)','v(m/s)');
+  plot(dtx,mData,'d',TRACKLEN,'#7CFFB2');plot(vtx,mData,'v',22,'#ffd9a8');}
+function mReset(){if(mAnim)cancelAnimationFrame(mAnim),mAnim=null;mt=0;mData=[{t:0,...curState(0)}];
+  drawTrackFrame(0,uVal());redrawGraphs();$('roT').textContent='0.0';$('roD').textContent='0';$('roV').textContent=uVal();$('mPlay').textContent='▶ 播放';}
+function mStep(){mt+=0.05;const s=curState(mt);mData.push(s);
+  drawTrackFrame(s.d,s.v);redrawGraphs();
+  $('roT').textContent=r1(mt);$('roD').textContent=Math.round(s.d);$('roV').textContent=r1(s.v);
+  if(mt>=MAXT||s.d>=TRACKLEN){cancelAnimationFrame(mAnim);mAnim=null;$('mPlay').textContent='▶ 播放';return;}
+  mAnim=requestAnimationFrame(mStep);}
+$('mPlay').onclick=()=>{if(mAnim){cancelAnimationFrame(mAnim);mAnim=null;$('mPlay').textContent='▶ 继续';return;}
+  if(mt>=MAXT)mReset();$('mPlay').textContent='⏸ 暂停';mAnim=requestAnimationFrame(mStep);};
+$('mReset').onclick=mReset;
+['uR','aR'].forEach(id=>$(id).addEventListener('input',()=>{$('uV').textContent=uVal();$('aV').textContent=aVal();mReset();}));
+mReset();
+/* 速度公式 */
+function speed(){const d=parseFloat($('spD').value),t=parseFloat($('spT').value);
+  if(!d||!t){$('spOut').textContent='请输入数字';return;}
+  $('spOut').innerHTML='v = d / t = '+d+' / '+t+' = <span class="res">'+r2(d/t)+' m/s</span>';}
+['spD','spT'].forEach(id=>$(id).addEventListener('input',speed));speed();
+
+/* ===== 1.3 质量重量 ===== */
+const PLANETS=[['地球',9.8],['月球',1.6],['火星',3.7],['木星',24.8],['太空',0]];
+let curG=9.8,curPl='地球';const pb=$('planetBtns');
+PLANETS.forEach(([n,g],i)=>{const b=document.createElement('button');b.className='btn sm '+(i?'ghost':'');b.textContent=n;
+  b.onclick=()=>{curG=g;curPl=n;pb.querySelectorAll('button').forEach(x=>x.className='btn sm ghost');b.className='btn sm';mw();};pb.appendChild(b);});
+function mw(){const m=+$('mwR').value;$('mwM').textContent=m;const w=m*curG;
+  $('roPl').textContent=curPl;$('roG').textContent=curG;$('roM').textContent=m+' kg';$('roW').textContent=r1(w)+' N';
+  $('mwOut').innerHTML='W = m × g = '+m+' × '+curG+' = <span class="res">'+r1(w)+' N</span>';}
+$('mwR').addEventListener('input',mw);mw();
+
+/* ===== 1.4 密度 ===== */
+const MATS=[['🪵 木头',0.5],['🧊 冰',0.92],['💧 水',1.0],['🧴 塑料',1.2],['🪨 橡胶',1.5],['🔩 铝',2.7],['⚙️ 铁',7.9],['🥇 金',19.3]];
+const matSel=$('matSel');MATS.forEach(([n,d],i)=>matSel.add(new Option(n+'  ('+d+' g/cm³)',i)));matSel.value=5;
+const tank=$('tank'),kx=tank.getContext('2d');
+function drawTank(rho){kx.clearRect(0,0,240,200);
+  // water
+  kx.fillStyle='#12325c';kx.fillRect(10,70,220,120);kx.strokeStyle='#2a5a8a';kx.strokeRect(10,70,220,120);
+  kx.fillStyle='#1e88e5';kx.globalAlpha=.5;kx.fillRect(10,70,220,120);kx.globalAlpha=1;
+  // block: float fraction submerged = rho/1.0 (capped 1)
+  const sub=Math.min(1,rho/1.0);const bw=70,bh=60;const bx=85;
+  const waterTop=70;let by;
+  if(rho<1.0){by=waterTop-bh*(1-sub);} // floats: part above water
+  else{by=190-bh-2; if(by<waterTop)by=waterTop;} // sinks to bottom
+  kx.fillStyle=rho<1.0?'#8d5a2b':'#888';kx.fillRect(bx,by,bw,bh);
+  kx.fillStyle='#fff';kx.font='12px sans-serif';kx.fillText(rho<1.0?'浮 float':'沉 sink',bx+8,by+34);}
+function density(){const [n,rho]=MATS[+matSel.value];const V=+$('dR').value;$('dV').textContent=V;
+  const m=rho*V;
+  $('roRho').textContent=rho+' g/cm³';$('roMass').textContent=r1(m)+' g';
+  $('dOut').innerHTML='m = ρ × V = '+rho+' × '+V+' = <span class="res">'+r1(m)+' g</span>';
+  $('floatNote').innerHTML=rho<1.0?('密度 '+rho+' &lt; 1.0 → <b>浮在水面</b> 🛟'):(rho>1.0?('密度 '+rho+' &gt; 1.0 → <b>沉到水底</b> ⬇️'):'密度正好=水，悬浮');
+  drawTank(rho);}
+matSel.addEventListener('change',density);$('dR').addEventListener('input',density);density();
+
+/* ===== 1.5 F=ma ===== */
+function fma(){const F=+$('fR').value,m=+$('fmR').value;$('fV').textContent=F;$('fmV').textContent=m;
+  $('fmaOut').innerHTML='a = F / m = '+F+' / '+m+' = <span class="res">'+r2(F/m)+' m/s²</span>';}
+['fR','fmR'].forEach(id=>$(id).addEventListener('input',fma));fma();
+/* 胡克 */
+const spring=$('spring'),sx=spring.getContext('2d'),hookeG=$('hookeG'),hgx=hookeG.getContext('2d');
+const K=0.5; // x = F/k cm per N... use extension = F/k (cm); k=0.5 -> 2cm per N
+function drawSpring(F){sx.clearRect(0,0,150,220);const ext=F/K; // cm
+  sx.strokeStyle='#888';sx.lineWidth=4;sx.beginPath();sx.moveTo(20,10);sx.lineTo(130,10);sx.stroke();// ceiling
+  const top=14,coils=8,baseLen=70,len=baseLen+ext*3.2;
+  sx.strokeStyle='#ffd9a8';sx.lineWidth=3;sx.beginPath();sx.moveTo(75,top);
+  for(let i=0;i<coils;i++){const y=top+(i+0.5)/coils*len;sx.lineTo(i%2?95:55,y);}
+  sx.lineTo(75,top+len);sx.stroke();
+  sx.fillStyle='#e8554e';sx.fillRect(55,top+len,40,28);// mass
+  sx.fillStyle='#fff';sx.font='12px monospace';sx.fillText(F+'N',62,top+len+18);}
+function drawHookeGraph(F){hgx.clearRect(0,0,300,170);hgx.strokeStyle='#445';hgx.beginPath();hgx.moveTo(34,10);hgx.lineTo(34,150);hgx.lineTo(290,150);hgx.stroke();
+  hgx.fillStyle='#9fb0ff';hgx.font='11px sans-serif';hgx.fillText('x(cm)',2,16);hgx.fillText('F(N)',262,164);
+  // line F vs x proportional: x=F/K -> F=K x ; plot up to F=12
+  hgx.strokeStyle='#7CFFB2';hgx.lineWidth=2.5;hgx.beginPath();
+  for(let f=0;f<=12;f+=0.5){const x=f/K;const px=34+x/24*250;const py=150-f/12*135;f?hgx.lineTo(px,py):hgx.moveTo(px,py);}hgx.stroke();
+  const x=F/K,px=34+x/24*250,py=150-F/12*135;hgx.fillStyle='#ff922b';hgx.beginPath();hgx.arc(px,py,5,0,7);hgx.fill();}
+function hooke(){const F=+$('hkR').value;$('hkF').textContent=F;const x=F/K;
+  $('hkOut').innerHTML='x = F / k = '+F+' / '+K+' = <span class="res">'+r1(x)+' cm</span>';drawSpring(F);drawHookeGraph(F);}
+$('hkR').addEventListener('input',hooke);hooke();
+/* 跷跷板 */
+const see=$('seesaw'),ex=see.getContext('2d');
+function seesaw(){const lw=+$('lwR').value,ld=+$('ldR').value,rw=+$('rwR').value,rd=+$('rdR').value;
+  $('lwV').textContent=lw;$('ldV').textContent=ld;$('rwV').textContent=rw;$('rdV').textContent=rd;
+  const ml=lw*ld,mr=rw*rd;const diff=mr-ml;const ang=Math.max(-0.22,Math.min(0.22,diff/120));
+  ex.clearRect(0,0,560,180);const cx=280,cy=130;
+  ex.fillStyle='#445';ex.beginPath();ex.moveTo(cx-18,170);ex.lineTo(cx+18,170);ex.lineTo(cx,cy);ex.fill();// pivot
+  ex.save();ex.translate(cx,cy);ex.rotate(ang);
+  ex.fillStyle='#ffd9a8';ex.fillRect(-240,-6,480,12);// beam
+  // weights: size by N
+  function box(side,w,d){const px=side*d/3*230;const s=14+w/2;ex.fillStyle=side<0?'#3a86ff':'#e8554e';ex.fillRect(px-s/2,-6-s,s,s);
+    ex.fillStyle='#fff';ex.font='11px monospace';ex.fillText(w+'N',px-10,-12-s/2+4);}
+  box(-1,lw,ld);box(1,rw,rd);ex.restore();
+  ex.fillStyle='#9fb0ff';ex.font='12px sans-serif';
+  $('seesawOut').innerHTML='左力矩 '+lw+'×'+ld+' = <b>'+ml+'</b>　｜　右力矩 '+rw+'×'+rd+' = <b>'+mr+'</b>　→ '+
+    (ml===mr?'<span class="res">平衡 balanced ✅</span>':(ml>mr?'左边下沉 ⬇️':'右边下沉 ⬇️'));}
+['lwR','ldR','rwR','rdR'].forEach(id=>$(id).addEventListener('input',seesaw));seesaw();
+
+/* ===== 1.6 动量碰撞 ===== */
+const col=$('collide'),cox=col.getContext('2d');let cAnim=null,cphase='idle';
+let cx1,cx2,cv1,cv2,cvf;
+function colReset(){if(cAnim)cancelAnimationFrame(cAnim),cAnim=null;cphase='idle';
+  cx1=90;cx2=420;drawCol();momText(false);$('cPlay').textContent='▶ 撞！';}
+function carDraw(x,color,label){cox.fillStyle=color;cox.fillRect(x,70,52,34);cox.fillStyle='#0f1730';
+  cox.beginPath();cox.arc(x+12,104,7,0,7);cox.arc(x+40,104,7,0,7);cox.fill();
+  cox.fillStyle='#fff';cox.font='12px monospace';cox.fillText(label,x+8,92);}
+function drawCol(stuck){cox.clearRect(0,0,560,140);cox.fillStyle='#1a2647';cox.fillRect(0,104,560,5);
+  if(stuck){carDraw(cx1,'#3a86ff','1');carDraw(cx1+52,'#e8554e','2');}
+  else{carDraw(cx1,'#3a86ff','1');carDraw(cx2,'#e8554e','2');}}
+function momText(after){const m1=+$('m1R').value,u1=+$('u1R').value,m2=+$('m2R').value,u2=+$('u2R').value;
+  $('m1V').textContent=m1;$('u1V').textContent=u1;$('m2V').textContent=m2;$('u2V').textContent=u2;
+  const pb=m1*u1+m2*u2,vf=pb/(m1+m2);
+  $('momOut').innerHTML='碰前总动量 = '+m1+'×'+u1+' + '+m2+'×'+u2+' = <b>'+r2(pb)+'</b> kg·m/s'+
+    (after?'<br>碰后一起跑：v = '+r2(pb)+' / ('+m1+'+'+m2+') = <span class="res">'+r2(vf)+' m/s</span>　（总动量不变 ✅）':'');
+  return {vf};}
+function colStep(){
+  if(cphase==='approach'){cx1+=cv1;cx2+=cv2;
+    if(cx1+52>=cx2){cx1=cx2-52;cphase='together';cvf=momText(true).vf*1.2; }
+    drawCol();cAnim=requestAnimationFrame(colStep);}
+  else if(cphase==='together'){cx1+=cvf;drawCol(true);
+    if(cx1>520||cx1<0){cancelAnimationFrame(cAnim);cAnim=null;$('cPlay').textContent='▶ 再撞';cphase='idle';return;}
+    cAnim=requestAnimationFrame(colStep);}}
+$('cPlay').onclick=()=>{if(cAnim)return;const u1=+$('u1R').value,u2=+$('u2R').value;
+  cv1=Math.max(0.6,u1)*0.9;cv2=u2*0.9;cphase='approach';momText(false);$('cPlay').textContent='💥';cAnim=requestAnimationFrame(colStep);};
+$('cReset').onclick=colReset;
+['m1R','u1R','m2R','u2R'].forEach(id=>$(id).addEventListener('input',()=>{if(cphase==='idle'){colReset();}}));
+colReset();
+
+/* ===== 测验 ===== */
+const QUIZ=[
+ {q:'下面哪个是矢量（有方向）？',o:['距离 distance','质量 mass','速度 velocity','时间 time'],a:2,why:'速度有大小+方向，是矢量；距离/质量/时间只有大小，是标量。'},
+ {q:'速度-时间图(v–t)中，图线下的"面积"代表？',o:['加速度','距离/位移','质量','力'],a:1,why:'v–t 图：斜率=加速度，面积=走过的距离。'},
+ {q:'宇航员从地球到月球，下面哪个不变？',o:['重量 weight','质量 mass','受到的重力','体重计读数'],a:1,why:'质量是物质多少，到哪都不变；重量随 g 改变（月球更小）。'},
+ {q:'重量的公式是？',o:['W = m / g','W = m g','W = ρ V','W = F / t'],a:1,why:'W = m g，单位 N。'},
+ {q:'密度公式 ρ = m / V。一块金属 m=79 g，V=10 cm³，密度是？',o:['0.79','7.9','790','89'],a:1,why:'79 / 10 = 7.9 g/cm³（差不多是铁）。'},
+ {q:'一个物体密度 0.5 g/cm³，放进水里会？',o:['浮在水面','沉到水底','悬在中间','溶解'],a:0,why:'比水(1.0)小 → 浮。'},
+ {q:'合力 30 N 作用在 6 kg 物体上，加速度是？',o:['5 m/s²','36 m/s²','180 m/s²','0.2 m/s²'],a:0,why:'a = F/m = 30/6 = 5 m/s²。'},
+ {q:'胡克定律说在比例极限内，弹簧伸长与什么成正比？',o:['时间','所加的力','温度','质量的平方'],a:1,why:'F = k x，伸长 x 与力 F 成正比（极限内）。'},
+ {q:'跷跷板平衡的条件是？',o:['两边重量相等','两边力臂相等','两边力矩(力×力臂)相等','两边人数相等'],a:2,why:'平衡 ⇔ 左力矩 = 右力矩，即 W×d 两边相等。'},
+ {q:'动量的公式是？',o:['p = m + v','p = m v','p = m / v','p = ½ m v²'],a:1,why:'动量 p = m v，单位 kg·m/s。（½mv² 是动能）'},
+];
+const qb=$('quizbox');let answered=0,correct=0,locked={};
+QUIZ.forEach((it,qi)=>{const d=document.createElement('div');d.className='q';let h='<div class="qh">'+(qi+1)+'. '+it.q+'</div>';
+  it.o.forEach((op,oi)=>h+='<div class="opt" data-q="'+qi+'" data-o="'+oi+'">'+String.fromCharCode(65+oi)+'. '+op+'</div>');
+  h+='<div class="fb" id="fb-'+qi+'"></div>';d.innerHTML=h;qb.appendChild(d);});
+qb.querySelectorAll('.opt').forEach(el=>el.onclick=()=>{const qi=+el.dataset.q,oi=+el.dataset.o,it=QUIZ[qi];if(locked[qi])return;locked[qi]=1;
+  const opts=qb.querySelectorAll('.opt[data-q="'+qi+'"]');const fb=$('fb-'+qi);fb.className='fb show';
+  if(oi===it.a){el.classList.add('right');fb.classList.add('ok');fb.innerHTML='✅ 正确！'+it.why;correct++;}
+  else{el.classList.add('wrong');opts[it.a].classList.add('right');fb.classList.add('no');fb.innerHTML='❌ 正确答案是 '+String.fromCharCode(65+it.a)+'。'+it.why;}
+  answered++;$('quizscore').textContent='已答 '+answered+' / '+QUIZ.length+'，答对 '+correct+' 题 '+(answered===QUIZ.length?(correct===QUIZ.length?'🎉 满分！':'💪 回顾下错题'):'');});
+</script>
+</body>
+</html>
