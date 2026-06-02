@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>化学 · 原子、元素与化合物 | IGCSE Chemistry Ch.2</title>
+<style>
+  :root{--bg:#f4f8f5;--card:#fff;--ink:#1f2d27;--muted:#6b7b72;--brand:#2f9e44;--brand2:#1098ad;
+    --accent:#f08c00;--good:#23b26d;--bad:#e8554e;--line:#e3ece6;--soft:#e7f6ec;--shadow:0 8px 28px rgba(30,80,50,.10);}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:16px}
+  code,.mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .en{color:var(--brand2);font-style:normal}
+  header.top{background:linear-gradient(120deg,#2f9e44,#1098ad);color:#fff;padding:26px 20px 22px}
+  header.top .wrap{max-width:1040px;margin:0 auto}
+  header.top h1{margin:0;font-size:25px}header.top p{margin:6px 0 0;opacity:.93;font-size:14px}
+  nav.tabs{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+  nav.tabs .wrap{max-width:1040px;margin:0 auto;display:flex;gap:4px;padding:8px 12px}
+  nav.tabs button{border:0;background:transparent;color:var(--muted);font-size:13.5px;font-weight:600;padding:8px 11px;border-radius:10px;cursor:pointer;flex:0 0 auto}
+  nav.tabs button:hover{background:var(--soft);color:var(--ink)}nav.tabs button.active{background:var(--brand);color:#fff}
+  main{max-width:1040px;margin:0 auto;padding:20px 16px 80px}
+  section{display:none;animation:fade .25s ease}section.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2.title{font-size:22px;margin:6px 0 4px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}h2.title .en{font-size:15px}
+  .lead{color:var(--muted);margin:0 0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:var(--shadow)}
+  .card h3{margin:2px 0 10px;font-size:17px}
+  .grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+  .frame{border:1.5px solid var(--brand);background:var(--soft);border-radius:14px;padding:12px 16px;margin:10px 0}
+  .frame h4{margin:0 0 6px;color:#1c7a33;font-size:15px}
+  .defbox{border-left:4px solid var(--brand);background:var(--soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}.defbox b{color:#1c7a33}
+  .warn{border-left:4px solid var(--accent);background:#fff7e6;padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}
+  ul.clean{margin:8px 0;padding-left:20px}ul.clean li{margin:4px 0}
+  table.t{width:100%;border-collapse:collapse;margin:8px 0;font-size:14.5px}
+  table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:center}table.t th{background:var(--soft)}
+  .tip{font-size:13px;color:var(--muted);margin-top:6px}
+  .btn{border:0;border-radius:10px;padding:9px 15px;font-size:14px;font-weight:700;cursor:pointer;color:#fff;background:var(--brand)}
+  .btn:hover{filter:brightness(1.05)}.btn.ghost{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}.btn.dim{background:#eef1f7;color:var(--muted)}.btn.sm{padding:6px 11px;font-size:13px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  details.acc{border:1px solid var(--line);border-radius:12px;padding:6px 14px;margin:8px 0;background:#fff}
+  details.acc summary{cursor:pointer;font-weight:700;padding:6px 0}details.acc[open]{box-shadow:var(--shadow)}
+  .ctl{margin:11px 0}.ctl label{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:4px}
+  .ctl label .val{color:var(--brand);font-family:"SF Mono",monospace}
+  input[type=range]{width:100%;accent-color:var(--brand)}
+  select.sel,input.num{padding:7px 10px;border-radius:10px;border:1.5px solid var(--line);font-size:15px;background:#fff}
+  input.num{width:90px;font-family:"SF Mono",monospace}
+  canvas.cv{width:100%;height:auto;background:#0f1c17;border-radius:12px;border:1px solid var(--line);display:block}
+  .readout{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+  .ro{background:#0f1c17;color:#e9f5ee;border-radius:10px;padding:8px 14px;min-width:88px;text-align:center}
+  .ro .lab{font-size:11px;color:#8fe0b0}.ro .v{font-size:20px;font-weight:800;font-family:"SF Mono",monospace}
+  .ro .v.g{color:#7CFFB2}
+  .formula{background:#0f1c17;color:#e9f5ee;border-radius:12px;padding:12px 16px;font-size:18px;text-align:center;font-family:"SF Mono",monospace;margin:8px 0}
+  .formula b{color:#ffd9a8}.formula .res{color:#7CFFB2;font-weight:800}
+  .qchip{display:inline-block;padding:8px 14px;border:1.5px solid var(--line);border-radius:12px;margin:5px;cursor:pointer;font-weight:700;background:#fff;font-family:"SF Mono",monospace}
+  .qchip.el{border-color:var(--brand2);background:#e6f7fa}.qchip.cp{border-color:var(--brand);background:var(--soft)}
+  .bigel{font-size:46px;font-weight:800;color:var(--brand);text-align:center;line-height:1}
+  .q{margin:14px 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.q .qh{font-weight:700;margin-bottom:8px}
+  .q .opt{display:block;padding:8px 12px;margin:6px 0;border:1.5px solid var(--line);border-radius:10px;cursor:pointer}.q .opt:hover{background:var(--soft)}
+  .q .opt.right{border-color:var(--good);background:#e9f9f1}.q .opt.wrong{border-color:var(--bad);background:#fdeceb}
+  .q .fb{margin-top:8px;font-size:14px;display:none}.q .fb.show{display:block}.q .fb.ok{color:var(--good)}.q .fb.no{color:var(--bad)}
+  .parent{background:#fff7ed;border:1px dashed var(--accent);border-radius:14px;padding:14px 18px;margin:16px 0}
+  footer{max-width:1040px;margin:0 auto;padding:20px 16px 60px;color:var(--muted);font-size:13px}footer a{color:var(--brand2)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <h1>化学 · 原子、元素与化合物</h1>
+  <p>Atoms, Elements &amp; Compounds（第 2 章）· Cambridge IGCSE Chemistry 0620 · 搭原子、配化学式，自己玩出化学 ⚗️</p>
+</div></header>
+<nav class="tabs"><div class="wrap" id="tabbar"></div></nav>
+
+<main>
+<!-- 地图 -->
+<section id="s-map" class="show">
+  <h2 class="title">先看地图 <span class="en">The Big Picture</span></h2>
+  <p class="lead">这一章回答一个根本问题：<b>世界由什么构成、又怎么连在一起？</b> 主线是从"最小的粒子"一步步搭到"各种物质和它们的性质"。</p>
+  <div class="card"><div style="font-size:16px;text-align:center;line-height:2.2">
+    ⚛️ <b>原子</b>(2.1–2.2) ➜ 🔢 <b>同位素</b>(2.3) ➜ 然后原子用三种方式"手拉手"成键：<br>
+    🧲 <b>离子键</b>(2.4) ｜ 🔗 <b>共价键</b>(2.5–2.6) ｜ 🪙 <b>金属键</b>(2.7) ➜ 决定物质的<b>性质</b>
+  </div></div>
+  <div class="grid g3">
+    <div class="card"><h3>⚛️ 2.1–2.2 原子与结构</h3>原子/分子/元素/化合物/混合物；质子中子电子；质量数；电子排布 2,8,8。</div>
+    <div class="card"><h3>🔢 2.3 同位素</h3>质子相同、中子不同；用丰度算相对原子质量 Ar。</div>
+    <div class="card"><h3>🧲 2.4 离子键</h3>得失电子成离子；金属+非金属；离子化合物的式与性质。</div>
+    <div class="card"><h3>🔗 2.5 共价键</h3>非金属共享电子；单/双/三键；简单分子。</div>
+    <div class="card"><h3>💎 2.6 巨型共价</h3>金刚石、石墨、二氧化硅——结构决定性质。</div>
+    <div class="card"><h3>🪙 2.7 金属键</h3>金属离子 + 自由电子；导电、延展。</div>
+  </div>
+  <div class="parent"><b>👋 给家长：</b>第一版框架课件，离线可玩。核心是 ⚛️ <b>原子搭建器</b>、Ar 计算器、离子化合物配平器。每节先建框架再讲透。中文为主、英文术语对照（考试全英文）。拿到讲义后我们再对齐符号与例题。</div>
+</section>
+
+<!-- 2.1 分类 -->
+<section id="s-classify">
+  <h2 class="title">2.1 · 物质的分类 <span class="en">Classifying Matter</span></h2>
+  <div class="frame"><h4>框架</h4><b>原子 atom</b>=构成物质的最小粒子。原子组合成<b>分子 molecule</b>。按"成分"分两层：<br>① <b>单质 element</b>（同种原子）vs <b>化合物 compound</b>（不同种原子，能写化学式）；② <b>纯净物 pure</b>（只有一种）vs <b>混合物 mixture</b>（多种混在一起，不能用一个化学式表示）。</div>
+  <div class="card"><h3>🎮 单质还是化合物？（点一下看答案）</h3>
+    <p class="tip"><span style="color:var(--brand2);font-weight:700">单质 element</span>=只含一种原子；<span style="color:var(--brand);font-weight:700">化合物 compound</span>=含不同原子。</p>
+    <div id="ecGame"></div>
+    <div class="tip" id="ecScore" style="margin-top:8px"></div>
+  </div>
+  <div class="card"><h3>纯净物 vs 混合物</h3>
+    <ul class="clean"><li><b>纯净物 pure</b>：只有一种物质，能写化学式（如 H₂O、O₂、CO₂）。</li><li><b>混合物 mixture</b>：多种物质混在一起，没固定化学式（如空气、盐水）。</li></ul>
+  </div>
+</section>
+
+<!-- 2.2 原子结构 -->
+<section id="s-atom">
+  <h2 class="title">2.2 · 原子结构与周期表 <span class="en">Atomic Structure</span></h2>
+  <div class="frame"><h4>框架</h4>原子 = 中心的<b>原子核</b>（质子 proton ⊕、中子 neutron）+ 外层的<b>电子 electron ⊖</b>。质子数 = 电子数（原子不带电）。<b>质量数 = 质子数 + 中子数</b>。电子按层排布：每层最多 2, 8, 8…</div>
+  <div class="card"><h3>⚛️ 原子搭建器（拖质子/中子，加减电子变离子）</h3>
+    <div class="row" style="align-items:flex-start;gap:18px;flex-wrap:wrap">
+      <canvas id="atom" class="cv" width="320" height="300" style="max-width:330px"></canvas>
+      <div style="flex:1;min-width:250px">
+        <div class="bigel" id="elBig">—</div>
+        <div class="ctl"><label>质子数 protons（决定是什么元素）<span class="val" id="pVal">8</span></label><input type="range" id="pR" min="1" max="20" value="8"></div>
+        <div class="ctl"><label>中子数 neutrons <span class="val" id="nVal">8</span></label><input type="range" id="nR" min="0" max="25" value="8"></div>
+        <div class="row" style="margin:6px 0"><span style="font-weight:700">电子 electrons：</span><button class="btn sm ghost" id="eMinus">失去 e⁻ −</button><span id="eVal" class="mono" style="font-weight:800">8</span><button class="btn sm ghost" id="ePlus">+ 得到 e⁻</button></div>
+        <div class="readout">
+          <div class="ro"><div class="lab">质量数 A</div><div class="v g" id="roA">16</div></div>
+          <div class="ro"><div class="lab">电荷 charge</div><div class="v" id="roCharge">0</div></div>
+          <div class="ro"><div class="lab">电子排布</div><div class="v" id="roCfg" style="font-size:16px">2,6</div></div>
+        </div>
+        <div class="tip" id="atomNote" style="margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="warn">🔴 红=质子 ⊕　⚪ 灰=中子　🔵 蓝=电子 ⊖。<b>最外层电子数 = 族 group</b>；<b>电子层数 = 周期 period</b>；最外层填满(2 或 8)的是<b>稀有气体 noble gas</b>，很稳定。</div>
+  </div>
+  <div class="card"><h3>三种亚原子粒子 <span class="en">Subatomic particles</span></h3>
+    <table class="t"><tr><th>粒子</th><th>相对质量</th><th>电荷</th><th>位置</th></tr>
+      <tr><td>质子 proton</td><td>1</td><td>+1</td><td>核内</td></tr>
+      <tr><td>中子 neutron</td><td>1</td><td>0</td><td>核内</td></tr>
+      <tr><td>电子 electron</td><td>1/1840 ≈ 0</td><td>−1</td><td>核外电子层</td></tr></table>
+  </div>
+</section>
+
+<!-- 2.3 同位素 -->
+<section id="s-iso">
+  <h2 class="title">2.3 · 同位素 <span class="en">Isotopes</span></h2>
+  <div class="frame"><h4>框架</h4><b>同位素 isotopes</b>=同种元素的原子，<b>质子数相同、中子数不同</b>。因为电子数一样，<b>化学性质相同</b>，只是质量等物理性质略不同。用<b>丰度 abundance</b> 算<b>相对原子质量 Ar</b>。</div>
+  <div class="card"><h3>⚖️ 相对原子质量 Ar 计算器（拖丰度）</h3>
+    <div class="row"><label>选元素：<select class="sel" id="isoSel"></select></label></div>
+    <div class="ctl"><label><span id="iso1L">同位素1</span> 的丰度 <span class="val"><span id="ab1">75</span>%</span></label><input type="range" id="abR" min="0" max="100" value="75"></div>
+    <div class="tip" id="iso2L">另一个同位素丰度 = 25%</div>
+    <div class="formula" id="arOut" style="margin-top:10px"></div>
+    <div class="tip">Ar = 同位素1质量×丰度 + 同位素2质量×丰度。把氯调到 75% 试试，看是不是 35.5。</div>
+  </div>
+  <div class="card"><h3>同位素符号 <span class="en">A/Z notation</span></h3>
+    <p style="text-align:center;font-size:22px"><sup>A</sup>/<sub>Z</sub> X　左上=质量数 A，左下=质子数 Z</p>
+    <p class="tip">例：硼 <sup>11</sup><sub>5</sub>B → 质子 5、电子 5、中子 = 11−5 = 6。</p>
+  </div>
+</section>
+
+<!-- 2.4 离子键 -->
+<section id="s-ionic">
+  <h2 class="title">2.4 · 离子与离子键 <span class="en">Ions &amp; Ionic Bonds</span></h2>
+  <div class="frame"><h4>框架</h4>原子<b>得失电子</b>变成<b>离子 ion</b>：金属失电子→<b>阳离子(+)</b>；非金属得电子→<b>阴离子(−)</b>。正负离子互相吸引 = <b>离子键</b>（靠电子转移形成）。<b>离子化合物 = 金属离子 + 非金属离子</b>，整体电荷为 0。</div>
+  <div class="card"><h3>🧲 离子化合物配平器（选阳离子 + 阴离子 → 自动配化学式）</h3>
+    <div class="row">
+      <label>阳离子 cation：<select class="sel" id="cat"></select></label>
+      <span style="font-weight:800;font-size:20px">+</span>
+      <label>阴离子 anion：<select class="sel" id="ani"></select></label>
+    </div>
+    <div class="formula" id="ionOut" style="margin-top:12px"></div>
+    <div class="warn" id="ionWhy"></div>
+    <p class="tip">规则：让正电荷总数 = 负电荷总数，整体为 0。命名：金属名 + 非金属名加 “-ide”（氯化…）。</p>
+  </div>
+  <div class="card"><h3>离子化合物的性质 <span class="en">Properties</span></h3>
+    <ul class="clean"><li><b>巨型离子晶格</b> giant ionic lattice，离子间吸引力强 → <b>熔沸点高</b>，常温固态。</li><li><b>导电</b>：固态<b>不</b>导电；<b>熔融或溶于水</b>时离子能自由移动 → 导电。</li></ul>
+  </div>
+</section>
+
+<!-- 2.5 共价键 -->
+<section id="s-cov">
+  <h2 class="title">2.5 · 共价键与简单分子 <span class="en">Covalent Bonds</span></h2>
+  <div class="frame"><h4>框架</h4><b>共价键</b>=两个<b>非金属</b>原子<b>共享电子对</b>形成的强作用力。共享 1 对=单键，2 对=双键，3 对=三键。这样形成的小颗粒就是<b>分子 molecule</b>。</div>
+  <div class="card"><h3>🔗 共享电子对（点选看单/双/三键）</h3>
+    <div class="row" id="bondBtns" style="margin-bottom:10px"></div>
+    <canvas id="bondCv" class="cv" width="420" height="160" style="max-width:420px"></canvas>
+    <div class="formula" id="bondOut"></div>
+  </div>
+  <div class="card"><h3>简单分子（共价）的性质</h3>
+    <ul class="clean"><li><b>熔沸点低</b>：要克服的是<b>弱的分子间作用力</b>（不是共价键本身），常温多为液体/气体。</li><li><b>不导电</b>（没有自由离子/电子）；大多<b>不溶于水</b>。</li></ul>
+    <p class="tip">命名带数字前缀：mono(1)·di(2)·tri(3)·tetra(4)…　例 CO₂=carbon dioxide，CO=carbon monoxide。</p>
+  </div>
+</section>
+
+<!-- 2.6/2.7 巨型结构 & 金属 -->
+<section id="s-giant">
+  <h2 class="title">2.6 / 2.7 · 巨型结构与金属键 <span class="en">Giant Structures &amp; Metals</span></h2>
+  <div class="frame"><h4>框架</h4>有些物质不是小分子，而是亿万原子连成的<b>巨型结构</b>：<b>巨型共价</b>（金刚石/石墨/二氧化硅）和<b>巨型金属</b>。<b>结构决定性质</b>——这是化学的核心思想。</div>
+  <div class="grid g3">
+    <div class="card"><h3>💎 金刚石 Diamond</h3>每个碳连<b>4</b>个碳，三维网状。→ 极硬、熔点极高、<b>不</b>导电（无自由电子）。</div>
+    <div class="card"><h3>✏️ 石墨 Graphite</h3>每个碳连<b>3</b>个碳，成层状六边形。层间弱力可滑动 → <b>软、滑</b>(铅笔)；有<b>离域电子</b> → <b>导电</b>。</div>
+    <div class="card"><h3>🪟 二氧化硅 SiO₂</h3>每 Si 连 4 个 O，每 O 连 2 个 Si。性质类似金刚石：硬、熔点高、不导电。</div>
+  </div>
+  <div class="card"><h3>🪙 金属键 Metallic Bond</h3>
+    <p><b>金属离子</b>排成晶格，浸在<b>自由(离域)电子</b>的"海"里，两者吸引 = 金属键。</p>
+    <ul class="clean"><li><b>熔沸点高</b>（金属键强，汞例外是液态）</li><li><b>导电</b>：自由电子可移动（固态、液态都导电）</li><li><b>有延展性</b> malleable & ductile：层可滑动而不断键</li></ul>
+  </div>
+  <div class="card"><h3>🧠 成键类型总结表（结构 → 性质）<span class="en">Summary</span></h3>
+    <table class="t"><tr><th>物质</th><th>熔沸点</th><th>熔化要克服</th><th>常温状态</th><th>导电性</th></tr>
+      <tr><td>离子化合物</td><td>高</td><td>离子键</td><td>固</td><td>熔融/溶液导电</td></tr>
+      <tr><td>金属</td><td>高</td><td>金属键</td><td>固(汞除外)</td><td>固/液都导电</td></tr>
+      <tr><td>巨型共价</td><td>高</td><td>共价键</td><td>固</td><td>不导电(石墨除外)</td></tr>
+      <tr><td>简单分子</td><td>低</td><td>分子间作用力</td><td>液/气</td><td>不导电</td></tr></table>
+  </div>
+  <div class="card"><h3>🎯 这是哪种成键/结构？（点开看答案）</h3>
+    <details class="acc"><summary>食盐 NaCl 熔点高、溶液导电</summary>离子化合物（离子键）</details>
+    <details class="acc"><summary>铜 能拉成电线、固态导电</summary>金属（金属键）</details>
+    <details class="acc"><summary>金刚石 极硬、不导电</summary>巨型共价结构</details>
+    <details class="acc"><summary>二氧化碳 CO₂ 常温是气体</summary>简单分子（共价键，分子间作用力弱）</details>
+    <details class="acc"><summary>石墨 软、滑、能导电</summary>巨型共价（层状 + 离域电子）</details>
+  </div>
+</section>
+
+<!-- 测验 -->
+<section id="s-quiz">
+  <h2 class="title">小测验 <span class="en">Quiz</span></h2>
+  <p class="lead">选答案点一下，错了会告诉你为什么。</p>
+  <div id="quizbox"></div>
+  <div class="card" id="quizscore" style="text-align:center;font-size:18px;font-weight:700"></div>
+</section>
+</main>
+<footer>© 给孩子的化学课 · 基于 Cambridge IGCSE Chemistry 0620 第 2 章 · 第一版框架，待对齐讲义后更新 · 全部本地运行。<br>
+  返回 <a href="../index.html">📚 学习小站首页</a></footer>
+
+<script>
+const TABS=[['s-map','地图'],['s-classify','2.1 分类'],['s-atom','2.2 原子结构'],['s-iso','2.3 同位素'],['s-ionic','2.4 离子键'],['s-cov','2.5 共价键'],['s-giant','2.6/2.7 巨型·金属'],['s-quiz','测验']];
+const tabbar=document.getElementById('tabbar');
+TABS.forEach(([id,n])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>show(id,b);tabbar.appendChild(b);});
+function show(id,btn){document.querySelectorAll('main section').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');
+  tabbar.querySelectorAll('button').forEach(x=>x.classList.remove('active'));(btn||tabbar.children[0]).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+tabbar.children[0].classList.add('active');
+const $=id=>document.getElementById(id);
+function sub(n){return n===1?'':'<sub>'+n+'</sub>';}
+
+/* ===== 2.1 单质/化合物 ===== */
+const EC=[['O₂',0],['CO₂',1],['Ar',0],['FeO',1],['CH₄',1],['N₂',0],['Cl₂',0],['H₂O',1],['NaCl',1],['He',0]];
+const ecGame=$('ecGame');let ecDone=0;
+EC.forEach(([f,isC])=>{const c=document.createElement('span');c.className='qchip';c.textContent=f;c.dataset.done=0;
+  c.onclick=()=>{if(c.dataset.done==1)return;c.dataset.done=1;ecDone++;c.classList.add(isC?'cp':'el');
+    c.innerHTML=f+(isC?'<br><span style="font-size:11px">化合物</span>':'<br><span style="font-size:11px">单质</span>');
+    $('ecScore').textContent='已分类 '+ecDone+' / '+EC.length+'（蓝=单质，绿=化合物）';};
+  ecGame.appendChild(c);});
+
+/* ===== 2.2 原子搭建器 ===== */
+const ELEMENTS=[['H','氢',1],['He','氦',4],['Li','锂',7],['Be','铍',9],['B','硼',11],['C','碳',12],['N','氮',14],['O','氧',16],['F','氟',19],['Ne','氖',20],['Na','钠',23],['Mg','镁',24],['Al','铝',27],['Si','硅',28],['P','磷',31],['S','硫',32],['Cl','氯',35],['Ar','氩',40],['K','钾',39],['Ca','钙',40]];
+function eConfig(e){const caps=[2,8,8,8];const out=[];let left=e;for(const c of caps){if(left<=0)break;const k=Math.min(c,left);out.push(k);left-=k;}return out;}
+let protons=8,neutrons=8,electrons=8;
+const atom=$('atom'),ax=atom.getContext('2d');
+function drawAtom(){ax.clearRect(0,0,320,300);const cx=160,cy=150;
+  const cfg=eConfig(electrons);
+  // shells
+  ax.strokeStyle='#2a4a3a';ax.lineWidth=1.5;
+  cfg.forEach((k,i)=>{const R=42+i*28;ax.beginPath();ax.arc(cx,cy,R,0,7);ax.stroke();
+    ax.fillStyle='#5ab0ff';for(let j=0;j<k;j++){const ang=-Math.PI/2+j*2*Math.PI/k;const x=cx+R*Math.cos(ang),y=cy+R*Math.sin(ang);ax.beginPath();ax.arc(x,y,4.5,0,7);ax.fill();}});
+  // nucleus
+  ax.fillStyle='#143026';ax.beginPath();ax.arc(cx,cy,26,0,7);ax.fill();
+  ax.fillStyle='#ff6b6b';ax.font='bold 13px monospace';ax.textAlign='center';ax.fillText(protons+'p',cx,cy-3);
+  ax.fillStyle='#bbb';ax.fillText(neutrons+'n',cx,cy+13);ax.textAlign='start';}
+function updAtom(){const el=ELEMENTS[protons-1];
+  $('pVal').textContent=protons;$('nVal').textContent=neutrons;$('eVal').textContent=electrons;
+  $('elBig').innerHTML=el[0]+' <span style="font-size:18px;color:#6b7b72">'+el[1]+'</span>';
+  const A=protons+neutrons,charge=protons-electrons;
+  $('roA').textContent=A;
+  $('roCharge').textContent=charge===0?'0 (原子)':(charge>0?'+'+charge:''+charge);
+  $('roCharge').style.color=charge===0?'#e9f5ee':(charge>0?'#ff9a9a':'#9fd0ff');
+  const cfg=eConfig(electrons);$('roCfg').textContent=cfg.join(',');
+  let note;
+  if(charge===0){const outer=cfg[cfg.length-1];note='中性原子。最外层 '+outer+' 个电子 → 第 '+(outer===8||(protons===2)?'0(稀有气体)':outer)+' 族；'+cfg.length+' 个电子层 → 第 '+cfg.length+' 周期。';}
+  else if(charge>0)note='这是<b>阳离子</b>（失去 '+charge+' 个电子，金属常这样）。';
+  else note='这是<b>阴离子</b>（得到 '+(-charge)+' 个电子，非金属常这样）。';
+  $('atomNote').innerHTML=note;
+  drawAtom();}
+$('pR').addEventListener('input',()=>{protons=+$('pR').value;const el=ELEMENTS[protons-1];neutrons=el[2]-protons;$('nR').value=neutrons;electrons=protons;updAtom();});
+$('nR').addEventListener('input',()=>{neutrons=+$('nR').value;updAtom();});
+$('ePlus').onclick=()=>{if(electrons<protons+4){electrons++;updAtom();}};
+$('eMinus').onclick=()=>{if(electrons>0){electrons--;updAtom();}};
+updAtom();
+
+/* ===== 2.3 Ar ===== */
+const ISO=[['氯 Cl',35,37,75],['硼 B',10,11,20],['铜 Cu',63,65,69],['溴 Br',79,81,50],['锂 Li',6,7,8]];
+const isoSel=$('isoSel');ISO.forEach((x,i)=>isoSel.add(new Option(x[0]+'（'+x[1]+' / '+x[2]+'）',i)));
+function ar(){const [name,m1,m2,def]=ISO[+isoSel.value];const a1=+$('abR').value,a2=100-a1;
+  $('ab1').textContent=a1;$('iso1L').textContent=name.split(' ')[0]+'-'+m1;
+  $('iso2L').textContent=name.split(' ')[0]+'-'+m2+' 的丰度 = '+a2+'%';
+  const Ar=m1*a1/100+m2*a2/100;
+  $('arOut').innerHTML='Ar = '+m1+'×'+a1+'% + '+m2+'×'+a2+'% = <span class="res">'+(Math.round(Ar*100)/100)+'</span>';}
+isoSel.addEventListener('change',()=>{$('abR').value=ISO[+isoSel.value][3];ar();});ar();
+$('abR').addEventListener('input',ar);
+
+/* ===== 2.4 离子配平 ===== */
+const CATIONS=[['Na',1,'sodium 钠'],['K',1,'potassium 钾'],['Li',1,'lithium 锂'],['Mg',2,'magnesium 镁'],['Ca',2,'calcium 钙'],['Al',3,'aluminium 铝'],['Zn',2,'zinc 锌']];
+const ANIONS=[['Cl',1,'chloride 氯化','chlorine'],['F',1,'fluoride 氟化','fluorine'],['Br',1,'bromide 溴化','bromine'],['O',2,'oxide 氧化','oxygen'],['S',2,'sulfide 硫化','sulfur'],['N',3,'nitride 氮化','nitrogen']];
+const cat=$('cat'),ani=$('ani');
+CATIONS.forEach((c,i)=>cat.add(new Option(c[0]+'^'+c[1]+'+  '+c[2].split(' ')[1],i)));
+ANIONS.forEach((a,i)=>ani.add(new Option(a[0]+'^'+a[1]+'-  '+a[2].split(' ')[1],i)));
+cat.value=3;ani.value=0; // Mg + Cl
+function gcd(a,b){return b?gcd(b,a%b):a;}
+function ionic(){const c=CATIONS[+cat.value],a=ANIONS[+ani.value];const ca=c[1],an=a[1];
+  const g=gcd(ca,an);const x=an/g,y=ca/g; // x cations, y anions
+  const formula=c[0]+sub(x)+a[0]+sub(y);
+  const name=c[2].split(' ')[1]?(c[2].split(' ')[0]+' '+a[2].split(' ')[0]):'';
+  const cnName=(c[2].split(' ')[1]||'')+( a[2].split(' ')[1]||'');
+  $('ionOut').innerHTML='<span style="font-size:24px">'+c[0]+'<sup>'+ca+'+</sup> + '+a[0]+'<sup>'+an+'−</sup> → <span class="res">'+formula+'</span></span><br><span style="font-size:14px;color:#8fe0b0">'+(c[2].split(' ')[0])+' '+(a[2].split(' ')[0])+'（'+(a[2].split(' ')[1]||'')+(c[2].split(' ')[1]||'')+'）</span>';
+  $('ionWhy').innerHTML='配平：'+x+' 个 '+c[0]+'<sup>'+ca+'+</sup>（共 +'+(x*ca)+'）和 '+y+' 个 '+a[0]+'<sup>'+an+'−</sup>（共 −'+(y*an)+'）→ 总电荷 0 ✅';}
+[cat,ani].forEach(e=>e.addEventListener('change',ionic));ionic();
+
+/* ===== 2.5 共价键 ===== */
+const BONDS=[['Cl₂ 单键',1,'Cl','Cl'],['O₂ 双键',2,'O','O'],['N₂ 三键',3,'N','N']];
+const bondBtns=$('bondBtns');let curBond=0;
+BONDS.forEach((b,i)=>{const btn=document.createElement('button');btn.className='btn sm '+(i?'ghost':'');btn.textContent=b[0];
+  btn.onclick=()=>{curBond=i;bondBtns.querySelectorAll('button').forEach(x=>x.className='btn sm ghost');btn.className='btn sm';bond();};bondBtns.appendChild(btn);});
+const bcv=$('bondCv'),bx=bcv.getContext('2d');
+function bond(){const [name,pairs,a1,a2]=BONDS[curBond];bx.clearRect(0,0,420,160);
+  const y=80,cx1=130,cx2=290;
+  bx.fillStyle='#143026';bx.beginPath();bx.arc(cx1,y,40,0,7);bx.arc(cx2,y,40,0,7);bx.fill();
+  bx.strokeStyle='#2f9e44';bx.lineWidth=2;bx.beginPath();bx.arc(cx1,y,40,0,7);bx.arc(cx2,y,40,0,7);bx.stroke();
+  bx.fillStyle='#e9f5ee';bx.font='bold 20px monospace';bx.textAlign='center';bx.fillText(a1,cx1,y+7);bx.fillText(a2,cx2,y+7);
+  // shared pairs between
+  bx.fillStyle='#ffd166';for(let p=0;p<pairs;p++){const off=(p-(pairs-1)/2)*16;
+    bx.beginPath();bx.arc(210-5,y+off,4,0,7);bx.arc(210+5,y+off,4,0,7);bx.fill();}
+  bx.textAlign='start';
+  $('bondOut').innerHTML=name+'：共享 <span class="res">'+pairs+'</span> 对电子（'+(pairs===1?'单 single':pairs===2?'双 double':'三 triple')+' bond）';}
+bond();
+
+/* ===== 测验 ===== */
+const QUIZ=[
+ {q:'CO₂ 属于？',o:['单质 element','化合物 compound','混合物 mixture','金属'],a:1,why:'含碳和氧两种不同原子，是化合物。'},
+ {q:'原子核里有什么？',o:['质子和电子','质子和中子','只有电子','中子和电子'],a:1,why:'核内是质子和中子；电子在核外电子层。'},
+ {q:'质量数(mass number)等于？',o:['质子数','质子数+电子数','质子数+中子数','中子数'],a:2,why:'质量数 = 质子数 + 中子数。'},
+ {q:'同位素的共同点是？',o:['中子数相同','质子数相同','质量数相同','电子排布不同'],a:1,why:'同位素质子数相同、中子数不同，化学性质相同。'},
+ {q:'氯有 ³⁵Cl(75%) 和 ³⁷Cl(25%)，Ar ≈？',o:['35','35.5','36','37'],a:1,why:'35×0.75 + 37×0.25 = 35.5。'},
+ {q:'金属原子形成离子时会？',o:['得到电子变阴离子','失去电子变阳离子','不变','变成中子'],a:1,why:'金属失电子→阳离子(+)；非金属得电子→阴离子(−)。'},
+ {q:'Mg²⁺ 和 Cl⁻ 组成的化学式是？',o:['MgCl','MgCl₂','Mg₂Cl','Mg₂Cl₃'],a:1,why:'要电荷平衡：1 个 Mg²⁺ 配 2 个 Cl⁻。'},
+ {q:'共价键是怎么形成的？',o:['金属失电子','正负离子吸引','两个非金属共享电子','自由电子海'],a:2,why:'共价键 = 非金属原子共享电子对。'},
+ {q:'离子化合物什么时候导电？',o:['固态时','熔融或溶于水时','任何时候','从不'],a:1,why:'固态离子不能动；熔融/溶液中离子自由移动才导电。'},
+ {q:'石墨为什么能导电？',o:['有自由离子','有离域(自由)电子','是金属','键很弱'],a:1,why:'石墨层内有离域电子可移动，能导电（同为碳的金刚石不行）。'},
+];
+const qb=$('quizbox');let answered=0,correct=0,locked={};
+QUIZ.forEach((it,qi)=>{const d=document.createElement('div');d.className='q';let h='<div class="qh">'+(qi+1)+'. '+it.q+'</div>';
+  it.o.forEach((op,oi)=>h+='<div class="opt" data-q="'+qi+'" data-o="'+oi+'">'+String.fromCharCode(65+oi)+'. '+op+'</div>');
+  h+='<div class="fb" id="fb-'+qi+'"></div>';d.innerHTML=h;qb.appendChild(d);});
+qb.querySelectorAll('.opt').forEach(el=>el.onclick=()=>{const qi=+el.dataset.q,oi=+el.dataset.o,it=QUIZ[qi];if(locked[qi])return;locked[qi]=1;
+  const opts=qb.querySelectorAll('.opt[data-q="'+qi+'"]');const fb=$('fb-'+qi);fb.className='fb show';
+  if(oi===it.a){el.classList.add('right');fb.classList.add('ok');fb.innerHTML='✅ 正确！'+it.why;correct++;}
+  else{el.classList.add('wrong');opts[it.a].classList.add('right');fb.classList.add('no');fb.innerHTML='❌ 正确答案是 '+String.fromCharCode(65+it.a)+'。'+it.why;}
+  answered++;$('quizscore').textContent='已答 '+answered+' / '+QUIZ.length+'，答对 '+correct+' 题 '+(answered===QUIZ.length?(correct===QUIZ.length?'🎉 满分！':'💪 回顾下错题'):'');});
+</script>
+</body>
+</html>
