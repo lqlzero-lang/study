@@ -52,8 +52,9 @@ const SUBJECTS=[
      {n:'第 4 课', title:'数据存储与压缩', en:'Data Storage & Compression', color:'#2bb4a8',
       href:'lesson 4 数据存储及压缩/计算机课-第4课.html', tags:['存储单位','文件大小','有损/无损','RLE']},
      {n:'第 5 课', title:'算法与流程图', en:'Algorithms & Flowcharts', color:'#5b7cfa',
-      href:'lesson 5 编程流程图/计算机课-第5课.html', tags:['流程图','顺序/选择/循环','伪代码练习场'],
-      extra:{label:'▶ 流程图动画演示（手动输入运行）', href:'lesson 5 编程流程图/练习场习题流程图演示.html'}},
+      href:'lesson 5 编程流程图/计算机课-第5课.html', tags:['流程图','顺序/选择/循环','伪代码练习场']},
+     {n:'第 5 课 · 演示', title:'流程图运行演示', en:'Flowchart Runner', color:'#7048e8',
+      href:'lesson 5 编程流程图/练习场习题流程图演示.html', tags:['流程图动画','单步运行','手动输入','看变量变化']},
    ]},
   {name:'物理', en:'Physics', icon:'🔬', color:'#e8554e', sub:'即将开始', lessons:[], soon:true,
    topics:'力与运动 · 能量 · 电学 · 波 · 热学 …'},
@@ -77,12 +78,7 @@ SUBJECTS.forEach(s=>{
         '<span class="badge" style="background:'+l.color+'">'+l.n+'</span>'+
         '<h3>'+l.title+'</h3><div class="ten">'+l.en+'</div>'+
         '<div class="tags">'+l.tags.map(t=>'<span class="tag">'+t+'</span>').join('')+'</div>';
-      if(l.extra)html+='<div class="extra">'+l.extra.label+'</div>';
       a.innerHTML=html;
-      if(l.extra){a.addEventListener('click',e=>{ // 点底部"演示"链接走子页面，否则进主课
-        const r=a.querySelector('.extra').getBoundingClientRect();
-        if(e.clientY>=r.top&&e.clientY<=r.bottom){e.preventDefault();location.href=encodeURI(l.extra.href);}
-      });}
       grid.appendChild(a);
     });
     sec.appendChild(grid);
