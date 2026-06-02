@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 4 课 · 数据存储与压缩 | Data Storage &amp; Compression</title>
+<style>
+  :root{--bg:#f5f7fb;--card:#fff;--ink:#243044;--muted:#6b7689;--brand:#2bb4a8;--brand2:#3a86ff;
+    --accent:#ff8a3d;--good:#23b26d;--bad:#e8554e;--line:#e6eaf2;--soft:#e9f7f5;--shadow:0 8px 28px rgba(40,60,120,.10);}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:16px}
+  code,.mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .en{color:var(--brand2);font-style:normal}
+  header.top{background:linear-gradient(120deg,#2bb4a8,#3a86ff);color:#fff;padding:26px 20px 22px}
+  header.top .wrap{max-width:1080px;margin:0 auto}
+  header.top h1{margin:0;font-size:26px}
+  header.top p{margin:6px 0 0;opacity:.93;font-size:14px}
+  nav.tabs{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+  nav.tabs .wrap{max-width:1080px;margin:0 auto;display:flex;gap:4px;padding:8px 12px}
+  nav.tabs button{border:0;background:transparent;color:var(--muted);font-size:14px;font-weight:600;padding:8px 12px;border-radius:10px;cursor:pointer;flex:0 0 auto}
+  nav.tabs button:hover{background:var(--soft);color:var(--ink)}
+  nav.tabs button.active{background:var(--brand);color:#fff}
+  main{max-width:1080px;margin:0 auto;padding:20px 16px 80px}
+  section{display:none;animation:fade .25s ease}section.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2.title{font-size:22px;margin:6px 0 4px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  h2.title .en{font-size:15px}
+  .lead{color:var(--muted);margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:var(--shadow)}
+  .card h3{margin:2px 0 10px;font-size:17px}
+  .grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+  .defbox{border-left:4px solid var(--brand);background:var(--soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}
+  .defbox b{color:#1c8a80}
+  .warn{border-left:4px solid var(--accent);background:#fff7ed;padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}
+  ul.clean{margin:8px 0;padding-left:20px}ul.clean li{margin:4px 0}
+  table.t{width:100%;border-collapse:collapse;margin:8px 0;font-size:15px}
+  table.t th,table.t td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  table.t th{background:var(--soft)}
+  .pill{display:inline-block;background:var(--soft);color:#1c8a80;font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px;margin-right:6px}
+  .tip{font-size:13px;color:var(--muted);margin-top:6px}
+  .btn{border:0;border-radius:10px;padding:9px 15px;font-size:14px;font-weight:700;cursor:pointer;color:#fff;background:var(--brand)}
+  .btn:hover{filter:brightness(1.05)}.btn.ghost{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}
+  .btn.dim{background:#eef1f7;color:var(--muted)} .btn.sm{padding:5px 11px;font-size:13px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  details.acc{border:1px solid var(--line);border-radius:12px;padding:6px 14px;margin:8px 0;background:#fff}
+  details.acc summary{cursor:pointer;font-weight:700;padding:6px 0}
+  details.acc[open]{box-shadow:var(--shadow)}
+  /* ladder */
+  .ladder{display:flex;flex-direction:column-reverse;gap:0}
+  .rung{display:flex;align-items:center;gap:12px;padding:7px 0}
+  .rung .bar{height:30px;border-radius:8px;background:linear-gradient(90deg,#2bb4a8,#3a86ff);display:flex;align-items:center;color:#fff;font-weight:700;padding:0 12px;font-size:13.5px;white-space:nowrap;box-shadow:0 2px 8px rgba(58,134,255,.25)}
+  .rung .mul{font-size:12px;color:var(--muted);font-weight:700}
+  .rung.small .bar{background:linear-gradient(90deg,#ffb15c,#ff8a3d)}
+  /* sliders & calc */
+  .ctl{margin:12px 0}
+  .ctl label{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:4px}
+  .ctl label .val{color:var(--brand2);font-family:"SF Mono",monospace}
+  input[type=range]{width:100%;accent-color:var(--brand)}
+  select.sel{padding:7px 10px;border-radius:10px;border:1.5px solid var(--line);font-size:14px;background:#fff}
+  .calcout{background:#0f1730;color:#e9edff;border-radius:12px;padding:14px 16px;font-family:"SF Mono",monospace;font-size:14px;line-height:1.9}
+  .calcout .step{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #25304f;padding:3px 0}
+  .calcout .step b{color:#7CFFB2} .calcout .op{color:#ffd9a8}
+  .big{font-size:22px;font-weight:800;color:var(--brand2)}
+  .fitnote{background:var(--soft);border-radius:12px;padding:10px 14px;margin-top:10px;font-size:14px}
+  /* lossy demo */
+  .cv{image-rendering:pixelated;width:200px;height:200px;border-radius:12px;border:2px solid var(--line);background:#fff}
+  .pixwrap{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+  .pcap{text-align:center;font-size:13px;color:var(--muted);margin-top:6px}
+  .sizetag{display:inline-block;background:#0f1730;color:#7CFFB2;border-radius:8px;padding:3px 10px;font-family:"SF Mono",monospace;font-size:13px;margin-top:6px}
+  /* RLE */
+  .runs{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0}
+  .run{padding:4px 9px;border-radius:8px;font-family:"SF Mono",monospace;font-weight:700;color:#fff;font-size:14px}
+  .enc{font-family:"SF Mono",monospace;font-size:17px;background:#0f1730;color:#7CFFB2;border-radius:10px;padding:10px 14px;word-break:break-all}
+  textarea.inp,input.inp{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-family:"SF Mono",monospace;font-size:15px}
+  .meter{height:26px;border-radius:8px;background:#eef1f7;overflow:hidden;display:flex;font-size:12px;font-weight:700;color:#fff}
+  .meter .a{background:#3a86ff;display:flex;align-items:center;justify-content:center}
+  .meter .b{background:#23b26d;display:flex;align-items:center;justify-content:center}
+  /* pixel grid */
+  .pgrid{display:grid;gap:2px;background:#cfd6e6;padding:2px;border-radius:8px;width:max-content}
+  .pcell{width:20px;height:20px;border-radius:3px;cursor:pointer}
+  .pcell.on{background:#243044}.pcell.off{background:#fff}
+  .rowrle{font-family:"SF Mono",monospace;font-size:13px;color:var(--ink);line-height:1.5}
+  /* quiz */
+  .q{margin:14px 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}
+  .q .qh{font-weight:700;margin-bottom:8px}
+  .q .opt{display:block;padding:8px 12px;margin:6px 0;border:1.5px solid var(--line);border-radius:10px;cursor:pointer}
+  .q .opt:hover{background:var(--soft)}
+  .q .opt.right{border-color:var(--good);background:#e9f9f1}.q .opt.wrong{border-color:var(--bad);background:#fdeceb}
+  .q .fb{margin-top:8px;font-size:14px;display:none}.q .fb.show{display:block}.q .fb.ok{color:var(--good)}.q .fb.no{color:var(--bad)}
+  .parent{background:#fff7ed;border:1px dashed var(--accent);border-radius:14px;padding:14px 18px;margin:16px 0}
+  footer{max-width:1080px;margin:0 auto;padding:20px 16px 60px;color:var(--muted);font-size:13px}
+  footer a{color:var(--brand2)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <h1>第 4 课 · 数据存储与压缩</h1>
+  <p>Data Storage &amp; Compression · Cambridge IGCSE Computer Science 0478 · 拖一拖、画一画，自己玩出来 🎮</p>
+</div></header>
+<nav class="tabs"><div class="wrap" id="tabbar"></div></nav>
+
+<main>
+<!-- 0 导览 -->
+<section id="s-intro" class="show">
+  <h2 class="title">欢迎！这节课玩什么 <span class="en">Welcome</span></h2>
+  <p class="lead">上节课我们知道图片和声音都变成了 0 和 1。这节课回答两个问题：<b>这些文件到底有多大？</b> 以及 <b>WhatsApp 为什么几秒就能发出一张照片？</b>（答案就是——压缩 🗜️）</p>
+  <div class="grid g3">
+    <div class="card"><h3>📏 量一量</h3>从 bit 到 EiB 的存储单位，自己用换算器爬"1024 阶梯"。</div>
+    <div class="card"><h3>🖼️ 算一算</h3>拖滑块改图片/声音参数，实时看文件大小怎么暴涨。</div>
+    <div class="card"><h3>🗜️ 压一压</h3>亲手做有损压缩看图变糊，玩 RLE 把一长串压短。</div>
+  </div>
+  <div class="card"><h3>本课目标 <span class="en">Today's Goals</span></h3>
+    <ul class="clean">
+      <li>会用从 <b>bit 到 exbibyte</b> 的数字数据单位</li>
+      <li>会<b>计算</b>一张图片 / 一段声音的文件大小</li>
+      <li>理解<b>为什么需要压缩 compression</b></li>
+      <li>区分<b>有损 lossy</b> 和 <b>无损 lossless</b> 压缩</li>
+      <li>会用<b>游程编码 RLE</b>（一种无损方法）</li>
+    </ul>
+  </div>
+  <div class="parent"><b>👋 给家长：</b>整页都能离线玩。每个工具都是"拖滑块/点格子→立刻看结果"，把考试要背的公式和单位换算变成肌肉记忆。中文为主、英文术语对照（考试是全英文）。</div>
+</section>
+
+<!-- 1 存储单位 -->
+<section id="s-units">
+  <h2 class="title">1 · 存储单位 <span class="en">Storage Units</span></h2>
+  <div class="card">
+    <div class="defbox"><b>地基：</b><b>bit 位</b> = 一个 0 或 1 ｜ <b>nibble</b> = 4 bits ｜ <b>byte 字节</b> = 8 bits。<br>一个 byte 能存一个字符或一个小数字，再大的单位都由 byte 搭起来。</div>
+    <h3>二进制存储阶梯（每级 ×1024）<span class="en">The Binary Storage Ladder</span></h3>
+    <div class="ladder" id="ladder"></div>
+    <div class="warn"><b>为什么是 1024 而不是 1000？</b> 因为计算机用二进制（2 的幂），而 <b>2¹⁰ = 1024</b> 是最接近 1000 的 2 的幂。<br><b>📌 考试铁律：</b>本课一律用 <b>1 KiB = 1024 bytes</b>，不是 1000！</div>
+    <details class="acc"><summary>🤔 KiB 和 KB 有什么区别？</summary>
+      <b>KiB（kibibyte，二进制）= 1024 bytes</b>；<b>KB（kilobyte，十进制）= 1000 bytes</b>。<br>硬盘包装常用 KB/MB/GB（十进制，显得更大），而操作系统和 CS 考试用 KiB/MiB/GiB（二进制）——这就是为什么"1TB 硬盘"在电脑里看起来变小了！</details>
+  </div>
+  <div class="card">
+    <h3>🧮 单位换算器 <span class="en">Converter</span>（看它一步步爬梯子）</h3>
+    <div class="row">
+      <input class="inp mono" id="cvVal" style="width:130px" value="5">
+      <select class="sel" id="cvFrom"></select>
+      <span style="font-weight:800">➜</span>
+      <select class="sel" id="cvTo"></select>
+    </div>
+    <div class="calcout" id="cvOut" style="margin-top:12px"></div>
+  </div>
+  <div class="card"><h3>✏️ 轮到你（先算再点开核对）</h3>
+    <details class="acc"><summary>1. 2 KiB 是多少 bytes？</summary>2 × 1024 = <b>2048 bytes</b></details>
+    <details class="acc"><summary>2. 4 MiB 转成 KiB？</summary>4 × 1024 = <b>4096 KiB</b></details>
+    <details class="acc"><summary>3. 6144 KiB 转成 MiB？</summary>6144 ÷ 1024 = <b>6 MiB</b></details>
+    <details class="acc"><summary>4. 1 KiB 有多少 bits？</summary>1024 bytes × 8 = <b>8192 bits</b></details>
+  </div>
+</section>
+
+<!-- 2 文件大小 -->
+<section id="s-size">
+  <h2 class="title">2 · 文件大小计算 <span class="en">File Size</span></h2>
+  <div class="card">
+    <h3>两条必背公式 <span class="en">Two Formulas</span></h3>
+    <div class="grid g2">
+      <div class="defbox"><b>🖼️ 图片 Image</b><br>文件大小(bits) = <b>宽 × 高 × 色深</b><br><span class="tip">width × height × colour depth</span></div>
+      <div class="defbox"><b>🔊 声音 Sound</b><br>文件大小(bits) = <b>采样率 × 位深 × 时长</b><br><span class="tip">sample rate × sample resolution × length</span></div>
+    </div>
+    <div class="warn"><b>换算链（永远从 bits 开始）：</b> bits <span class="mono">÷8</span> bytes <span class="mono">÷1024</span> KiB <span class="mono">÷1024</span> MiB <span class="mono">÷1024</span> GiB</div>
+  </div>
+
+  <div class="card">
+    <h3>🖼️ 图片大小计算器（拖滑块）</h3>
+    <div class="ctl"><label>宽 width <span class="val"><span id="imW">800</span> px</span></label><input type="range" id="rW" min="100" max="4000" step="20" value="800"></div>
+    <div class="ctl"><label>高 height <span class="val"><span id="imH">600</span> px</span></label><input type="range" id="rH" min="100" max="4000" step="20" value="600"></div>
+    <div class="ctl"><label>色深 colour depth <span class="val"><span id="imD">24</span> bit</span></label><input type="range" id="rD" min="1" max="32" step="1" value="24"></div>
+    <div class="calcout" id="imgOut"></div>
+    <div class="fitnote" id="imgFit"></div>
+  </div>
+
+  <div class="card">
+    <h3>🔊 声音大小计算器（拖滑块）</h3>
+    <div class="ctl"><label>采样率 sample rate <span class="val"><span id="sR">44100</span> Hz</span></label><input type="range" id="rR" min="8000" max="48000" step="50" value="44100"></div>
+    <div class="ctl"><label>位深 resolution <span class="val"><span id="sRes">16</span> bit</span></label><input type="range" id="rRes" min="8" max="24" step="8" value="16"></div>
+    <div class="ctl"><label>时长 length <span class="val"><span id="sLen">180</span> 秒（<span id="sMin">3.0</span> 分钟）</span></label><input type="range" id="rLen" min="10" max="3600" step="10" value="180"></div>
+    <div class="calcout" id="sndOut"></div>
+  </div>
+  <div class="card"><h3>✏️ 自己算（题目要求"写出过程"）</h3>
+    <details class="acc"><summary>图片：640 × 480，色深 8 bit，求 KiB</summary>640×480×8 = 2,457,600 bits ÷8 = 307,200 bytes ÷1024 = <b>300 KiB</b>（把上面计算器调成这些值核对！）</details>
+    <details class="acc"><summary>声音：22050 Hz，16 bit，2 分钟，求 MiB</summary>2 分钟=120 秒；22050×16×120 = 42,336,000 bits ÷8 = 5,292,000 bytes ÷1024 ÷1024 ≈ <b>5.05 MiB</b></details>
+  </div>
+</section>
+
+<!-- 3 为什么压缩 -->
+<section id="s-why">
+  <h2 class="title">3 · 为什么要压缩 <span class="en">Why Compression?</span></h2>
+  <div class="card">
+    <h3>问题来了 🤯</h3>
+    <div class="grid g3">
+      <div class="defbox">📷 没压缩的照片<br><b>30+ MiB</b></div>
+      <div class="defbox">🎵 没压缩的歌曲<br><b>50+ MiB</b></div>
+      <div class="defbox">🎬 没压缩的电影<br><b>好几 GiB</b></div>
+    </div>
+    <p>原封不动地存、原封不动地发……根本不现实。所以我们要<b>压缩</b>。</p>
+  </div>
+  <div class="card">
+    <h3>压缩带来什么好处 <span class="en">Why We Compress</span></h3>
+    <ul class="clean">
+      <li>占用<b>更少存储空间</b></li>
+      <li>占用<b>更少带宽 bandwidth</b></li>
+      <li><b>传输时间更短</b>，下载/播放更快</li>
+      <li>同一台设备能<b>装下更多文件</b></li>
+    </ul>
+    <div class="defbox"><b>一句话：</b>压缩让文件变小，于是更省空间、发得更快。</div>
+  </div>
+</section>
+
+<!-- 4 有损vs无损 -->
+<section id="s-lossy">
+  <h2 class="title">4 · 有损 vs 无损 <span class="en">Lossy vs Lossless</span></h2>
+  <div class="card">
+    <div class="grid g2">
+      <div class="defbox"><b>有损 Lossy</b><br><b>永久删掉</b>一部分数据。删了就回不来，质量下降，但文件能变得<b>非常小</b>。</div>
+      <div class="defbox"><b>无损 Lossless</b><br><b>一点数据都不丢</b>。原文件能被<b>完美还原</b>，质量不变，但压缩幅度比有损小。</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🎨 有损压缩实验台（亲眼看质量怎么掉）</h3>
+    <p class="tip">拖动滑块降低"分辨率"和"颜色深度"——右图会变糊、文件变小，<b>而且这些细节再也回不来了</b>（这就是"有损"）。</p>
+    <div class="pixwrap">
+      <div><canvas id="cOrig" class="cv" width="80" height="80"></canvas><div class="pcap">原图 Original<br><span class="sizetag" id="origSize"></span></div></div>
+      <div><canvas id="cComp" class="cv" width="80" height="80"></canvas><div class="pcap">有损压缩后 Compressed<br><span class="sizetag" id="compSize"></span></div></div>
+      <div style="flex:1;min-width:240px">
+        <div class="ctl"><label>降低分辨率 resolution <span class="val">每 <span id="lRv">1</span> 格合并</span></label><input type="range" id="lR" min="1" max="16" step="1" value="1"></div>
+        <div class="ctl"><label>降低颜色深度 colour depth <span class="val"><span id="lDv">24</span> bit</span></label><input type="range" id="lD" min="0" max="3" step="1" value="0"></div>
+        <div class="fitnote" id="lossNote"></div>
+      </div>
+    </div>
+    <div class="warn" style="margin-top:14px"><b>什么时候能用有损？</b> 社交媒体照片、在线音乐、YouTube/抖音视频——这些"小体积比完美画质更重要"的场合。<br><b>千万别用在：</b>法律文件、医学影像、源代码——每个细节都不能丢的东西。</div>
+  </div>
+  <div class="card">
+    <h3>一眼对比 <span class="en">At a Glance</span></h3>
+    <table class="t">
+      <tr><th></th><th>有损 Lossy</th><th>无损 Lossless</th></tr>
+      <tr><td>丢数据吗</td><td>会，永久</td><td>不丢</td></tr>
+      <tr><td>能还原吗</td><td>不能</td><td>能，完美还原</td></tr>
+      <tr><td>压缩幅度</td><td>大</td><td>中等</td></tr>
+      <tr><td>画质</td><td>下降</td><td>不变</td></tr>
+      <tr><td>常见格式</td><td>JPEG、MP3、MP4</td><td>PNG、ZIP、FLAC</td></tr>
+      <tr><td>适用</td><td>照片、音乐、视频</td><td>文档、源代码</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 5 RLE -->
+<section id="s-rle">
+  <h2 class="title">5 · 游程编码 RLE <span class="en">Run-Length Encoding</span></h2>
+  <div class="card">
+    <div class="defbox"><b>RLE 的点子：</b>把"连续重复的数据"换成<b>一个值 + 重复次数</b>。<br>例：<span class="mono">AAAAAABBBCCCC</span>（13 个）➜ <span class="mono">6A 3B 4C</span>（6 个）。<b>无损</b>——解码能完整还原。</div>
+  </div>
+  <div class="card">
+    <h3>🔁 RLE 编码器（自己输入试试）</h3>
+    <input class="inp" id="rleIn" value="AAAAAABBBCCCC" spellcheck="false">
+    <div class="runs" id="rleRuns"></div>
+    <div class="row" style="margin:6px 0"><span style="font-weight:700">编码结果：</span></div>
+    <div class="enc" id="rleEnc"></div>
+    <div style="margin-top:12px"><div class="meter" id="rleMeter"></div></div>
+    <div class="fitnote" id="rleNote"></div>
+    <p class="tip">试试 <span class="mono">WWWWWWWWBBBWWWWW</span>（压得很好），再试 <span class="mono">ABCDEFG</span>（反而更大！）</p>
+  </div>
+  <div class="card">
+    <h3>🧩 RLE 解码器</h3>
+    <div class="row"><input class="inp mono" id="decIn" value="4A 2B 5C 1D" style="flex:1"><button class="btn" id="decBtn">解码 ▶</button></div>
+    <div class="enc" id="decOut" style="margin-top:10px"></div>
+  </div>
+  <div class="card">
+    <h3>🖌️ 像素画板：画个图，看每行怎么被压缩</h3>
+    <p class="tip">点格子涂黑/留白（<b>W</b>=白，<b>B</b>=黑）。右边实时显示每行的 RLE 编码。大片同色＝压得好！</p>
+    <div class="row" style="align-items:flex-start;gap:20px;flex-wrap:wrap">
+      <div>
+        <div class="pgrid" id="pgrid"></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn ghost sm" id="pgClear">清空</button>
+          <button class="btn ghost sm" id="pgHeart">❤️ 示例</button>
+          <button class="btn ghost sm" id="pgNoise">🎲 杂点（看反例）</button>
+        </div>
+      </div>
+      <div style="flex:1;min-width:240px">
+        <div class="rowrle" id="pgRle"></div>
+        <div class="fitnote" id="pgStat" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card"><h3>✏️ 轮到你</h3>
+    <details class="acc"><summary>1. 用 RLE 编码 MMMMNNNPPPPPPQ</summary><b>4M 3N 6P 1Q</b></details>
+    <details class="acc"><summary>2. 解码 4A 2B 5C 1D</summary><b>AAAABBCCCCCD</b></details>
+    <details class="acc"><summary>3. 100 个白 + 50 个黑像素</summary><b>100W 50B</b></details>
+    <details class="acc"><summary>4. 什么时候 RLE 没用？</summary>数据几乎没有重复时（如 ABCDEFG），编码后反而比原来更大。</details>
+  </div>
+</section>
+
+<!-- 6 测验 -->
+<section id="s-quiz">
+  <h2 class="title">6 · 闯关小测验 <span class="en">Quiz</span></h2>
+  <p class="lead">选答案点一下，错了会告诉你为什么。</p>
+  <div id="quizbox"></div>
+  <div class="card" id="quizscore" style="text-align:center;font-size:18px;font-weight:700"></div>
+</section>
+</main>
+<footer>
+  © 给女儿的计算机课 · 基于 Stellan G5 / Cambridge IGCSE 0478 第 4 课。全部在你浏览器里运行，不联网。<br>
+  配套：<a href="../lesson%205%20%E7%BC%96%E7%A8%8B%E6%B5%81%E7%A8%8B%E5%9B%BE/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%AF%BE-%E7%AC%AC5%E8%AF%BE.html">第 5 课 · 算法与流程图 ↗</a>
+</footer>
+
+<script>
+/* ===== 通用 ===== */
+function fmt(n){return n.toLocaleString('en-US',{maximumFractionDigits:2});}
+function fmtInt(n){return Math.round(n).toLocaleString('en-US');}
+const TABS=[['s-intro','导览'],['s-units','1 存储单位'],['s-size','2 文件大小'],['s-why','3 为什么压缩'],['s-lossy','4 有损vs无损'],['s-rle','5 RLE 编码'],['s-quiz','6 测验']];
+const tabbar=document.getElementById('tabbar');
+TABS.forEach(([id,name])=>{const b=document.createElement('button');b.textContent=name;b.onclick=()=>show(id,b);tabbar.appendChild(b);});
+function show(id,btn){document.querySelectorAll('main section').forEach(s=>s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');tabbar.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+  (btn||tabbar.children[0]).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+tabbar.children[0].classList.add('active');
+
+/* ===== 存储阶梯 ===== */
+const RUNGS=[['bit','1 个 0/1',true],['nibble','4 bits',true],['byte','8 bits',true],
+  ['KiB','1024 bytes',false],['MiB','1024 KiB',false],['GiB','1024 MiB',false],
+  ['TiB','1024 GiB',false],['PiB','1024 TiB',false],['EiB','1024 PiB',false]];
+const ladder=document.getElementById('ladder');
+RUNGS.forEach(([u,eq,small],i)=>{const d=document.createElement('div');d.className='rung'+(small?' small':'');
+  const w=Math.min(100,40+i*8);
+  d.innerHTML='<div class="bar" style="width:'+w+'%">'+u+'</div><div class="mul">= '+eq+'</div>';
+  ladder.appendChild(d);});
+
+/* ===== 换算器 ===== */
+const UNITS=[{k:'bit',bytes:1/8},{k:'byte',bytes:1},{k:'KiB',bytes:1024},{k:'MiB',bytes:1024**2},{k:'GiB',bytes:1024**3},{k:'TiB',bytes:1024**4}];
+const cvFrom=document.getElementById('cvFrom'),cvTo=document.getElementById('cvTo'),cvVal=document.getElementById('cvVal'),cvOut=document.getElementById('cvOut');
+UNITS.forEach((u,i)=>{cvFrom.add(new Option(u.k,i));cvTo.add(new Option(u.k,i));});
+cvFrom.value=3;cvTo.value=1; // MiB -> byte
+function pairFactor(lowIdx){return lowIdx===0?8:1024;} // 0:bit-byte ÷8, 其余 ÷1024
+function convert(){
+  const v=parseFloat(cvVal.value);let fi=+cvFrom.value,ti=+cvTo.value;
+  if(isNaN(v)){cvOut.innerHTML='<span style="color:#ff9">请输入一个数字</span>';return;}
+  let cur=v,i=fi,html='<div class="step"><span>起点</span><b>'+fmt(v)+' '+UNITS[fi].k+'</b></div>';
+  if(fi===ti){cvOut.innerHTML=html+'<div class="step"><span>结果</span><b>就是 '+fmt(v)+' '+UNITS[ti].k+'</b></div>';return;}
+  while(i!==ti){
+    if(i<ti){const f=pairFactor(i);cur=cur/f;i++;html+='<div class="step"><span class="op">÷ '+f+'</span><b>'+fmt(cur)+' '+UNITS[i].k+'</b></div>';}
+    else{const f=pairFactor(i-1);cur=cur*f;i--;html+='<div class="step"><span class="op">× '+f+'</span><b>'+fmt(cur)+' '+UNITS[i].k+'</b></div>';}
+  }
+  html+='<div class="step" style="border:0"><span>✅ 结果</span><span class="big">'+fmt(cur)+' '+UNITS[ti].k+'</span></div>';
+  cvOut.innerHTML=html;
+}
+[cvVal,cvFrom,cvTo].forEach(e=>e.addEventListener('input',convert));convert();
+
+/* ===== 图片计算器 ===== */
+const rW=document.getElementById('rW'),rH=document.getElementById('rH'),rD=document.getElementById('rD');
+function imgCalc(){
+  const w=+rW.value,h=+rH.value,d=+rD.value;
+  document.getElementById('imW').textContent=w;document.getElementById('imH').textContent=h;document.getElementById('imD').textContent=d;
+  const px=w*h,bits=px*d,bytes=bits/8,kib=bytes/1024,mib=kib/1024;
+  document.getElementById('imgOut').innerHTML=
+    '<div class="step"><span>像素 = 宽 × 高</span><b>'+fmtInt(px)+' px</b></div>'+
+    '<div class="step"><span class="op">× '+d+' (色深) = bits</span><b>'+fmtInt(bits)+' bits</b></div>'+
+    '<div class="step"><span class="op">÷ 8 = bytes</span><b>'+fmtInt(bytes)+' bytes</b></div>'+
+    '<div class="step"><span class="op">÷ 1024 = KiB</span><b>'+fmt(kib)+' KiB</b></div>'+
+    '<div class="step" style="border:0"><span class="op">÷ 1024 = MiB</span><span class="big">'+fmt(mib)+' MiB</span></div>';
+  const phone=64*1024; // 64 GiB in MiB
+  const n=Math.floor(phone/mib);
+  document.getElementById('imgFit').innerHTML='📱 一部 <b>64 GiB</b> 的手机大约能装 <b>'+fmtInt(n)+'</b> 张这样<b>没压缩</b>的图片。'+(d>=24?' （24-bit 叫"真彩色"，约 1670 万种颜色）':'');
+}
+[rW,rH,rD].forEach(e=>e.addEventListener('input',imgCalc));imgCalc();
+
+/* ===== 声音计算器 ===== */
+const rR=document.getElementById('rR'),rRes=document.getElementById('rRes'),rLen=document.getElementById('rLen');
+function sndCalc(){
+  const r=+rR.value,res=+rRes.value,len=+rLen.value;
+  document.getElementById('sR').textContent=r;document.getElementById('sRes').textContent=res;
+  document.getElementById('sLen').textContent=len;document.getElementById('sMin').textContent=(len/60).toFixed(1);
+  const bits=r*res*len,bytes=bits/8,kib=bytes/1024,mib=kib/1024;
+  document.getElementById('sndOut').innerHTML=
+    '<div class="step"><span>采样率 × 位深 × 时长</span><b>'+r+'×'+res+'×'+len+'</b></div>'+
+    '<div class="step"><span class="op">= bits</span><b>'+fmtInt(bits)+' bits</b></div>'+
+    '<div class="step"><span class="op">÷ 8 = bytes</span><b>'+fmtInt(bytes)+' bytes</b></div>'+
+    '<div class="step"><span class="op">÷ 1024 = KiB</span><b>'+fmt(kib)+' KiB</b></div>'+
+    '<div class="step" style="border:0"><span class="op">÷ 1024 = MiB</span><span class="big">'+fmt(mib)+' MiB</span></div>';
+}
+[rR,rRes,rLen].forEach(e=>e.addEventListener('input',sndCalc));sndCalc();
+
+/* ===== 有损压缩实验台 ===== */
+const SZ=80;
+const cOrig=document.getElementById('cOrig'),cComp=document.getElementById('cComp');
+const octx=cOrig.getContext('2d'),cctx=cComp.getContext('2d');
+function drawScene(ctx){
+  // 天空渐变
+  const g=ctx.createLinearGradient(0,0,0,SZ);g.addColorStop(0,'#7ec8ff');g.addColorStop(1,'#eaf6ff');
+  ctx.fillStyle=g;ctx.fillRect(0,0,SZ,SZ);
+  // 太阳
+  ctx.fillStyle='#ffd23f';ctx.beginPath();ctx.arc(60,18,11,0,7);ctx.fill();
+  ctx.fillStyle='#ffb703';ctx.beginPath();ctx.arc(60,18,6,0,7);ctx.fill();
+  // 草地
+  const g2=ctx.createLinearGradient(0,50,0,SZ);g2.addColorStop(0,'#7bc950');g2.addColorStop(1,'#3a8f2e');
+  ctx.fillStyle=g2;ctx.fillRect(0,52,SZ,SZ-52);
+  // 树
+  ctx.fillStyle='#8a5a2b';ctx.fillRect(20,44,5,14);
+  ctx.fillStyle='#2f9e44';ctx.beginPath();ctx.arc(22,40,12,0,7);ctx.fill();
+  ctx.fillStyle='#37b24d';ctx.beginPath();ctx.arc(28,44,8,0,7);ctx.fill();
+  // 房子
+  ctx.fillStyle='#e8553e';ctx.fillRect(46,46,18,12);
+  ctx.fillStyle='#b23b2c';ctx.beginPath();ctx.moveTo(44,46);ctx.lineTo(55,38);ctx.lineTo(66,46);ctx.fill();
+}
+drawScene(octx);
+const srcData=octx.getImageData(0,0,SZ,SZ);
+const origBits=SZ*SZ*24;
+document.getElementById('origSize').textContent=fmt(origBits/8/1024)+' KiB';
+const lR=document.getElementById('lR'),lD=document.getElementById('lD');
+const DEPTHS=[24,12,6,3]; // index -> depth bits
+function quant(c,levels){if(levels<=1)return 128;return Math.round(c/255*(levels-1))/(levels-1)*255;}
+function lossy(){
+  const R=+lR.value, depth=DEPTHS[+lD.value], levels=Math.pow(2,depth/3);
+  document.getElementById('lRv').textContent=R+'×'+R;document.getElementById('lDv').textContent=depth;
+  const out=cctx.createImageData(SZ,SZ),s=srcData.data,d=out.data;
+  for(let by=0;by<SZ;by+=R)for(let bx=0;bx<SZ;bx+=R){
+    let r=0,g=0,b=0,cnt=0;
+    for(let y=by;y<Math.min(by+R,SZ);y++)for(let x=bx;x<Math.min(bx+R,SZ);x++){const i=(y*SZ+x)*4;r+=s[i];g+=s[i+1];b+=s[i+2];cnt++;}
+    r=quant(r/cnt,levels);g=quant(g/cnt,levels);b=quant(b/cnt,levels);
+    for(let y=by;y<Math.min(by+R,SZ);y++)for(let x=bx;x<Math.min(bx+R,SZ);x++){const i=(y*SZ+x)*4;d[i]=r;d[i+1]=g;d[i+2]=b;d[i+3]=255;}
+  }
+  cctx.putImageData(out,0,0);
+  const pxAfter=Math.ceil(SZ/R)*Math.ceil(SZ/R),bits=pxAfter*depth,kib=bits/8/1024;
+  document.getElementById('compSize').textContent=fmt(kib)+' KiB';
+  const pct=Math.round((1-bits/origBits)*100);
+  document.getElementById('lossNote').innerHTML='压缩后只有原来的 <b>'+(100-pct)+'%</b> 大小（省了 <b>'+pct+'%</b>）。'+(pct>0?' 但被删掉的细节<b>再也回不来了</b> —— 这就是<b>有损</b>。':' 把滑块往右拖试试！');
+}
+[lR,lD].forEach(e=>e.addEventListener('input',lossy));lossy();
+
+/* ===== RLE 编码器 ===== */
+const COLORS=['#3a86ff','#23b26d','#ff8a3d','#8a6dff','#e8554e','#2bb4a8','#d6336c','#f59f00'];
+function rleEncode(str){const out=[];let i=0;while(i<str.length){const c=str[i];let n=1;while(str[i+n]===c)n++;out.push([n,c]);i+=n;}return out;}
+const rleIn=document.getElementById('rleIn');
+function doRle(){
+  const str=rleIn.value;
+  const runs=rleEncode(str);
+  const runsBox=document.getElementById('rleRuns');runsBox.innerHTML='';
+  runs.forEach((rn,i)=>{const sp=document.createElement('span');sp.className='run';sp.style.background=COLORS[i%COLORS.length];
+    sp.textContent=rn[1]+'×'+rn[0];runsBox.appendChild(sp);});
+  const enc=runs.map(r=>r[0]+r[1]).join(' ');
+  document.getElementById('rleEnc').textContent=enc||'（空）';
+  const origLen=str.length, encLen=runs.reduce((a,r)=>a+(''+r[0]+r[1]).length,0);
+  const m=document.getElementById('rleMeter');
+  const total=Math.max(origLen,encLen)||1;
+  m.innerHTML='<div class="a" style="width:'+(origLen/total*100)+'%">原始 '+origLen+'</div>'+
+              '<div class="b" style="width:'+(encLen/total*100)+'%">编码 '+encLen+'</div>';
+  const note=document.getElementById('rleNote');
+  if(encLen<origLen)note.innerHTML='👍 从 <b>'+origLen+'</b> 个字符压到 <b>'+encLen+'</b> 个，省了 <b>'+Math.round((1-encLen/origLen)*100)+'%</b>！重复越多压得越好。';
+  else note.innerHTML='⚠️ 编码后<b>反而更长/一样</b>（'+origLen+'→'+encLen+'）。因为几乎没有重复——这正是 RLE 的弱点！';
+}
+rleIn.addEventListener('input',doRle);doRle();
+
+/* ===== RLE 解码器 ===== */
+document.getElementById('decBtn').onclick=()=>{
+  const toks=document.getElementById('decIn').value.trim().split(/\s+/);let out='';let ok=true;
+  toks.forEach(t=>{const m=t.match(/^(\d+)(.)$/);if(m)out+=m[2].repeat(+m[1]);else if(t)ok=false;});
+  document.getElementById('decOut').textContent=ok?(out||'（空）'):'格式应为 "数字+字符"，如 4A 2B 5C';
+};
+
+/* ===== 像素画板 ===== */
+const PCOLS=20,PROWS=10;let grid=Array.from({length:PROWS},()=>Array(PCOLS).fill(0));
+const pgrid=document.getElementById('pgrid');pgrid.style.gridTemplateColumns='repeat('+PCOLS+',20px)';
+let painting=false,paintVal=1;
+function buildGrid(){pgrid.innerHTML='';
+  for(let y=0;y<PROWS;y++)for(let x=0;x<PCOLS;x++){const c=document.createElement('div');
+    c.className='pcell '+(grid[y][x]?'on':'off');c.dataset.x=x;c.dataset.y=y;
+    c.addEventListener('mousedown',e=>{painting=true;paintVal=grid[y][x]?0:1;grid[y][x]=paintVal;c.className='pcell '+(paintVal?'on':'off');renderRle();e.preventDefault();});
+    c.addEventListener('mouseenter',()=>{if(painting){grid[y][x]=paintVal;c.className='pcell '+(paintVal?'on':'off');renderRle();}});
+    pgrid.appendChild(c);}}
+document.addEventListener('mouseup',()=>painting=false);
+function renderRle(){
+  let html='',totalOrig=0,totalEnc=0;
+  for(let y=0;y<PROWS;y++){
+    const rowStr=grid[y].map(v=>v?'B':'W').join('');
+    const runs=rleEncode(rowStr);
+    totalOrig+=PCOLS;totalEnc+=runs.length*1; // 每个游程算 1 个"值对"（次数+颜色）
+    html+='<div>行 '+(y+1)+'：<b>'+runs.map(r=>r[0]+r[1]).join(' ')+'</b></div>';
+  }
+  document.getElementById('pgRle').innerHTML=html;
+  const stat=document.getElementById('pgStat');
+  const pct=Math.round((1-totalEnc/totalOrig)*100);
+  stat.innerHTML='原始：<b>'+totalOrig+'</b> 个像素值　|　RLE 编码：<b>'+totalEnc+'</b> 个游程<br>'+
+    (pct>0?'省了 <b>'+pct+'%</b> 👍 大片同色压得好！':'⚠️ 没省甚至更多——太花了，RLE 不擅长。');
+}
+function setHeart(){const H=[
+ "00000000000000000000",
+ "00011000000000110000",
+ "00111100000001111000",
+ "01111110000011111100",
+ "01111111000111111100",
+ "01111111101111111100",
+ "00111111111111111000",
+ "00011111111111110000",
+ "00000111111111000000",
+ "00000001111100000000"];
+ grid=H.map(r=>r.split('').map(Number));buildGrid();renderRle();}
+function setNoise(){grid=Array.from({length:PROWS},()=>Array.from({length:PCOLS},()=>Math.random()<.5?1:0));buildGrid();renderRle();}
+document.getElementById('pgClear').onclick=()=>{grid=Array.from({length:PROWS},()=>Array(PCOLS).fill(0));buildGrid();renderRle();};
+document.getElementById('pgHeart').onclick=setHeart;
+document.getElementById('pgNoise').onclick=setNoise;
+setHeart();
+
+/* ===== 测验 ===== */
+const QUIZ=[
+ {q:'1 KiB 等于多少 bytes？',o:['1000','1024','8','512'],a:1,why:'本课用二进制：1 KiB = 2¹⁰ = 1024 bytes。'},
+ {q:'图片文件大小的公式是？',o:['宽 + 高 + 色深','宽 × 高 × 色深','采样率 × 时长','宽 × 高 ÷ 色深'],a:1,why:'图片：文件大小(bits) = 宽 × 高 × 色深。'},
+ {q:'从 bits 换成 bytes 要？',o:['× 8','÷ 8','× 1024','÷ 1024'],a:1,why:'1 byte = 8 bits，所以 bits ÷ 8 = bytes。'},
+ {q:'有损压缩(lossy)的关键特征是？',o:['数据能完美还原','永久删除部分数据','完全不丢数据','只用于文档'],a:1,why:'有损会永久删数据、不可还原；无损才能完美还原。'},
+ {q:'AAAABBB 用 RLE 编码是？',o:['4A3B','7AB','A4B3','AAAA BBB'],a:0,why:'4 个 A、3 个 B → 4A 3B。'},
+ {q:'下面哪种文件最不该用有损压缩？',o:['社交媒体照片','在线音乐','源代码','短视频'],a:2,why:'源代码每个字符都不能错，必须无损。'},
+ {q:'RLE 在什么数据上几乎没用、甚至更大？',o:['大片纯色的图标','扫描的黑白文档','几乎没有重复的数据(如 ABCDEFG)','卡通图'],a:2,why:'没有连续重复时，1A1B1C… 反而更长。'},
+ {q:'一段声音：采样率×位深×时长，算出来的单位是？',o:['bytes','bits','KiB','MiB'],a:1,why:'两条公式算出的都是 bits，之后再 ÷8、÷1024 换算。'},
+];
+const qb=document.getElementById('quizbox');let answered=0,correct=0,locked={};
+QUIZ.forEach((it,qi)=>{const d=document.createElement('div');d.className='q';
+  let h='<div class="qh">'+(qi+1)+'. '+it.q+'</div>';
+  it.o.forEach((op,oi)=>h+='<div class="opt" data-q="'+qi+'" data-o="'+oi+'">'+String.fromCharCode(65+oi)+'. '+op+'</div>');
+  h+='<div class="fb" id="fb-'+qi+'"></div>';d.innerHTML=h;qb.appendChild(d);});
+qb.querySelectorAll('.opt').forEach(el=>el.onclick=()=>{
+  const qi=+el.dataset.q,oi=+el.dataset.o,it=QUIZ[qi];if(locked[qi])return;locked[qi]=1;
+  const opts=qb.querySelectorAll('.opt[data-q="'+qi+'"]');const fb=document.getElementById('fb-'+qi);fb.className='fb show';
+  if(oi===it.a){el.classList.add('right');fb.classList.add('ok');fb.innerHTML='✅ 正确！'+it.why;correct++;}
+  else{el.classList.add('wrong');opts[it.a].classList.add('right');fb.classList.add('no');fb.innerHTML='❌ 正确答案是 '+String.fromCharCode(65+it.a)+'。'+it.why;}
+  answered++;document.getElementById('quizscore').textContent='已答 '+answered+' / '+QUIZ.length+'，答对 '+correct+' 题 '+(answered===QUIZ.length?(correct===QUIZ.length?'🎉 满分！':'💪 回顾下错题'):'');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 3 课 · 文字、声音与图像 | Text, Sound &amp; Images</title>
+<style>
+  :root{--bg:#f5f7fb;--card:#fff;--ink:#243044;--muted:#6b7689;--brand:#e8590c;--brand2:#d6336c;
+    --accent:#3a86ff;--good:#23b26d;--bad:#e8554e;--line:#e6eaf2;--soft:#fff0e6;--shadow:0 8px 28px rgba(40,60,120,.10);}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:16px}
+  code,.mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .en{color:var(--brand2);font-style:normal}
+  header.top{background:linear-gradient(120deg,#e8590c,#d6336c);color:#fff;padding:26px 20px 22px}
+  header.top .wrap{max-width:1040px;margin:0 auto}
+  header.top h1{margin:0;font-size:26px}header.top p{margin:6px 0 0;opacity:.93;font-size:14px}
+  nav.tabs{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+  nav.tabs .wrap{max-width:1040px;margin:0 auto;display:flex;gap:4px;padding:8px 12px}
+  nav.tabs button{border:0;background:transparent;color:var(--muted);font-size:14px;font-weight:600;padding:8px 12px;border-radius:10px;cursor:pointer;flex:0 0 auto}
+  nav.tabs button:hover{background:var(--soft);color:var(--ink)}nav.tabs button.active{background:var(--brand);color:#fff}
+  main{max-width:1040px;margin:0 auto;padding:20px 16px 80px}
+  section{display:none;animation:fade .25s ease}section.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2.title{font-size:22px;margin:6px 0 4px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}h2.title .en{font-size:15px}
+  .lead{color:var(--muted);margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:var(--shadow)}
+  .card h3{margin:2px 0 10px;font-size:17px}
+  .grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+  .defbox{border-left:4px solid var(--brand);background:var(--soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}.defbox b{color:#c2410c}
+  .warn{border-left:4px solid var(--accent);background:#eef4ff;padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}
+  ul.clean{margin:8px 0;padding-left:20px}ul.clean li{margin:4px 0}
+  table.t{width:100%;border-collapse:collapse;margin:8px 0;font-size:15px}
+  table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:center}table.t th{background:var(--soft)}
+  .tip{font-size:13px;color:var(--muted);margin-top:6px}
+  .btn{border:0;border-radius:10px;padding:9px 15px;font-size:14px;font-weight:700;cursor:pointer;color:#fff;background:var(--brand)}
+  .btn:hover{filter:brightness(1.05)}.btn.ghost{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}.btn.sm{padding:5px 11px;font-size:13px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  details.acc{border:1px solid var(--line);border-radius:12px;padding:6px 14px;margin:8px 0;background:#fff}
+  details.acc summary{cursor:pointer;font-weight:700;padding:6px 0}details.acc[open]{box-shadow:var(--shadow)}
+  input.inp{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-family:"SF Mono",monospace;font-size:16px}
+  .ctl{margin:12px 0}.ctl label{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:4px}
+  .ctl label .val{color:var(--brand2);font-family:"SF Mono",monospace}
+  input[type=range]{width:100%;accent-color:var(--brand)}
+  /* char table */
+  .chars{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .chartile{border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:center;background:#fff;min-width:74px}
+  .chartile .c{font-size:22px;font-weight:800;color:var(--brand)}
+  .chartile .d{font-size:13px;color:var(--ink);font-weight:700}
+  .chartile .bn{font-family:"SF Mono",monospace;font-size:11px;color:var(--muted)}
+  .chartile.bad{border-color:var(--bad);background:#fdeceb}
+  .enc{font-family:"SF Mono",monospace;font-size:15px;background:#0f1730;color:#9fd0ff;border-radius:10px;padding:10px 14px;word-break:break-all;margin-top:8px}
+  canvas.viz{width:100%;height:auto;background:#0f1730;border-radius:12px;border:1px solid var(--line)}
+  .cv{image-rendering:pixelated;width:200px;height:200px;border-radius:12px;border:2px solid var(--line);background:#fff}
+  .swatch{width:120px;height:120px;border-radius:14px;border:2px solid var(--line)}
+  .chip{display:inline-block;background:#0f1730;color:#ffd9a8;border-radius:8px;padding:3px 10px;font-family:"SF Mono",monospace;font-size:13px;margin:2px}
+  .fitnote{background:var(--soft);border-radius:12px;padding:10px 14px;margin-top:10px;font-size:14px}
+  .pixwrap{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+  .pcap{text-align:center;font-size:13px;color:var(--muted);margin-top:6px}
+  /* quiz */
+  .q{margin:14px 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.q .qh{font-weight:700;margin-bottom:8px}
+  .q .opt{display:block;padding:8px 12px;margin:6px 0;border:1.5px solid var(--line);border-radius:10px;cursor:pointer}.q .opt:hover{background:var(--soft)}
+  .q .opt.right{border-color:var(--good);background:#e9f9f1}.q .opt.wrong{border-color:var(--bad);background:#fdeceb}
+  .q .fb{margin-top:8px;font-size:14px;display:none}.q .fb.show{display:block}.q .fb.ok{color:var(--good)}.q .fb.no{color:var(--bad)}
+  .parent{background:#fff7ed;border:1px dashed var(--accent);border-radius:14px;padding:14px 18px;margin:16px 0}
+  footer{max-width:1040px;margin:0 auto;padding:20px 16px 60px;color:var(--muted);font-size:13px}footer a{color:var(--brand2)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <h1>第 3 课 · 文字、声音与图像</h1>
+  <p>Text, Sound &amp; Images · 数据表示 Data Representation · Cambridge IGCSE 0478 · 打字、拖波形、调颜色 🎨🔊</p>
+</div></header>
+<nav class="tabs"><div class="wrap" id="tabbar"></div></nav>
+
+<main>
+<!-- 0 -->
+<section id="s-intro" class="show">
+  <h2 class="title">今天的问题 <span class="en">Today's Question</span></h2>
+  <p class="lead">计算机只懂 <b>0 和 1</b>。那它是怎么把<b>文字、声音、图像</b>都变成 0 和 1 的？这节课用三个小工具，让你亲手把它们"编码"出来。</p>
+  <div class="grid g3">
+    <div class="card"><h3>🔤 文字 Text</h3>每个字符配一个数字（字符集）。打字看它变成 ASCII 数字和二进制。</div>
+    <div class="card"><h3>🔊 声音 Sound</h3>连续的声波被"采样"成离散的数字。拖滑块看采样率/位深怎么影响音质和体积。</div>
+    <div class="card"><h3>🖼️ 图像 Image</h3>由像素组成，每个像素一个颜色值。玩 RGB 调色、看色深和分辨率。</div>
+  </div>
+  <div class="parent"><b>👋 给家长：</b>整页离线可玩。三个核心交互：文字编码器、声音采样波形图、图像 RGB/色深可视化——把"数据如何变二进制"从背诵变成动手。中文为主、英文术语对照。</div>
+</section>
+
+<!-- 1 文字 -->
+<section id="s-text">
+  <h2 class="title">1 · 文字表示 <span class="en">Text Representation</span></h2>
+  <div class="card"><div class="defbox"><b>字符集 Character Set：</b>把每个字符映射到唯一二进制码的规定。计算机存数字，显示硬件再把数字画成字符。<br>例：<span class="mono">'A' → 65 → 01000001</span></div></div>
+  <div class="card"><h3>⌨️ 文字编码器（打字看它变二进制）</h3>
+    <input class="inp" id="txtIn" value="Hi" spellcheck="false" maxlength="20">
+    <div class="chars" id="txtChars"></div>
+    <div class="enc" id="txtBits"></div>
+    <div class="fitnote" id="txtNote"></div>
+  </div>
+  <div class="card"><h3>🧩 解码器（二进制流 → 文字）</h3>
+    <div class="row"><input class="inp mono" id="decIn" value="1001000 1000101 1011001" style="flex:1"><button class="btn" id="decBtn">解码 ▶</button></div>
+    <div class="enc" id="decOut" style="margin-top:8px"></div>
+    <p class="tip">先按 7 位一组分开，每组转十进制，再查 ASCII 表。</p>
+  </div>
+  <div class="card"><h3>ASCII 关键规律 <span class="en">Key Patterns</span></h3>
+    <table class="t"><tr><th>字符</th><th>'A'</th><th>'Z'</th><th>'a'</th><th>'z'</th><th>'0'</th><th>空格</th></tr>
+      <tr><td>ASCII</td><td>65</td><td>90</td><td>97</td><td>122</td><td>48</td><td>32</td></tr></table>
+    <ul class="clean"><li>大写 A–Z 连续；小写 a–z 连续；<b>小写 = 大写 + 32</b></li><li>⚠️ 字符 <span class="mono">'5'</span> 的 ASCII 是 <b>53</b>，不是 5！字符码 ≠ 它看起来的数值。</li></ul>
+  </div>
+  <div class="card"><h3>ASCII vs Unicode</h3>
+    <table class="t"><tr><th></th><th>ASCII</th><th>Unicode</th></tr>
+      <tr><td>每字符位数</td><td>7（或8）</td><td>16 或更多</td></tr>
+      <tr><td>字符数量</td><td>128（或256）</td><td>100 万+</td></tr>
+      <tr><td>支持语言</td><td>只英文</td><td>所有语言+emoji</td></tr>
+      <tr><td>文件大小</td><td>更小</td><td>更大</td></tr></table>
+    <p class="tip">Unicode 前 128 个码和 ASCII 一样（向后兼容）。中文、é、emoji 都需要 Unicode。</p>
+  </div>
+</section>
+
+<!-- 2 声音 -->
+<section id="s-sound">
+  <h2 class="title">2 · 声音表示 <span class="en">Sound Representation</span></h2>
+  <div class="card"><div class="defbox"><b>声音</b>是空气的连续振动 = <b>模拟信号 analogue</b>（任意时刻可取任意值）。计算机要把它变成<b>离散的数字</b>，这个过程叫<b>采样 sampling</b>：每隔固定时间量一次振幅，记成二进制数。</div></div>
+  <div class="card"><h3>🔊 采样可视化（拖滑块看音质怎么变）</h3>
+    <canvas id="wave" class="viz" width="560" height="200"></canvas>
+    <div class="ctl"><label>采样率 sample rate（每秒采几次）<span class="val"><span id="srv">16</span> 个样本</span></label><input type="range" id="sr" min="4" max="64" step="1" value="16"></div>
+    <div class="ctl"><label>采样位深 resolution（每个样本几位）<span class="val"><span id="bdv">3</span> bit = <span id="lvv">8</span> 个振幅级</span></label><input type="range" id="bd" min="1" max="5" step="1" value="3"></div>
+    <div class="fitnote" id="sndNote"></div>
+    <p class="tip">蓝线=原始声波，橙点=采样点，绿色阶梯=计算机实际存下来的近似。点越密、级越多 → 越接近原声，但文件越大。</p>
+  </div>
+  <div class="card">
+    <table class="t"><tr><th>参数 ↑</th><th>音质</th><th>文件大小</th></tr>
+      <tr><td>采样率 sample rate</td><td>更好</td><td>更大</td></tr>
+      <tr><td>采样位深 resolution</td><td>更好</td><td>更大</td></tr></table>
+    <div class="warn"><b>常见参考：</b>电话 8,000 Hz ｜ CD 44,100 Hz ｜ 录音室 96,000 Hz。人耳上限约 20,000 Hz，要准确还原至少采样两倍 → 40,000 Hz，CD 的 44,100 留了余量。采太慢会产生"假音"<b>aliasing</b>。</div>
+    <details class="acc"><summary>采样率从 44,100 减半到 22,050，会怎样？</summary>音质变差，文件大小减半。</details>
+  </div>
+</section>
+
+<!-- 3 图像 -->
+<section id="s-image">
+  <h2 class="title">3 · 图像表示 <span class="en">Image Representation</span></h2>
+  <div class="card"><div class="defbox"><b>像素 Pixel：</b>数字图像的最小单位，每个像素存一个颜色值。<b>分辨率 resolution</b>=像素总数（宽×高）。<b>色深 colour depth</b>=每个像素用几位表示颜色，n 位 → 2ⁿ 种颜色。</div></div>
+
+  <div class="card"><h3>🎨 RGB 调色器（24 位真彩色怎么来的）</h3>
+    <p class="tip">24 位真彩色 = 红/绿/蓝 三通道，每通道 8 位(0–255)，3×8=24 位 → 2²⁴ ≈ 1670 万色。拖一拖，看颜色和它的 hex 码（呼应第 1 课！）。</p>
+    <div class="row" style="align-items:center;gap:20px">
+      <div class="swatch" id="rgbSw"></div>
+      <div style="flex:1;min-width:240px">
+        <div class="ctl"><label>红 Red <span class="val" id="rV">200</span></label><input type="range" id="rR" min="0" max="255" value="200"></div>
+        <div class="ctl"><label>绿 Green <span class="val" id="gV">80</span></label><input type="range" id="rG" min="0" max="255" value="80"></div>
+        <div class="ctl"><label>蓝 Blue <span class="val" id="bV">40</span></label><input type="range" id="rB" min="0" max="255" value="40"></div>
+        <div><span class="chip" id="rgbDec"></span><span class="chip" id="rgbHex"></span><span class="chip" id="rgbBin"></span></div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:8px"><button class="btn sm ghost" data-rgb="255,0,0">纯红</button><button class="btn sm ghost" data-rgb="0,255,0">纯绿</button><button class="btn sm ghost" data-rgb="0,0,255">纯蓝</button><button class="btn sm ghost" data-rgb="255,255,255">白</button><button class="btn sm ghost" data-rgb="0,0,0">黑</button></div>
+  </div>
+
+  <div class="card"><h3>🌈 色深对比（颜色变少会出现"色带"）</h3>
+    <div class="pixwrap">
+      <div><canvas id="cdFull" class="cv" width="120" height="120"></canvas><div class="pcap">原图（24-bit 真彩）</div></div>
+      <div><canvas id="cdLow" class="cv" width="120" height="120"></canvas><div class="pcap" id="cdCap">压低色深后</div></div>
+      <div style="flex:1;min-width:220px">
+        <div class="ctl"><label>色深 colour depth <span class="val"><span id="cdv">24</span> bit</span></label><input type="range" id="cd" min="0" max="4" step="1" value="0"></div>
+        <div class="fitnote" id="cdNote"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card"><h3>🔍 分辨率对比（像素越多越清晰）</h3>
+    <div class="pixwrap">
+      <div><canvas id="resOut" class="cv" width="96" height="96"></canvas><div class="pcap" id="resCap"></div></div>
+      <div style="flex:1;min-width:220px">
+        <div class="ctl"><label>分辨率 resolution <span class="val"><span id="resv"></span></span></label><input type="range" id="res" min="1" max="24" step="1" value="1"></div>
+        <div class="fitnote">像素越多 → 越清晰 → 文件越大。把滑块往右拖，图会变成马赛克。</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <details class="acc"><summary>色深 4 位，每个像素能有几种颜色？</summary>2⁴ = <b>16 种</b></details>
+    <details class="acc"><summary>为什么提高分辨率会增大文件？</summary>像素更多，每个像素都要存颜色数据，总数据量随之增加。</details>
+  </div>
+</section>
+
+<!-- 4 quiz -->
+<section id="s-quiz">
+  <h2 class="title">4 · 闯关小测验 <span class="en">Quiz</span></h2>
+  <p class="lead">选答案点一下，错了会告诉你为什么。</p>
+  <div id="quizbox"></div>
+  <div class="card" id="quizscore" style="text-align:center;font-size:18px;font-weight:700"></div>
+</section>
+</main>
+<footer>© 给女儿的计算机课 · 基于 Stellan G5 / Cambridge IGCSE 0478 第 3 课。全部本地运行。<br>
+  其它课：<a href="../lesson%201%20%E8%AF%BE%E7%A8%8B%E4%BB%8B%E7%BB%8D/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%AF%BE-%E7%AC%AC1%E8%AF%BE.html">第 1 课 进制</a> ·
+  <a href="../lesson%204%20%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%8F%8A%E5%8E%8B%E7%BC%A9/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%AF%BE-%E7%AC%AC4%E8%AF%BE.html">第 4 课 存储与压缩</a> ·
+  <a href="../lesson%205%20%E7%BC%96%E7%A8%8B%E6%B5%81%E7%A8%8B%E5%9B%BE/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%AF%BE-%E7%AC%AC5%E8%AF%BE.html">第 5 课 算法流程图</a></footer>
+
+<script>
+const TABS=[['s-intro','导览'],['s-text','1 文字'],['s-sound','2 声音'],['s-image','3 图像'],['s-quiz','4 测验']];
+const tabbar=document.getElementById('tabbar');
+TABS.forEach(([id,n])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>show(id,b);tabbar.appendChild(b);});
+function show(id,btn){document.querySelectorAll('main section').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');
+  tabbar.querySelectorAll('button').forEach(x=>x.classList.remove('active'));(btn||tabbar.children[0]).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+tabbar.children[0].classList.add('active');
+
+/* ===== 文字编码器 ===== */
+const txtIn=document.getElementById('txtIn');
+function encodeText(){
+  const s=txtIn.value;const box=document.getElementById('txtChars');box.innerHTML='';
+  let bitsAll=[];let nonAscii=false;
+  [...s].forEach(ch=>{const code=ch.codePointAt(0);const tile=document.createElement('div');
+    const ascii=code<128;if(!ascii)nonAscii=true;
+    tile.className='chartile'+(ascii?'':' bad');
+    const disp=ch===' '?'␣':ch;
+    tile.innerHTML='<div class="c">'+disp+'</div><div class="d">'+code+'</div><div class="bn">'+(ascii?code.toString(2).padStart(7,'0'):'需Unicode')+'</div>';
+    box.appendChild(tile);
+    if(ascii)bitsAll.push(code.toString(2).padStart(7,'0'));});
+  document.getElementById('txtBits').textContent=bitsAll.join(' ')||'（空）';
+  const n=[...s].length;
+  document.getElementById('txtNote').innerHTML='共 <b>'+n+'</b> 个字符 → 7位ASCII = <b>'+n*7+'</b> bits（8位扩展ASCII = '+n*8+' bits）。'+(nonAscii?' ⚠️ 红色字符超出 ASCII 范围，需要 <b>Unicode</b>（如中文/emoji）。':'');
+}
+txtIn.addEventListener('input',encodeText);encodeText();
+document.getElementById('decBtn').onclick=()=>{
+  const groups=document.getElementById('decIn').value.trim().split(/\s+/);let out='',ok=true;
+  groups.forEach(g=>{if(/^[01]+$/.test(g)){out+=String.fromCharCode(parseInt(g,2));}else if(g)ok=false;});
+  document.getElementById('decOut').textContent=ok?('→ "'+out+'"'):'⚠️ 请输入空格分隔的二进制组，如 1001000 1101001';
+};
+
+/* ===== 声音采样 ===== */
+const wave=document.getElementById('wave'),wx=wave.getContext('2d');
+const W=560,Hh=200,mid=Hh/2,scale=70;
+function f(t){return 0.62*Math.sin(2*Math.PI*1.5*t)+0.30*Math.sin(2*Math.PI*3*t+0.6);}
+function quant(a,L){return Math.round((a+1)/2*(L-1))/(L-1)*2-1;}
+function drawWave(){
+  const N=+document.getElementById('sr').value,bd=+document.getElementById('bd').value,L=Math.pow(2,bd);
+  document.getElementById('srv').textContent=N;document.getElementById('bdv').textContent=bd;document.getElementById('lvv').textContent=L;
+  wx.clearRect(0,0,W,Hh);
+  // 量化网格
+  wx.strokeStyle='rgba(255,255,255,.08)';wx.lineWidth=1;
+  for(let k=0;k<L;k++){const a=k/(L-1)*2-1;const y=mid-a*scale;wx.beginPath();wx.moveTo(0,y);wx.lineTo(W,y);wx.stroke();}
+  // 原始波
+  wx.strokeStyle='#5aa6ff';wx.lineWidth=2.5;wx.beginPath();
+  for(let x=0;x<=W;x++){const t=x/W;const y=mid-f(t)*scale;x===0?wx.moveTo(x,y):wx.lineTo(x,y);}wx.stroke();
+  // 阶梯重建(绿) + 采样点(橙)
+  wx.strokeStyle='#46d39a';wx.lineWidth=2;wx.beginPath();
+  for(let i=0;i<N;i++){const t=(i+0.5)/N;const aq=quant(f(t),L);const x0=i/N*W,x1=(i+1)/N*W,y=mid-aq*scale;
+    wx.moveTo(x0,y);wx.lineTo(x1,y);}wx.stroke();
+  for(let i=0;i<N;i++){const t=(i+0.5)/N;const aq=quant(f(t),L);const x=t*W,y=mid-aq*scale;
+    wx.fillStyle='#ff922b';wx.beginPath();wx.arc(x,y,3.2,0,7);wx.fill();}
+  const bits=N*bd;
+  document.getElementById('sndNote').innerHTML='这段里：<b>'+N+'</b> 个样本 × <b>'+bd+'</b> bit = <b>'+bits+'</b> bits 的数据。'+(N<8?' ⚠️ 采样太少，绿色阶梯和原声差很远（会失真/aliasing）！':(L<=2?' ⚠️ 位深太低，振幅只有 '+L+' 级，台阶很粗。':' 👍 比较接近原声了。'));
+}
+['sr','bd'].forEach(id=>document.getElementById(id).addEventListener('input',drawWave));drawWave();
+
+/* ===== RGB 调色器 ===== */
+const rR=document.getElementById('rR'),rG=document.getElementById('rG'),rB=document.getElementById('rB');
+function hex2(n){return n.toString(16).toUpperCase().padStart(2,'0');}
+function rgb(){
+  const r=+rR.value,g=+rG.value,b=+rB.value;
+  document.getElementById('rV').textContent=r;document.getElementById('gV').textContent=g;document.getElementById('bV').textContent=b;
+  document.getElementById('rgbSw').style.background='rgb('+r+','+g+','+b+')';
+  document.getElementById('rgbDec').textContent='('+r+', '+g+', '+b+')';
+  document.getElementById('rgbHex').textContent='#'+hex2(r)+hex2(g)+hex2(b);
+  document.getElementById('rgbBin').textContent=r.toString(2).padStart(8,'0')+' '+g.toString(2).padStart(8,'0')+' '+b.toString(2).padStart(8,'0');
+}
+[rR,rG,rB].forEach(e=>e.addEventListener('input',rgb));rgb();
+document.querySelectorAll('[data-rgb]').forEach(btn=>btn.onclick=()=>{const[r,g,b]=btn.dataset.rgb.split(',');rR.value=r;rG.value=g;rB.value=b;rgb();});
+
+/* ===== 共享：画一个小风景 ===== */
+function drawScene(ctx,S){
+  const g=ctx.createLinearGradient(0,0,0,S);g.addColorStop(0,'#7ec8ff');g.addColorStop(1,'#eaf6ff');
+  ctx.fillStyle=g;ctx.fillRect(0,0,S,S);
+  ctx.fillStyle='#ffd23f';ctx.beginPath();ctx.arc(S*0.75,S*0.22,S*0.13,0,7);ctx.fill();
+  const g2=ctx.createLinearGradient(0,S*0.6,0,S);g2.addColorStop(0,'#7bc950');g2.addColorStop(1,'#3a8f2e');
+  ctx.fillStyle=g2;ctx.fillRect(0,S*0.62,S,S*0.38);
+  ctx.fillStyle='#8a5a2b';ctx.fillRect(S*0.25,S*0.52,S*0.06,S*0.18);
+  ctx.fillStyle='#2f9e44';ctx.beginPath();ctx.arc(S*0.28,S*0.48,S*0.15,0,7);ctx.fill();
+  ctx.fillStyle='#e8553e';ctx.fillRect(S*0.55,S*0.55,S*0.22,S*0.15);
+  ctx.fillStyle='#b23b2c';ctx.beginPath();ctx.moveTo(S*0.53,S*0.55);ctx.lineTo(S*0.66,S*0.45);ctx.lineTo(S*0.79,S*0.55);ctx.fill();
+}
+/* 色深 */
+const S1=120;const cdFull=document.getElementById('cdFull'),cdLow=document.getElementById('cdLow');
+const fctx=cdFull.getContext('2d'),lctx=cdLow.getContext('2d');drawScene(fctx,S1);
+const cdSrc=fctx.getImageData(0,0,S1,S1);
+const DEPTHS=[24,8,4,2,1];
+function qChan(c,levels){if(levels<=1)return c<128?0:255;return Math.round(c/255*(levels-1))/(levels-1)*255;}
+function colourDepth(){
+  const depth=DEPTHS[+document.getElementById('cd').value];
+  document.getElementById('cdv').textContent=depth;
+  const levels=depth>=24?256:Math.max(2,Math.round(Math.pow(2,depth/3)));
+  const out=lctx.createImageData(S1,S1),s=cdSrc.data,d=out.data;
+  for(let i=0;i<s.length;i+=4){
+    if(depth===1){const lum=0.3*s[i]+0.59*s[i+1]+0.11*s[i+2];const v=lum<128?0:255;d[i]=d[i+1]=d[i+2]=v;}
+    else{d[i]=qChan(s[i],levels);d[i+1]=qChan(s[i+1],levels);d[i+2]=qChan(s[i+2],levels);}
+    d[i+3]=255;}
+  lctx.putImageData(out,0,0);
+  const colours=depth>=24?'16,777,216':(depth===1?'2 (黑白)':Math.pow(2,depth).toLocaleString('en-US'));
+  document.getElementById('cdCap').textContent=depth+'-bit';
+  document.getElementById('cdNote').innerHTML='色深 <b>'+depth+'</b> 位 → 每像素 <b>'+colours+'</b> 种颜色。'+(depth>=24?' 平滑的渐变没有色带。':' 颜色变少，渐变处出现一条条<b>色带 banding</b>，文件也更小。');
+}
+document.getElementById('cd').addEventListener('input',colourDepth);colourDepth();
+/* 分辨率 */
+const S2=96;const resOut=document.getElementById('resOut');const rctx=resOut.getContext('2d');
+const tmp=document.createElement('canvas');tmp.width=tmp.height=S2;const tctx=tmp.getContext('2d');drawScene(tctx,S2);
+const resSrc=tctx.getImageData(0,0,S2,S2);
+function resolution(){
+  const R=+document.getElementById('res').value;const dim=Math.max(1,Math.round(S2/R));
+  document.getElementById('resv').textContent=dim+'×'+dim+' 像素';
+  document.getElementById('resCap').textContent=dim+'×'+dim;
+  const out=rctx.createImageData(S2,S2),s=resSrc.data,d=out.data;
+  for(let by=0;by<S2;by+=R)for(let bx=0;bx<S2;bx+=R){let r=0,g=0,b=0,c=0;
+    for(let y=by;y<Math.min(by+R,S2);y++)for(let x=bx;x<Math.min(bx+R,S2);x++){const i=(y*S2+x)*4;r+=s[i];g+=s[i+1];b+=s[i+2];c++;}
+    r/=c;g/=c;b/=c;
+    for(let y=by;y<Math.min(by+R,S2);y++)for(let x=bx;x<Math.min(bx+R,S2);x++){const i=(y*S2+x)*4;d[i]=r;d[i+1]=g;d[i+2]=b;d[i+3]=255;}}
+  rctx.putImageData(out,0,0);
+}
+document.getElementById('res').addEventListener('input',resolution);resolution();
+
+/* ===== 测验 ===== */
+const QUIZ=[
+ {q:'什么是字符集 character set？',o:['一种字体','字符到唯一二进制码的映射规定','一段声音','像素的集合'],a:1,why:'字符集 = 把每个字符映射到唯一二进制码的规定，如 ASCII、Unicode。'},
+ {q:"'A' 的 ASCII 是 65，那 'E' 是？",o:['66','68','69','70'],a:2,why:'字母连续：E 比 A 大 4，65+4 = 69。'},
+ {q:"字符 '5' 的 ASCII 值是？",o:['5','35','48','53'],a:3,why:"'0'=48，'5'=48+5=53。字符码不等于它看起来的数值！"},
+ {q:'把模拟声波变成数字数据的过程叫？',o:['压缩','采样 sampling','编码移位','量化误差'],a:1,why:'采样：每隔固定时间测量振幅并记成二进制。'},
+ {q:'采样率减半，对声音的影响是？',o:['音质更好、文件更大','音质更差、文件更小','没有影响','只变文件不变音质'],a:1,why:'采样率↓ → 还原更差(音质下降)，数据更少(文件更小)。'},
+ {q:'色深 4 位，每个像素能表示几种颜色？',o:['4','8','16','24'],a:2,why:'n 位 → 2ⁿ 种，2⁴ = 16。'},
+ {q:'24 位真彩色是怎么分配的？',o:['一个通道24位','红绿蓝各8位','24个像素','24种颜色'],a:1,why:'RGB 三通道各 8 位，3×8 = 24 位，约 1670 万色。'},
+ {q:'下面哪句对？',o:['Unicode 比 ASCII 位数少所以文件更小','提高采样位深会降低音质','分辨率越高像素越多文件越大','ASCII 能表示中文'],a:2,why:'分辨率↑→像素↑→文件↑。Unicode 位数更多文件更大；位深↑音质↑；ASCII 不能表示中文。'},
+];
+const qb=document.getElementById('quizbox');let answered=0,correct=0,locked={};
+QUIZ.forEach((it,qi)=>{const d=document.createElement('div');d.className='q';let h='<div class="qh">'+(qi+1)+'. '+it.q+'</div>';
+  it.o.forEach((op,oi)=>h+='<div class="opt" data-q="'+qi+'" data-o="'+oi+'">'+String.fromCharCode(65+oi)+'. '+op+'</div>');
+  h+='<div class="fb" id="fb-'+qi+'"></div>';d.innerHTML=h;qb.appendChild(d);});
+qb.querySelectorAll('.opt').forEach(el=>el.onclick=()=>{const qi=+el.dataset.q,oi=+el.dataset.o,it=QUIZ[qi];if(locked[qi])return;locked[qi]=1;
+  const opts=qb.querySelectorAll('.opt[data-q="'+qi+'"]');const fb=document.getElementById('fb-'+qi);fb.className='fb show';
+  if(oi===it.a){el.classList.add('right');fb.classList.add('ok');fb.innerHTML='✅ 正确！'+it.why;correct++;}
+  else{el.classList.add('wrong');opts[it.a].classList.add('right');fb.classList.add('no');fb.innerHTML='❌ 正确答案是 '+String.fromCharCode(65+it.a)+'。'+it.why;}
+  answered++;document.getElementById('quizscore').textContent='已答 '+answered+' / '+QUIZ.length+'，答对 '+correct+' 题 '+(answered===QUIZ.length?(correct===QUIZ.length?'🎉 满分！':'💪 回顾下错题'):'');});
+</script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>看图学编程 · 流程图演示</title>
+<style>
+  :root{--bg:#f5f7fb;--card:#fff;--ink:#243044;--muted:#6b7689;--brand:#5b7cfa;--brand2:#8a6dff;
+    --accent:#ff8a3d;--good:#23b26d;--line:#e6eaf2;--soft:#eef2ff;--shadow:0 8px 28px rgba(40,60,120,.10);}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:16px}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  header.top{background:linear-gradient(120deg,var(--brand),var(--brand2));color:#fff;padding:24px 20px 20px}
+  header.top .wrap{max-width:1120px;margin:0 auto}
+  header.top h1{margin:0;font-size:24px}
+  header.top p{margin:6px 0 0;opacity:.92;font-size:14px}
+  header.top a{color:#fff;text-decoration:underline}
+  main{max-width:1120px;margin:0 auto;padding:18px 16px 80px}
+  .bar{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 18px;box-shadow:var(--shadow);margin-bottom:16px}
+  .bar h2{margin:0 0 10px;font-size:17px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:13.5px;font-weight:700;cursor:pointer;color:var(--ink)}
+  .chip:hover{background:var(--soft)}
+  .chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .chip .tag{font-size:11px;opacity:.7;font-weight:600}
+  .lab{font-size:12px;font-weight:700;color:var(--muted);margin:2px 0 6px;letter-spacing:.5px}
+  .pane{display:grid;grid-template-columns:1.45fr .9fr;gap:16px}
+  @media(max-width:900px){.pane{grid-template-columns:1fr}}
+  .fcbox{background:#fbfcff;border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:var(--shadow);overflow:hidden;height:clamp(380px,80vh,860px);display:flex;align-items:center;justify-content:center}
+  svg.flow2{max-width:100%;max-height:100%;width:100%;height:100%;display:block}
+  svg.flow2 .shape{fill:#fff;stroke:#9aa6c4;stroke-width:2}
+  svg.flow2 .term{fill:#eef2ff;stroke:#5b7cfa}
+  svg.flow2 .proc{fill:#fff}
+  svg.flow2 .io{fill:#fffaf2;stroke:#e6a25c}
+  svg.flow2 .dec{fill:#f3f0ff;stroke:#8a6dff}
+  svg.flow2 .lbl{font:600 12.5px "SF Mono",Menlo,monospace;fill:#243044}
+  svg.flow2 .edge{stroke:#9aa6c4;stroke-width:2;fill:none}
+  svg.flow2 .elabel{font:700 12px sans-serif;fill:#8a6dff}
+  svg.flow2 g.node.on .shape{fill:#ffe7cf;stroke:var(--accent);stroke-width:3;filter:drop-shadow(0 0 7px rgba(255,138,61,.65))}
+  svg.flow2 g.node{transition:opacity .15s}
+  .side .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow);margin-bottom:14px}
+  ol.code{margin:0;padding:6px 6px 6px 38px;background:#0f1730;color:#aeb8d8;border-radius:12px;font-family:"SF Mono",monospace;font-size:13.5px;line-height:1.6;overflow:auto}
+  ol.code li{padding:1px 6px;border-radius:6px;white-space:pre}
+  ol.code li.cur{background:#33421c;color:#fff}
+  .varbox{background:#0f1730;color:#e9edff;border-radius:12px;padding:12px}
+  .varbox h4{margin:0 0 8px;color:#9fb0ff;font-size:12.5px;letter-spacing:.5px}
+  table.vars{width:100%;border-collapse:collapse;font-family:"SF Mono",monospace;font-size:14px}
+  table.vars td{padding:4px 8px;border-bottom:1px solid #24304f}
+  table.vars td.k{color:#ffd9a8}
+  table.vars tr.changed td{background:#33421c}
+  .note{background:#162041;color:#cfe0ff;border-radius:10px;padding:8px 12px;font-size:14px;min-height:20px;margin-top:10px}
+  .outline{background:#0c1330;color:#7CFFB2;border-radius:10px;padding:8px 12px;font-family:"SF Mono",monospace;font-size:14px;white-space:pre-wrap;min-height:20px;margin-top:8px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .btn{border:0;border-radius:10px;padding:9px 15px;font-size:14px;font-weight:700;cursor:pointer;color:#fff;background:var(--brand)}
+  .btn:hover{filter:brightness(1.05)}
+  .btn.ghost{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}
+  .btn.warn{background:var(--accent)} .btn.dim{background:#eef1f7;color:var(--muted)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:10px}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .sw{width:16px;height:12px;border-radius:3px;display:inline-block;border:1.5px solid}
+  .err{background:#ffe9e7;color:#b3322c;border:1px solid #ffc9c4;border-radius:10px;padding:8px 12px;font-size:14px;margin-top:8px;display:none}
+  .progress{font-size:13px;color:var(--muted);margin-top:8px}
+  .toggle{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-top:10px;cursor:pointer}
+  .toggle input{width:16px;height:16px}
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(20,30,60,.45);z-index:100;align-items:center;justify-content:center}
+  .modal-card{background:#fff;border-radius:18px;padding:22px 24px;width:min(92vw,370px);box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}
+  .modal-h{font-size:17px;font-weight:700;margin-bottom:6px}
+  .modal-sub{font-size:13px;color:var(--muted);margin-bottom:14px}
+  .modal-in{width:100%;font-size:22px;text-align:center;padding:12px;border:2px solid var(--brand);border-radius:12px;font-family:"SF Mono",monospace;outline:none}
+  .modal-row{display:flex;gap:10px;justify-content:center;margin-top:16px}
+  .modal-tip{font-size:12px;color:var(--muted);margin-top:12px}
+  .modal-tip .mono{color:var(--brand)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <h1>看图学编程 · 流程图演示</h1>
+  <p>把练习场里的每个例子，变成会动的流程图 🟦➡️🔶 ｜ 配套《<a href="计算机课-第5课.html">第 5 课</a>》使用</p>
+</div></header>
+<main>
+  <div class="bar">
+    <h2>① 选一个例子</h2>
+    <div class="lab">顺序 SEQUENCE</div><div class="chips" id="chips-seq"></div>
+    <div class="lab" style="margin-top:10px">选择 SELECTION</div><div class="chips" id="chips-sel"></div>
+    <div class="lab" style="margin-top:10px">循环 ITERATION</div><div class="chips" id="chips-iter"></div>
+  </div>
+
+  <div class="pane">
+    <div>
+      <div class="lab">② 流程图（橙色＝正在执行的这一步）</div>
+      <div class="fcbox" id="fcHost"></div>
+      <div class="legend">
+        <span><i class="sw" style="background:#eef2ff;border-color:#5b7cfa"></i>开始/结束</span>
+        <span><i class="sw" style="background:#fff;border-color:#9aa6c4"></i>处理 Process</span>
+        <span><i class="sw" style="background:#fffaf2;border-color:#e6a25c"></i>输入/输出 I/O</span>
+        <span><i class="sw" style="background:#f3f0ff;border-color:#8a6dff;transform:rotate(45deg)"></i>判断 Decision</span>
+      </div>
+    </div>
+    <div class="side">
+      <div class="card">
+        <div class="lab">对应的代码（黄色＝当前步）</div>
+        <ol class="code" id="codeList"></ol>
+      </div>
+      <div class="card">
+        <div class="varbox"><h4>📦 变量 VARIABLES</h4><table class="vars" id="varTbl"></table>
+          <div class="note" id="noteBox">点「单步 ▶」开始</div>
+          <div class="outline" id="outBox">（暂无输出）</div></div>
+        <div class="err" id="errBox"></div>
+        <div class="row">
+          <button class="btn" id="bStep">单步 ▶</button>
+          <button class="btn ghost" id="bPrev">◀ 上一步</button>
+          <button class="btn warn" id="bAuto">慢放 ⏩</button>
+          <button class="btn dim" id="bReset">重置 ↺</button>
+        </div>
+        <label class="toggle"><input type="checkbox" id="autoFill"> 自动用示例数据（不弹框输入）</label>
+        <div class="progress" id="prog"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="modalOverlay" class="modal-bg">
+  <div class="modal-card">
+    <div class="modal-h">⌨️ 请输入 <span style="color:#5b7cfa" id="modalName"></span> 的值</div>
+    <div class="modal-sub">程序运行到 <span class="mono">INPUT</span> 了，轮到你输入数据啦！</div>
+    <input id="modalInput" class="modal-in" autocomplete="off" placeholder="在这里输入…">
+    <div class="modal-row">
+      <button class="btn" id="modalOk">确定 ✓</button>
+      <button class="btn dim" id="modalCancel">取消</button>
+    </div>
+    <div class="modal-tip">输入数字或文字都行，按 <b>Enter</b> 也可以确定</div>
+  </div>
+</div>
+
+<script>
+/* ===== 解释器基础（与第5课一致，已测过）===== */
+function tokenize(line){const toks=[];let i=0;const s=line;const isIdS=c=>/[A-Za-z_]/.test(c),isId=c=>/[A-Za-z0-9_]/.test(c);
+  while(i<s.length){const c=s[i];
+    if(c===' '||c==='\t'||c==='\r'){i++;continue;}
+    if(c==='/'&&s[i+1]==='/'){break;}
+    if(c==='"'){let j=i+1,t='';while(j<s.length&&s[j]!=='"'){t+=s[j];j++;}j++;toks.push({t:'str',v:t});i=j;continue;}
+    if(/[0-9]/.test(c)||(c==='.'&&/[0-9]/.test(s[i+1]))){let j=i,n='';while(j<s.length&&/[0-9.]/.test(s[j])){n+=s[j];j++;}toks.push({t:'num',v:parseFloat(n)});i=j;continue;}
+    if(c==='←'){toks.push({t:'op',v:'←'});i++;continue;}
+    if(c==='<'&&s[i+1]==='-'){toks.push({t:'op',v:'←'});i+=2;continue;}
+    if(c==='<'&&s[i+1]==='>'){toks.push({t:'op',v:'<>'});i+=2;continue;}
+    if(c==='<'&&s[i+1]==='='){toks.push({t:'op',v:'<='});i+=2;continue;}
+    if(c==='>'&&s[i+1]==='='){toks.push({t:'op',v:'>='});i+=2;continue;}
+    if('=<>+-*/(),'.includes(c)){toks.push({t:'op',v:c});i++;continue;}
+    if(isIdS(c)){let j=i,id='';while(j<s.length&&isId(s[j])){id+=s[j];j++;}const up=id.toUpperCase();
+      const kw=['IF','THEN','ELSE','ENDIF','WHILE','ENDWHILE','DO','REPEAT','UNTIL','FOR','TO','STEP','NEXT','INPUT','OUTPUT','AND','OR','NOT','MOD','DIV','TRUE','FALSE'];
+      toks.push(kw.includes(up)?{t:'kw',v:up}:{t:'id',v:id});i=j;continue;}
+    throw{msg:'无法识别的字符："'+c+'"'};}
+  return toks;}
+function parseExpr(toks){let p=0;const pk=()=>toks[p],nx=()=>toks[p++];const exp=v=>{if(!pk()||pk().v!==v)throw{msg:'缺少 '+v};p++;};
+  function pOr(){let a=pAnd();while(pk()&&pk().v==='OR'){nx();a={k:'bin',op:'OR',a,b:pAnd()};}return a;}
+  function pAnd(){let a=pNot();while(pk()&&pk().v==='AND'){nx();a={k:'bin',op:'AND',a,b:pNot()};}return a;}
+  function pNot(){if(pk()&&pk().v==='NOT'){nx();return{k:'un',op:'NOT',a:pNot()};}return pCmp();}
+  function pCmp(){let a=pAdd();while(pk()&&['=','<>','<','>','<=','>='].includes(pk().v)){const op=nx().v;a={k:'bin',op,a,b:pAdd()};}return a;}
+  function pAdd(){let a=pMul();while(pk()&&['+','-'].includes(pk().v)){const op=nx().v;a={k:'bin',op,a,b:pMul()};}return a;}
+  function pMul(){let a=pUn();while(pk()&&['*','/','MOD','DIV'].includes(pk().v)){const op=nx().v;a={k:'bin',op,a,b:pUn()};}return a;}
+  function pUn(){if(pk()&&pk().v==='-'){nx();return{k:'un',op:'-',a:pUn()};}return pP();}
+  function pP(){const t=pk();if(!t)throw{msg:'表达式不完整'};
+    if(t.t==='num'){nx();return{k:'num',v:t.v};}if(t.t==='str'){nx();return{k:'str',v:t.v};}
+    if(t.v==='TRUE'){nx();return{k:'bool',v:true};}if(t.v==='FALSE'){nx();return{k:'bool',v:false};}
+    if(t.t==='id'){nx();return{k:'var',name:t.v};}if(t.v==='('){nx();const e=pOr();exp(')');return e;}
+    throw{msg:'看不懂："'+t.v+'"'};}
+  const e=pOr();if(p<toks.length)throw{msg:'多余内容'};return e;}
+function evalAst(n,v){switch(n.k){
+  case 'num':case 'str':case 'bool':return n.v;
+  case 'var':if(!(n.name in v))throw{msg:'变量 '+n.name+' 还没有值'};return v[n.name];
+  case 'un':{const a=evalAst(n.a,v);return n.op==='-'?-a:!a;}
+  case 'bin':{const a=evalAst(n.a,v),b=evalAst(n.b,v);switch(n.op){
+    case '+':return(typeof a==='string'||typeof b==='string')?(''+a)+(''+b):a+b;
+    case '-':return a-b;case '*':return a*b;case '/':return a/b;case 'MOD':return a%b;case 'DIV':return Math.floor(a/b);
+    case '=':return a===b;case '<>':return a!==b;case '<':return a<b;case '>':return a>b;case '<=':return a<=b;case '>=':return a>=b;
+    case 'AND':return a&&b;case 'OR':return a||b;}}}throw{msg:'内部错误'};}
+function fmt(v){if(typeof v==='number')return ''+(Math.round(v*1e9)/1e9);if(typeof v==='boolean')return v?'TRUE':'FALSE';return ''+v;}
+function visible(v){const o={};for(const k in v)if(!k.startsWith('$'))o[k]=v[k];return o;}
+
+/* ===== 把 token 美化成方框里的文字 ===== */
+function pretty(toks){let out='';toks.forEach((t,i)=>{let s;
+  if(t.t==='str')s='"'+t.v+'"';
+  else if(t.v==='←')s='←';else if(t.v==='<>')s='≠';else if(t.v==='>=')s='≥';else if(t.v==='<=')s='≤';else if(t.v==='*')s='×';
+  else s=t.v;
+  if(i>0&&s!==','&&out[out.length-1]!=='(')out+=' ';out+=s;});
+  return out.replace(/\(\s+/g,'(').replace(/\s+\)/g,')');}
+
+/* ===== 结构化解析：源代码 → 语句树（FOR 展开为 赋值+WHILE）===== */
+function parseProgram(src){
+  const lines=src.split('\n').map((raw,i)=>({raw,no:i+1,toks:tokenize(raw)}));
+  let li=0,idc=0;const nid=()=>'fn'+(++idc);
+  const skip=()=>{while(li<lines.length&&lines[li].toks.length===0)li++;};
+  const peekKw=()=>{skip();if(li>=lines.length)return null;const t=lines[li].toks[0];return t.t==='kw'?t.v:'_S';};
+  const cur=()=>lines[li],adv=()=>{li++;};
+  const findIdx=(t,v)=>{for(let i=0;i<t.length;i++)if(t[i].v===v)return i;return -1;};
+  function block(stops){const arr=[];while(true){const k=peekKw();if(k===null||stops.includes(k))break;for(const n of one())arr.push(n);}return arr;}
+  function one(){const ln=cur(),toks=ln.toks,no=ln.no,head=toks[0];
+    if(head.t==='kw'){switch(head.v){
+      case 'IF':{const ti=findIdx(toks,'THEN');const ct=ti>=0?toks.slice(1,ti):toks.slice(1);
+        const cond=parseExpr(ct);adv();const then=block(['ELSE','ENDIF']);let els=[];
+        if(peekKw()==='ELSE'){adv();els=block(['ENDIF']);}
+        if(peekKw()==='ENDIF')adv();else throw{msg:'第'+no+'行缺少 ENDIF'};
+        return[{id:nid(),k:'if',cond,then,els,text:pretty(ct)+' ?',line:no}];}
+      case 'WHILE':{let t2=toks.slice(1);if(t2.length&&t2[t2.length-1].v==='DO')t2=t2.slice(0,-1);
+        const cond=parseExpr(t2);adv();const body=block(['ENDWHILE']);
+        if(peekKw()==='ENDWHILE')adv();else throw{msg:'第'+no+'行缺少 ENDWHILE'};
+        return[{id:nid(),k:'while',cond,body,text:pretty(t2)+' ?',line:no}];}
+      case 'REPEAT':{adv();const body=block(['UNTIL']);if(peekKw()!=='UNTIL')throw{msg:'缺少 UNTIL'};
+        const ul=cur();const ct=ul.toks.slice(1);const cond=parseExpr(ct);const uno=ul.no;adv();
+        return[{id:nid(),k:'repeat',body,cond,text:pretty(ct)+' ?',line:uno}];}
+      case 'FOR':{const vn=toks[1].v;const ti=findIdx(toks,'TO');const si=findIdx(toks,'STEP');
+        const fromT=toks.slice(3,ti);const toT=si>=0?toks.slice(ti+1,si):toks.slice(ti+1);const stepT=si>=0?toks.slice(si+1):[{t:'num',v:1}];
+        const fromE=parseExpr(fromT),toE=parseExpr(toT),stepE=parseExpr(stepT);adv();
+        const body=block(['NEXT']);if(peekKw()==='NEXT')adv();else throw{msg:'FOR 缺少 NEXT'};
+        const initN={id:nid(),k:'assign',name:vn,expr:fromE,text:vn+' ← '+pretty(fromT),line:no};
+        const incN={id:nid(),k:'assign',name:vn,expr:{k:'bin',op:'+',a:{k:'var',name:vn},b:stepE},text:vn+' ← '+vn+' + '+pretty(stepT),line:no};
+        const condA={k:'bin',op:'<=',a:{k:'var',name:vn},b:toE};
+        const whileN={id:nid(),k:'while',cond:condA,body:body.concat([incN]),text:vn+' ≤ '+pretty(toT)+' ?',line:no};
+        return[initN,whileN];}
+      case 'INPUT':{const name=toks[1].v;adv();return[{id:nid(),k:'input',name,text:'INPUT '+name,line:no}];}
+      case 'OUTPUT':{const parts=[];let d=0,c=[];toks.slice(1).forEach(t=>{if(t.v==='(')d++;if(t.v===')')d--;if(t.v===','&&d===0){parts.push(c);c=[];}else c.push(t);});if(c.length)parts.push(c);
+        adv();return[{id:nid(),k:'output',exprs:parts.map(parseExpr),text:pretty(toks),line:no}];}
+      default:throw{msg:'第'+no+'行不认识 '+head.v};
+    }} else {
+      if(toks.length>=2&&toks[0].t==='id'&&(toks[1].v==='←'||toks[1].v==='=')){
+        const name=toks[0].v;const expr=parseExpr(toks.slice(2));adv();
+        return[{id:nid(),k:'assign',name,expr,text:name+' ← '+pretty(toks.slice(2)),line:no}];}
+      throw{msg:'第'+no+'行看不懂'};}
+  }
+  return block([]);
+}
+
+/* ===== 生成器式执行：可在 INPUT 处暂停等待手动输入 ===== */
+function* gexec(tree,state){
+  const vars=state.vars,out=state.out;let guard=0;
+  const fr=(s,branch,changed)=>({type:'frame',active:s.id,line:s.line,text:s.text,vars:visible(vars),branch:branch||null,changed:changed||null,out:out.slice()});
+  function* list(l){for(const s of l){if(guard++>5000)throw{msg:'步骤太多(可能死循环)'};yield* stmt(s);}}
+  function* stmt(s){switch(s.k){
+    case 'assign':vars[s.name]=evalAst(s.expr,vars);yield fr(s,null,s.name);break;
+    case 'output':out.push(s.exprs.map(e=>fmt(evalAst(e,vars))).join(''));yield fr(s);break;
+    case 'input':{let v=yield{type:'input',node:s};if(typeof v==='string'&&v.trim()!==''&&!isNaN(Number(v)))v=Number(v);vars[s.name]=v;yield fr(s,null,s.name);break;}
+    case 'if':{const c=evalAst(s.cond,vars);yield fr(s,c?'Yes':'No');yield* list(c?s.then:(s.els||[]));break;}
+    case 'while':while(true){const c=evalAst(s.cond,vars);yield fr(s,c?'Yes':'No');if(!c)break;yield* list(s.body);if(guard++>5000)throw{msg:'步骤太多(可能死循环)'};}break;
+    case 'repeat':while(true){yield* list(s.body);const c=evalAst(s.cond,vars);yield fr(s,c?'Yes':'No');if(c)break;if(guard++>5000)throw{msg:'步骤太多'};}break;
+  }}
+  yield{type:'frame',active:'__start__',line:null,vars:{},branch:null,out:[],note:'开始 Start'};
+  yield* list(tree);
+  yield{type:'frame',active:'__stop__',line:null,vars:visible(vars),branch:null,out:out.slice(),note:'结束 Stop'};
+}
+
+/* ===== 自动布局 + 渲染 SVG ===== */
+const NH=38,DH=56,TH=36,GV=26,GH=38,CH=38,TM=14,MG=18;
+function textW(t){let w=0;for(const c of t)w+=(c.charCodeAt(0)<128)?7.6:14;return w;}
+function nodeSize(type,text){const tw=textW(text);
+  if(type==='term')return{w:Math.max(110,tw+30),h:TH};
+  if(type==='decision')return{w:Math.max(120,tw+52),h:DH};
+  return{w:Math.max(120,tw+28),h:NH};}
+function measureSeq(list){if(!list||!list.length)return{empty:true,w:50,h:22,cx:25,ms:[]};
+  const ms=list.map(measureStmt);let mc=0,mr=0;ms.forEach(m=>{mc=Math.max(mc,m.cx);mr=Math.max(mr,m.w-m.cx);});
+  const h=ms.reduce((a,m)=>a+m.h,0)+GV*(list.length-1);return{w:mc+mr,h,cx:mc,ms,list};}
+function measureStmt(s){
+  if(s.k==='assign'||s.k==='input'){const z=nodeSize('proc',s.text);return{w:z.w,h:z.h,cx:z.w/2,z};}
+  if(s.k==='output'){const z=nodeSize('io',s.text);return{w:z.w,h:z.h,cx:z.w/2,z};}
+  if(s.k==='if'){const mt=measureSeq(s.then),me=measureSeq(s.els||[]),ds=nodeSize('decision',s.text);
+    const cw=mt.w+GH+me.w,w=Math.max(ds.w,cw),h=ds.h+GV+Math.max(mt.h,me.h)+GV;return{w,h,cx:w/2,ds,mt,me,cw};}
+  if(s.k==='while'){const mb=measureSeq(s.body),ds=nodeSize('decision',s.text);const iw=Math.max(ds.w,mb.w);
+    return{w:CH+iw+CH,h:ds.h+GV+mb.h+GV+14,cx:CH+iw/2,ds,mb,iw};}
+  if(s.k==='repeat'){const mb=measureSeq(s.body),ds=nodeSize('decision',s.text);const iw=Math.max(ds.w,mb.w);
+    return{w:CH+iw+CH,h:TM+mb.h+GV+ds.h+GV+14,cx:CH+iw/2,ds,mb,iw};}
+}
+let NODES=[],EDGES=[];
+function addNode(id,type,x,y,w,h,text){NODES.push({id,type,x,y,w,h,text});}
+function placeSeq(list,ox,oy){const m=measureSeq(list);if(m.empty)return;let curY=oy,prevB=null;
+  list.forEach((s,i)=>{const ms=m.ms[i];const cx0=ox+m.cx;const childX=cx0-ms.cx;placeStmt(s,childX,curY);
+    if(i>0)EDGES.push({pts:[[cx0,prevB],[cx0,curY]],arrow:true});
+    prevB=curY+ms.h;curY+=ms.h+GV;});}
+function placeStmt(s,ox,oy){const m=measureStmt(s);
+  if(s.k==='assign'||s.k==='input'){addNode(s.id,'proc',ox,oy,m.w,m.h,s.text);return;}
+  if(s.k==='output'){addNode(s.id,'io',ox,oy,m.w,m.h,s.text);return;}
+  if(s.k==='if'){const ds=m.ds,mt=m.mt,me=m.me,cx=ox+m.cx;
+    addNode(s.id,'decision',cx-ds.w/2,oy,ds.w,ds.h,s.text);
+    const startX=cx-m.cw/2,thenC=startX+mt.cx,elseC=startX+mt.w+GH+me.cx,top=oy+ds.h+GV,mergeY=oy+m.h;
+    placeSeq(s.then,startX,top);if(s.els&&s.els.length)placeSeq(s.els,startX+mt.w+GH,top);
+    EDGES.push({pts:[[cx-ds.w/2,oy+ds.h/2],[thenC,oy+ds.h/2],[thenC,top]],arrow:true,label:'是 Yes'});
+    EDGES.push({pts:[[cx+ds.w/2,oy+ds.h/2],[elseC,oy+ds.h/2],[elseC,top]],arrow:true,label:'否 No'});
+    EDGES.push({pts:[[thenC,top+mt.h],[thenC,mergeY],[cx,mergeY]]});
+    EDGES.push({pts:[[elseC,top+me.h],[elseC,mergeY],[cx,mergeY]]});return;}
+  if(s.k==='while'){const ds=m.ds,mb=m.mb,cx=ox+m.cx,btop=oy+ds.h+GV,bbot=btop+mb.h,exitY=oy+m.h;
+    addNode(s.id,'decision',cx-ds.w/2,oy,ds.w,ds.h,s.text);
+    placeSeq(s.body,cx-mb.cx,btop);
+    EDGES.push({pts:[[cx,oy+ds.h],[cx,btop]],arrow:true,label:'是 Yes'});
+    const xL=ox+CH/2,xR=ox+m.w-CH/2;
+    EDGES.push({pts:[[cx,bbot],[cx,bbot+12],[xL,bbot+12],[xL,oy+ds.h/2],[cx-ds.w/2,oy+ds.h/2]],arrow:true});
+    EDGES.push({pts:[[cx+ds.w/2,oy+ds.h/2],[xR,oy+ds.h/2],[xR,exitY],[cx,exitY]],label:'否 No'});return;}
+  if(s.k==='repeat'){const ds=m.ds,mb=m.mb,cx=ox+m.cx,btop=oy+TM,bbot=btop+mb.h,decY=bbot+GV,exitY=oy+m.h;
+    placeSeq(s.body,cx-mb.cx,btop);
+    addNode(s.id,'decision',cx-ds.w/2,decY,ds.w,ds.h,s.text);
+    EDGES.push({pts:[[cx,oy],[cx,btop]],arrow:true});
+    EDGES.push({pts:[[cx,bbot],[cx,decY]],arrow:true});
+    EDGES.push({pts:[[cx,decY+ds.h],[cx,exitY]],label:'是 Yes'});
+    const xL=ox+CH/2;
+    EDGES.push({pts:[[cx-ds.w/2,decY+ds.h/2],[xL,decY+ds.h/2],[xL,btop],[cx,btop]],arrow:true,label:'否 No'});return;}
+}
+function buildSVG(tree){NODES=[];EDGES=[];const m=measureSeq(tree);const cX=MG+m.cx;
+  const st=nodeSize('term','开始 Start');addNode('__start__','term',cX-st.w/2,MG,st.w,TH,'开始 Start');
+  const bTop=MG+TH+GV;placeSeq(tree,MG,bTop);const bBot=bTop+m.h;
+  EDGES.unshift({pts:[[cX,MG+TH],[cX,bTop]],arrow:true});
+  const sp=nodeSize('term','结束 Stop');const stopY=bBot+GV;addNode('__stop__','term',cX-sp.w/2,stopY,sp.w,TH,'结束 Stop');
+  EDGES.push({pts:[[cX,bBot],[cX,stopY]],arrow:true});
+  return renderSVG(MG+m.w+MG,stopY+TH+MG);}
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function renderSVG(W,H){
+  let s=`<svg class="flow2" viewBox="0 0 ${W} ${H}"><defs><marker id="ah" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#9aa6c4"/></marker></defs>`;
+  EDGES.forEach(e=>{const p=e.pts.map(pt=>pt[0].toFixed(1)+','+pt[1].toFixed(1)).join(' ');
+    s+=`<polyline class="edge" points="${p}"${e.arrow?' marker-end="url(#ah)"':''}/>`;
+    if(e.label){const a=e.pts[0],b=e.pts[1];const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;s+=`<text class="elabel" x="${mx+4}" y="${my-5}">${e.label}</text>`;}});
+  NODES.forEach(n=>{const cx=n.x+n.w/2,cy=n.y+n.h/2;let shape;
+    if(n.type==='term')shape=`<ellipse class="shape term" cx="${cx}" cy="${cy}" rx="${n.w/2}" ry="${n.h/2}"/>`;
+    else if(n.type==='proc')shape=`<rect class="shape proc" x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="5"/>`;
+    else if(n.type==='io'){const sk=12;shape=`<polygon class="shape io" points="${n.x+sk},${n.y} ${n.x+n.w},${n.y} ${n.x+n.w-sk},${n.y+n.h} ${n.x},${n.y+n.h}"/>`;}
+    else shape=`<polygon class="shape dec" points="${cx},${n.y} ${n.x+n.w},${cy} ${cx},${n.y+n.h} ${n.x},${cy}"/>`;
+    s+=`<g class="node" data-id="${n.id}">${shape}<text class="lbl" x="${cx}" y="${cy+4}" text-anchor="middle">${esc(n.text)}</text></g>`;});
+  return s+'</svg>';}
+
+/* ===== 例子（与练习场一致）===== */
+const EX={
+  seq:[
+    ['两数相加','INPUT Number1\nINPUT Number2\nSum ← Number1 + Number2\nOUTPUT "和是 ", Sum','3\n4'],
+    ['长方形面积','INPUT Length\nINPUT Width\nArea ← Length * Width\nOUTPUT "面积 = ", Area','5\n6'],
+    ['摄氏转华氏','INPUT Celsius\nFahrenheit ← Celsius * 9 / 5 + 32\nOUTPUT Fahrenheit','100'],
+    ['公里转英里','INPUT Km\nMiles ← Km / 1.609\nOUTPUT Miles','10'],
+  ],
+  sel:[
+    ['及格判断','INPUT Mark\nIF Mark >= 50 THEN\n  OUTPUT "Pass"\nELSE\n  OUTPUT "Fail"\nENDIF','72'],
+    ['成绩等级(嵌套)','INPUT Mark\nIF Mark >= 70 THEN\n  OUTPUT "A"\nELSE\n  IF Mark >= 50 THEN\n    OUTPUT "B"\n  ELSE\n    OUTPUT "Fail"\n  ENDIF\nENDIF','65'],
+    ['电影票价','INPUT Age\nIF Age < 12 THEN\n  Price ← 5\nELSE\n  IF Age >= 65 THEN\n    Price ← 7\n  ELSE\n    Price ← 10\n  ENDIF\nENDIF\nOUTPUT Price','8'],
+    ['两数取大','INPUT A\nINPUT B\nIF A > B THEN\n  OUTPUT A\nELSE\n  IF B > A THEN\n    OUTPUT B\n  ELSE\n    OUTPUT "Equal"\n  ENDIF\nENDIF','7\n12'],
+  ],
+  iter:[
+    ['输出1到5','Counter ← 1\nWHILE Counter <= 5\n  OUTPUT Counter\n  Counter ← Counter + 1\nENDWHILE',''],
+    ['2到10偶数','FOR n ← 2 TO 10 STEP 2\n  OUTPUT n\nNEXT n',''],
+    ['累加到0为止','Total ← 0\nINPUT Number\nWHILE Number <> 0\n  Total ← Total + Number\n  INPUT Number\nENDWHILE\nOUTPUT "总和 = ", Total','5\n10\n15\n0'],
+    ['5个数求平均','Total ← 0\nFOR i ← 1 TO 5\n  INPUT Mark\n  Total ← Total + Mark\nNEXT i\nAverage ← Total / 5\nOUTPUT "平均 ", Average','60\n70\n80\n90\n100'],
+    ['猜数字(3次)','Secret ← 42\nFound ← FALSE\nFOR t ← 1 TO 3\n  INPUT Guess\n  IF Guess = Secret THEN\n    OUTPUT "You win!"\n    Found ← TRUE\n  ENDIF\nNEXT t\nIF Found = FALSE THEN\n  OUTPUT "Game over"\nENDIF','10\n42\n7'],
+    ['数到-1停','Count ← 0\nINPUT Number\nWHILE Number <> -1\n  Count ← Count + 1\n  INPUT Number\nENDWHILE\nOUTPUT "一共 ", Count, " 个"','4\n9\n2\n-1'],
+    ['阶乘 5!','f ← 1\nFOR i ← 1 TO 5\n  f ← f * i\nNEXT i\nOUTPUT "5! = ", f',''],
+    ['乘法表(单行)','n ← 7\nFOR i ← 1 TO 9\n  OUTPUT n, " x ", i, " = ", n * i\nNEXT i',''],
+  ]
+};
+
+/* ===== 播放器（边走边执行，遇到 INPUT 弹框）===== */
+const fcHost=document.getElementById('fcHost'),codeList=document.getElementById('codeList'),
+  varTbl=document.getElementById('varTbl'),noteBox=document.getElementById('noteBox'),
+  outBox=document.getElementById('outBox'),errBox=document.getElementById('errBox'),prog=document.getElementById('prog'),
+  bAuto=document.getElementById('bAuto'),autoFillEl=document.getElementById('autoFill'),
+  modalOverlay=document.getElementById('modalOverlay'),modalName=document.getElementById('modalName'),
+  modalInput=document.getElementById('modalInput');
+let tree=null,curSrc='',gen=null,state=null,history=[],idx=-1,finished=false,pendingInput=null,
+    defaults=[],defaultPtr=0,timer=null,autoOn=false,modalOpen=false;
+function renderVars(v,changed){varTbl.innerHTML='';const ks=Object.keys(v);
+  if(!ks.length){varTbl.innerHTML='<tr><td style="color:#67739c">（还没有变量）</td></tr>';return;}
+  ks.forEach(k=>{const tr=document.createElement('tr');if(k===changed)tr.className='changed';
+    tr.innerHTML='<td class="k">'+k+'</td><td>'+fmt(v[k])+'</td>';varTbl.appendChild(tr);});}
+function renderCode(line){codeList.innerHTML='';curSrc.split('\n').forEach((ln,i)=>{const li=document.createElement('li');
+  li.textContent=ln||' ';if(i+1===line)li.className='cur';codeList.appendChild(li);});}
+function paint(active,vars,changed,line,note,out){
+  fcHost.querySelectorAll('g.node').forEach(g=>g.classList.toggle('on',g.dataset.id===active));
+  renderVars(vars,changed);renderCode(line);noteBox.textContent=note;
+  outBox.textContent=out&&out.length?out.join('\n'):'（暂无输出）';}
+function show(){const f=history[idx];let note=f.note||f.text||'';
+  if(f.branch)note=f.text+'　→ 走 '+(f.branch==='Yes'?'是 Yes':'否 No')+' 这条路';
+  paint(f.active,f.vars,f.changed,f.line,'第 '+(idx+1)+' 步：'+note,f.out);
+  prog.textContent=(finished&&idx===history.length-1)?'✅ 执行完毕':'';}
+function renderPending(){const node=pendingInput,base=history[idx]||{vars:{},out:[]};
+  paint(node.id,base.vars,null,node.line,'⌨️ 请输入 '+node.name+' 的值…',base.out);
+  prog.textContent='⏸ 等待你输入';}
+function pump(arg){try{const res=gen.next(arg);if(res.done){finished=true;return;}
+    const y=res.value;
+    if(y.type==='input'){pendingInput=y.node;renderPending();return;}
+    history.push(y);idx=history.length-1;if(y.active==='__stop__')finished=true;show();
+  }catch(e){errBox.style.display='block';errBox.textContent='⚠️ '+(e.msg||e);stopAuto();}}
+function stepFwd(){
+  if(idx<history.length-1){idx++;show();return;}
+  if(finished)return;
+  if(pendingInput){openInputModal();return;}
+  pump();
+  if(pendingInput)openInputModal();}
+function prevStep(){if(idx>0){idx--;show();}}
+function reset(){stopAuto();errBox.style.display='none';if(!tree)return;
+  state={vars:{},out:[]};gen=gexec(tree,state);
+  history=[];idx=-1;finished=false;pendingInput=null;defaultPtr=0;pump();}
+/* 自动播放 */
+function startTimer(){timer=setInterval(tick,950);}
+function pauseTimer(){if(timer){clearInterval(timer);timer=null;}}
+function stopAuto(){autoOn=false;pauseTimer();bAuto.textContent='慢放 ⏩';}
+function tick(){if(modalOpen)return;if(finished){stopAuto();return;}stepFwd();}
+function toggleAuto(){if(autoOn){stopAuto();return;}if(finished)return;
+  autoOn=true;bAuto.textContent='暂停 ⏸';tick();if(autoOn&&!modalOpen&&!finished)startTimer();}
+/* 输入对话框 */
+function openInputModal(){pauseTimer();
+  const def=defaults[defaultPtr];
+  if(autoFillEl.checked&&def!==undefined&&def!==''){confirmInput(def);return;}
+  modalName.textContent=pendingInput.name;modalInput.value='';
+  modalOpen=true;modalOverlay.style.display='flex';setTimeout(()=>modalInput.focus(),30);}
+function confirmInput(val){if(val===undefined)val=modalInput.value;
+  if((''+val).trim()===''){modalInput.focus();return;}
+  modalOpen=false;modalOverlay.style.display='none';defaultPtr++;pendingInput=null;
+  pump(val);
+  if(autoOn&&!finished&&!pendingInput)startTimer();}
+function cancelInput(){modalOpen=false;modalOverlay.style.display='none';stopAuto();}
+document.getElementById('bStep').onclick=stepFwd;
+document.getElementById('bPrev').onclick=prevStep;
+document.getElementById('bAuto').onclick=toggleAuto;
+document.getElementById('bReset').onclick=reset;
+document.getElementById('modalOk').onclick=()=>confirmInput();
+document.getElementById('modalCancel').onclick=cancelInput;
+modalInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();confirmInput();}else if(e.key==='Escape'){cancelInput();}});
+
+function load(code,inp){stopAuto();errBox.style.display='none';modalOpen=false;modalOverlay.style.display='none';curSrc=code;
+  try{tree=parseProgram(code);fcHost.innerHTML=buildSVG(tree);}
+  catch(e){errBox.style.display='block';errBox.textContent='⚠️ '+(e.msg||e);fcHost.innerHTML='';tree=null;return;}
+  defaults=inp.split('\n').map(s=>s.trim()).filter(s=>s!=='');reset();}
+
+/* ===== 选择按钮 ===== */
+let allChips=[];
+function makeChips(boxId,arr){const box=document.getElementById(boxId);
+  arr.forEach(([name,code,inp])=>{const b=document.createElement('button');b.className='chip';b.textContent=name;
+    b.onclick=()=>{allChips.forEach(c=>c.classList.remove('on'));b.classList.add('on');load(code,inp);};
+    box.appendChild(b);allChips.push(b);});}
+makeChips('chips-seq',EX.seq);makeChips('chips-sel',EX.sel);makeChips('chips-iter',EX.iter);
+// 默认载入"输出1到5"
+allChips.find(c=>c.textContent==='输出1到5').click();
+</script>
+</body>
+</html>

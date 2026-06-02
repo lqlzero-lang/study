@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 1 课 · 进制与二进制运算 | Number Systems</title>
+<style>
+  :root{--bg:#f5f7fb;--card:#fff;--ink:#243044;--muted:#6b7689;--brand:#6c5ce7;--brand2:#3a86ff;
+    --accent:#ff8a3d;--good:#23b26d;--bad:#e8554e;--line:#e6eaf2;--soft:#eeebff;--shadow:0 8px 28px rgba(40,60,120,.10);}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:16px}
+  code,.mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .en{color:var(--brand2);font-style:normal}
+  header.top{background:linear-gradient(120deg,#6c5ce7,#3a86ff);color:#fff;padding:26px 20px 22px}
+  header.top .wrap{max-width:1040px;margin:0 auto}
+  header.top h1{margin:0;font-size:26px}header.top p{margin:6px 0 0;opacity:.93;font-size:14px}
+  nav.tabs{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+  nav.tabs .wrap{max-width:1040px;margin:0 auto;display:flex;gap:4px;padding:8px 12px}
+  nav.tabs button{border:0;background:transparent;color:var(--muted);font-size:14px;font-weight:600;padding:8px 12px;border-radius:10px;cursor:pointer;flex:0 0 auto}
+  nav.tabs button:hover{background:var(--soft);color:var(--ink)}nav.tabs button.active{background:var(--brand);color:#fff}
+  main{max-width:1040px;margin:0 auto;padding:20px 16px 80px}
+  section{display:none;animation:fade .25s ease}section.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2.title{font-size:22px;margin:6px 0 4px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  h2.title .en{font-size:15px}.lead{color:var(--muted);margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:var(--shadow)}
+  .card h3{margin:2px 0 10px;font-size:17px}
+  .grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+  .defbox{border-left:4px solid var(--brand);background:var(--soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}.defbox b{color:#5849c4}
+  .warn{border-left:4px solid var(--accent);background:#fff7ed;padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}
+  ul.clean{margin:8px 0;padding-left:20px}ul.clean li{margin:4px 0}
+  table.t{width:100%;border-collapse:collapse;margin:8px 0;font-size:15px}
+  table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:center}table.t th{background:var(--soft)}
+  .tip{font-size:13px;color:var(--muted);margin-top:6px}
+  .btn{border:0;border-radius:10px;padding:9px 15px;font-size:14px;font-weight:700;cursor:pointer;color:#fff;background:var(--brand)}
+  .btn:hover{filter:brightness(1.05)}.btn.ghost{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}
+  .btn.dim{background:#eef1f7;color:var(--muted)}.btn.sm{padding:5px 11px;font-size:13px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  details.acc{border:1px solid var(--line);border-radius:12px;padding:6px 14px;margin:8px 0;background:#fff}
+  details.acc summary{cursor:pointer;font-weight:700;padding:6px 0}details.acc[open]{box-shadow:var(--shadow)}
+  input.num{padding:8px 10px;border-radius:10px;border:1.5px solid var(--line);font-size:16px;font-family:"SF Mono",monospace;width:120px}
+  select.sel{padding:7px 10px;border-radius:10px;border:1.5px solid var(--line);font-size:14px;background:#fff}
+  /* bits */
+  .bits{display:flex;gap:6px;flex-wrap:wrap}
+  .bit{width:46px;text-align:center;user-select:none}
+  .bit .pv{font-size:11px;color:var(--muted);margin-bottom:3px}
+  .bit .b{height:46px;display:flex;align-items:center;justify-content:center;border-radius:10px;border:2px solid var(--line);font-size:20px;font-weight:800;font-family:"SF Mono",monospace;background:#fff;cursor:pointer;transition:.12s}
+  .bit.on .b{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 3px 10px rgba(108,92,231,.3)}
+  .bit.drop .b{background:#fdeceb;border-color:var(--bad);color:var(--bad);text-decoration:line-through}
+  .bit.add .b{background:#e9f9f1;border-color:var(--good);color:var(--good)}
+  .readout{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px}
+  .ro{background:#0f1730;color:#e9edff;border-radius:12px;padding:10px 16px;min-width:130px}
+  .ro .lab{font-size:11px;color:#9fb0ff;letter-spacing:.5px}.ro .v{font-size:24px;font-weight:800;font-family:"SF Mono",monospace}
+  .ro.den .v{color:#7CFFB2}.ro.bin .v{color:#9fd0ff;font-size:18px}.ro.hex .v{color:#ffd9a8}
+  .calcout{background:#0f1730;color:#e9edff;border-radius:12px;padding:14px 16px;font-family:"SF Mono",monospace;font-size:15px;line-height:1.9;white-space:pre-wrap;overflow:auto}
+  .calcout .op{color:#ffd9a8}.calcout b{color:#7CFFB2}
+  .big{font-size:22px;font-weight:800;color:var(--brand2)}
+  .hexgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+  @media(max-width:680px){.hexgrid{grid-template-columns:repeat(4,1fr)}}
+  .hexcell{border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;background:#fff}
+  .hexcell .h{font-size:20px;font-weight:800;color:var(--brand)}.hexcell .d{font-size:12px;color:var(--muted)}.hexcell .bn{font-family:"SF Mono",monospace;font-size:13px}
+  .addgrid{font-family:"SF Mono",monospace;font-size:22px;line-height:1.5;letter-spacing:3px}
+  .addgrid .carry{color:var(--accent);font-size:15px;letter-spacing:6px}
+  .addgrid .lost{color:var(--bad);text-decoration:line-through}
+  .swatch{width:70px;height:70px;border-radius:12px;border:2px solid var(--line)}
+  /* quiz */
+  .q{margin:14px 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.q .qh{font-weight:700;margin-bottom:8px}
+  .q .opt{display:block;padding:8px 12px;margin:6px 0;border:1.5px solid var(--line);border-radius:10px;cursor:pointer}.q .opt:hover{background:var(--soft)}
+  .q .opt.right{border-color:var(--good);background:#e9f9f1}.q .opt.wrong{border-color:var(--bad);background:#fdeceb}
+  .q .fb{margin-top:8px;font-size:14px;display:none}.q .fb.show{display:block}.q .fb.ok{color:var(--good)}.q .fb.no{color:var(--bad)}
+  .parent{background:#fff7ed;border:1px dashed var(--accent);border-radius:14px;padding:14px 18px;margin:16px 0}
+  footer{max-width:1040px;margin:0 auto;padding:20px 16px 60px;color:var(--muted);font-size:13px}footer a{color:var(--brand2)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <h1>第 1 课 · 进制与二进制运算</h1>
+  <p>Number Systems · Binary · Hex · Cambridge IGCSE Computer Science 0478 · 点开关、按按钮，自己算 🔢</p>
+</div></header>
+<nav class="tabs"><div class="wrap" id="tabbar"></div></nav>
+
+<main>
+<!-- 0 -->
+<section id="s-intro" class="show">
+  <h2 class="title">为什么计算机用二进制 <span class="en">Why Binary?</span></h2>
+  <p class="lead">计算机由<b>几十亿个开关</b>组成，每个开关只有两种可靠状态：<b>开 / 关</b> ➜ <b>1 / 0</b>。状态越多越容易出错，所以只用两种。</p>
+  <div class="card"><div class="defbox"><b>核心规则：</b>任何数据——数字、文字、图片、声音——在计算机处理之前，都必须先变成<b>二进制 binary</b>。</div></div>
+  <div class="card"><h3>三种进制 <span class="en">Three Number Systems</span></h3>
+    <table class="t">
+      <tr><th>进制</th><th>基数 base</th><th>用到的数字</th><th>谁在用</th></tr>
+      <tr><td>十进制 Denary</td><td>10</td><td>0–9</td><td>我们日常</td></tr>
+      <tr><td>二进制 Binary</td><td>2</td><td>0 1</td><td>计算机本身</td></tr>
+      <tr><td>十六进制 Hex</td><td>16</td><td>0–9 A–F</td><td>人类读二进制的"速记"</td></tr>
+    </table>
+  </div>
+  <div class="card"><h3>本课目标 <span class="en">Goals</span></h3>
+    <ul class="clean"><li>三种进制之间互相转换</li><li>二进制加法 + 理解<b>溢出 overflow</b></li><li>逻辑移位 <span class="en">logical shift</span></li><li>用<b>补码 two's complement</b> 表示负数</li></ul>
+  </div>
+  <div class="parent"><b>👋 给家长：</b>整页离线可玩。最核心的工具是"位开关转换器"——点亮/熄灭每一位，立刻看到十进制、二进制、十六进制三者同步变化，把抽象的进制变成可触摸的开关。中文为主、英文术语对照。</div>
+</section>
+
+<!-- 1 转换器 -->
+<section id="s-conv">
+  <h2 class="title">1 · 二进制 ↔ 十进制 <span class="en">Binary ↔ Denary</span></h2>
+  <div class="card"><h3>位值是关键 <span class="en">Place Value</span></h3>
+    <p>每一位代表一个<b>2 的幂</b>，从右往左翻倍：1, 2, 4, 8, 16, 32, 64, 128。8 位最大 = 128+64+…+1 = <b>255</b>。</p>
+  </div>
+  <div class="card"><h3>🔀 位开关转换器（点格子开/关）</h3>
+    <p class="tip">点上面每一位把它变成 1 或 0，下面三种进制会同步变。也可以直接在框里输入十进制或十六进制。</p>
+    <div class="bits" id="bitRow"></div>
+    <div class="readout">
+      <div class="ro den"><div class="lab">十进制 DENARY</div><div class="v" id="roDen">0</div></div>
+      <div class="ro bin"><div class="lab">二进制 BINARY</div><div class="v" id="roBin">00000000</div></div>
+      <div class="ro hex"><div class="lab">十六进制 HEX</div><div class="v" id="roHex">00</div></div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <label>输入十进制 (0–255)：<input class="num" id="inDen" value="0"></label>
+      <label>输入十六进制 (00–FF)：<input class="num" id="inHex" value="00" style="width:90px"></label>
+    </div>
+    <div class="calcout" id="convWork" style="margin-top:12px"></div>
+  </div>
+  <div class="card"><h3>✏️ 轮到你（先算再点开）</h3>
+    <details class="acc"><summary>01101110 转十进制</summary>64+32+8+4+2 = <b>110</b></details>
+    <details class="acc"><summary>11111111 转十进制</summary><b>255</b>（8 位最大值）</details>
+    <details class="acc"><summary>75 转二进制</summary><b>01001011</b>（64+8+2+1）</details>
+    <details class="acc"><summary>200 转二进制</summary><b>11001000</b>（128+64+8）</details>
+  </div>
+</section>
+
+<!-- 2 hex -->
+<section id="s-hex">
+  <h2 class="title">2 · 十六进制 <span class="en">Hexadecimal</span></h2>
+  <div class="card"><div class="defbox"><b>为什么用 Hex？</b> 它是二进制的"速记"：<span class="mono">10110101</span> ➜ <span class="mono">B5</span>，同样的信息，长度只有四分之一。<b>每 1 个 hex 位 = 正好 4 个二进制位（一个 nibble）。</b></div></div>
+  <div class="card"><h3>对照表（背下来！）<span class="en">Hex Digits</span></h3>
+    <div class="hexgrid" id="hexGrid"></div>
+    <p class="tip">规则：二进制每 4 位一组转一个 hex 位；hex 每位拆成 4 位二进制。</p>
+  </div>
+  <div class="card"><h3>用上面的转换器</h3><p>切到「1 · 二进制↔十进制」标签，在 hex 框输入 <span class="mono">B5</span>，看它对应 181、对应 10110101。三者一起亮起来 ✨</p>
+    <details class="acc"><summary>11001010 转 hex</summary>1100 1010 ➜ <b>CA</b></details>
+    <details class="acc"><summary>3F 转二进制</summary>3=0011, F=1111 ➜ <b>00111111</b></details>
+    <details class="acc"><summary>A7 转十进制</summary>10×16 + 7 = <b>167</b></details>
+    <details class="acc"><summary>140 转 hex</summary>140 = 10001100 ➜ 1000 1100 ➜ <b>8C</b></details>
+  </div>
+  <div class="card"><h3>Hex 用在哪 <span class="en">Where Hex Is Used</span></h3>
+    <ul class="clean"><li>网页颜色码：<span class="mono">#FF5733</span></li><li>MAC 地址：<span class="mono">3A:7C:A5:5A:AF:A7</span></li><li>IPv6 地址、内存地址、错误码 <span class="mono">0x80070005</span></li></ul>
+  </div>
+</section>
+
+<!-- 3 加法 -->
+<section id="s-add">
+  <h2 class="title">3 · 二进制加法与溢出 <span class="en">Addition &amp; Overflow</span></h2>
+  <div class="card"><h3>加法规则</h3>
+    <table class="t"><tr><th>相加</th><th>结果</th><th>进位 carry</th></tr>
+      <tr><td>0+0</td><td>0</td><td>0</td></tr><tr><td>0+1 / 1+0</td><td>1</td><td>0</td></tr>
+      <tr><td>1+1</td><td>0</td><td>1</td></tr><tr><td>1+1+1</td><td>1</td><td>1</td></tr></table>
+    <p class="tip">和十进制一样——超过基数就进位。</p>
+  </div>
+  <div class="card"><h3>➕ 加法器（输入两个数，看竖式和进位）</h3>
+    <div class="row">
+      <label>A：<input class="num" id="addA" value="90"></label>
+      <label>B：<input class="num" id="addB" value="53"></label>
+      <select class="sel" id="addMode"><option value="den">十进制输入</option><option value="bin">二进制输入</option></select>
+    </div>
+    <div class="addgrid" id="addOut" style="margin-top:14px"></div>
+    <div class="warn" id="addNote" style="margin-top:12px"></div>
+  </div>
+  <div class="card"><div class="defbox"><b>溢出 Overflow：</b>8 位寄存器只能存 0–255。如果和超过 255，第 9 位无处可放、被丢掉，存下来的结果就<b>错了</b>。（16 位上限是 65535）</div>
+    <details class="acc"><summary>00110011 + 01001100 = ?</summary>51+76 = 127 = <b>01111111</b>（不溢出）</details>
+    <details class="acc"><summary>01111111 + 00000001 = ?</summary>127+1 = 128 = <b>10000000</b>（不溢出）</details>
+    <details class="acc"><summary>10101010 + 10101010 会溢出吗？</summary>170+170 = 340 > 255 ➜ <b>溢出！</b> 存下来的是 340−256 = 84</details>
+  </div>
+</section>
+
+<!-- 4 移位 -->
+<section id="s-shift">
+  <h2 class="title">4 · 逻辑移位 <span class="en">Logical Shift</span></h2>
+  <div class="card"><div class="defbox"><b>逻辑移位：</b>把所有位整体左移或右移若干格。移出去的位<b>丢失</b>，空出来的位补 <b>0</b>。<br>👉 <b>左移 n 位 = ×2ⁿ</b>（乘）；<b>右移 n 位 = ÷2ⁿ</b>（整除，余数丢掉）。这是计算机快速乘除 2 的幂的办法。</div></div>
+  <div class="card"><h3>↔️ 移位实验（看位怎么掉、怎么补 0）</h3>
+    <div class="row">
+      <label>数值 (0–255)：<input class="num" id="shVal" value="22"></label>
+      <select class="sel" id="shDir"><option value="L">左移 ◀</option><option value="R">右移 ▶</option></select>
+      <label>位数 n：<input class="num" id="shN" value="2" style="width:70px"></label>
+      <button class="btn" id="shGo">移位 ▶</button>
+    </div>
+    <div style="margin-top:14px"><div class="tip">移位前：</div><div class="bits" id="shBefore"></div></div>
+    <div style="margin-top:12px"><div class="tip">移位后：<span style="color:var(--bad)">红=丢失</span>　<span style="color:var(--good)">绿=补的0</span></div><div class="bits" id="shAfter"></div></div>
+    <div class="warn" id="shNote" style="margin-top:12px"></div>
+  </div>
+  <div class="card">
+    <details class="acc"><summary>00001111 左移 3</summary>15×8 = 120 = <b>01111000</b></details>
+    <details class="acc"><summary>11000000 左移 2 会怎样？</summary>两个 MSB 是 1，被移出丢失！结果 = <b>00000000</b>（不再等于 ×4）</details>
+    <details class="acc"><summary>10110000 右移 4</summary>176÷16 = 11 = <b>00001011</b></details>
+    <details class="acc"><summary>"左移 5 位"等于哪个十进制运算？</summary><b>×32</b>（2⁵）</details>
+  </div>
+</section>
+
+<!-- 5 补码 -->
+<section id="s-twos">
+  <h2 class="title">5 · 补码（负数）<span class="en">Two's Complement</span></h2>
+  <div class="card"><p>到目前为止都是正数。计算机怎么表示<b>负数</b>？答案：<b>补码 two's complement</b>——只有一个 0、加减法用同一套硬件。</p>
+    <div class="defbox"><b>规则：</b>正数不变（MSB=0）。负数：①写出正数的 8 位二进制 ②每一位<b>取反</b>(0↔1) ③<b>加 1</b>。</div>
+  </div>
+  <div class="card"><h3>➖ 补码生成器（看翻转+加1 的每一步）</h3>
+    <div class="row"><label>输入一个整数 (−128 ~ 127)：<input class="num" id="twVal" value="-5"></label><button class="btn" id="twGo">生成 ▶</button></div>
+    <div class="calcout" id="twOut" style="margin-top:12px"></div>
+  </div>
+  <div class="card"><h3>🔎 补码解码器（8 位二进制 → 十进制）</h3>
+    <div class="row"><label>输入 8 位二进制：<input class="num" id="dcBin" value="11011000" style="width:150px"></label><button class="btn" id="dcGo">解码 ▶</button></div>
+    <div class="calcout" id="dcOut" style="margin-top:12px"></div>
+    <p class="tip">MSB=0 → 正数，直接转；MSB=1 → 负数，同样"翻转+加1"求大小再加负号。</p>
+  </div>
+</section>
+
+<!-- 6 quiz -->
+<section id="s-quiz">
+  <h2 class="title">6 · 闯关小测验 <span class="en">Quiz</span></h2>
+  <p class="lead">选答案点一下，错了会告诉你为什么。</p>
+  <div id="quizbox"></div>
+  <div class="card" id="quizscore" style="text-align:center;font-size:18px;font-weight:700"></div>
+</section>
+</main>
+<footer>© 给女儿的计算机课 · 基于 Stellan G5 / Cambridge IGCSE 0478 第 1 课。全部在浏览器本地运行。<br>
+  其它课：<a href="../lesson%203%20%E6%96%87%E5%AD%97%20%E9%9F%B3%E8%A7%86%E9%A2%91/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%AF%BE-%E7%AC%AC3%E8%AF%BE.html">第 3 课 文字/音视频</a> ·
+  <a href="../lesson%204%20%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%8F%8A%E5%8E%8B%E7%BC%A9/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%AF%BE-%E7%AC%AC4%E8%AF%BE.html">第 4 课 数据存储与压缩</a> ·
+  <a href="../lesson%205%20%E7%BC%96%E7%A8%8B%E6%B5%81%E7%A8%8B%E5%9B%BE/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%AF%BE-%E7%AC%AC5%E8%AF%BE.html">第 5 课 算法与流程图</a></footer>
+
+<script>
+/* tabs */
+const TABS=[['s-intro','导览'],['s-conv','1 二进制↔十进制'],['s-hex','2 十六进制'],['s-add','3 加法与溢出'],['s-shift','4 逻辑移位'],['s-twos','5 补码'],['s-quiz','6 测验']];
+const tabbar=document.getElementById('tabbar');
+TABS.forEach(([id,n])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>show(id,b);tabbar.appendChild(b);});
+function show(id,btn){document.querySelectorAll('main section').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');
+  tabbar.querySelectorAll('button').forEach(x=>x.classList.remove('active'));(btn||tabbar.children[0]).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+tabbar.children[0].classList.add('active');
+const PV=[128,64,32,16,8,4,2,1];
+function toBin(v){return v.toString(2).padStart(8,'0');}
+function toHex(v){return v.toString(16).toUpperCase().padStart(2,'0');}
+
+/* ===== 转换器 ===== */
+let bits=[0,0,0,0,0,0,0,0];
+const bitRow=document.getElementById('bitRow');
+PV.forEach((pv,i)=>{const d=document.createElement('div');d.className='bit';d.dataset.i=i;
+  d.innerHTML='<div class="pv">'+pv+'</div><div class="b">0</div>';
+  d.querySelector('.b').onclick=()=>{bits[i]^=1;refresh('bit');};bitRow.appendChild(d);});
+const inDen=document.getElementById('inDen'),inHex=document.getElementById('inHex');
+function bitsVal(){return bits.reduce((a,b,i)=>a+b*PV[i],0);}
+function setFromVal(v){for(let i=0;i<8;i++)bits[i]=(v>>(7-i))&1;}
+function refresh(src){
+  const v=bitsVal();
+  bitRow.querySelectorAll('.bit').forEach((el,i)=>{el.classList.toggle('on',!!bits[i]);el.querySelector('.b').textContent=bits[i];});
+  document.getElementById('roDen').textContent=v;
+  document.getElementById('roBin').textContent=toBin(v);
+  document.getElementById('roHex').textContent=toHex(v);
+  if(src!=='den')inDen.value=v;
+  if(src!=='hex')inHex.value=toHex(v);
+  // 工作过程
+  const parts=[];for(let i=0;i<8;i++)if(bits[i])parts.push(PV[i]);
+  const hi=Math.floor(v/16),lo=v%16;
+  document.getElementById('convWork').innerHTML=
+    '二进制 = '+toBin(v)+'\n十进制 = '+(parts.length?parts.join(' + ')+' = ':'')+'<b>'+v+'</b>'+
+    '\nhex   = '+toBin(v).slice(0,4)+' '+toBin(v).slice(4)+' ➜ '+hi.toString(16).toUpperCase()+lo.toString(16).toUpperCase()+' = <b>'+toHex(v)+'</b>';
+}
+inDen.oninput=()=>{let v=parseInt(inDen.value,10);if(isNaN(v))return;v=Math.max(0,Math.min(255,v));setFromVal(v);refresh('den');};
+inHex.oninput=()=>{let v=parseInt(inHex.value,16);if(isNaN(v))return;v=Math.max(0,Math.min(255,v));setFromVal(v);refresh('hex');};
+setFromVal(181);refresh();inDen.value=181;inHex.value='B5';
+
+/* ===== hex 表 ===== */
+const hexGrid=document.getElementById('hexGrid');
+for(let i=0;i<16;i++){const c=document.createElement('div');c.className='hexcell';
+  c.innerHTML='<div class="h">'+i.toString(16).toUpperCase()+'</div><div class="d">'+i+'</div><div class="bn">'+i.toString(2).padStart(4,'0')+'</div>';hexGrid.appendChild(c);}
+
+/* ===== 加法器 ===== */
+const addA=document.getElementById('addA'),addB=document.getElementById('addB'),addMode=document.getElementById('addMode');
+function parseN(s,mode){return mode==='bin'?parseInt(s,2):parseInt(s,10);}
+function doAdd(){
+  const mode=addMode.value;let a=parseN(addA.value.trim(),mode),b=parseN(addB.value.trim(),mode);
+  const out=document.getElementById('addOut'),note=document.getElementById('addNote');
+  if(isNaN(a)||isNaN(b)||a<0||b<0||a>255||b>255){out.innerHTML='';note.innerHTML='⚠️ 请输入 0–255 之间的两个数';return;}
+  const sum=a+b,abin=toBin(a),bbin=toBin(b);
+  // 进位逐列
+  let carry=Array(9).fill(0),res=Array(8).fill(0),c=0;
+  for(let i=7;i>=0;i--){const s=(+abin[i])+(+bbin[i])+c;res[i]=s&1;c=s>>1;carry[i]=c;}
+  const carryStr=(c?'<span style="color:#ff8a3d">1</span>':'&nbsp;')+carry.slice(0,8).map(x=>x?'1':'&nbsp;').join('');
+  const resStr=(c?'<span class="lost">1</span>':'')+res.join('');
+  out.innerHTML='<div class="carry">进位 '+carry.map(x=>x?'1':'·').join('').slice(0,8)+(c?' ←'+1:'')+'</div>'+
+    '<div>&nbsp;&nbsp;'+abin+'　('+a+')</div><div>+ '+bbin+'　('+b+')</div><div>─────────</div>'+
+    '<div>'+(c?'<span class="lost">1</span>':'&nbsp;')+res.join('')+'　= '+(sum&255)+'</div>';
+  if(sum>255)note.innerHTML='💥 <b>溢出 Overflow！</b> '+a+'+'+b+' = '+sum+' > 255。第 9 位放不下被丢掉，存下来的结果变成 <b>'+(sum&255)+'</b>（错的！）';
+  else note.innerHTML='✅ '+a+' + '+b+' = <b>'+sum+'</b>，没有溢出（≤255）。';
+}
+[addA,addB,addMode].forEach(e=>e.addEventListener('input',doAdd));doAdd();
+
+/* ===== 移位 ===== */
+function bitBoxes(host,arr,cls){host.innerHTML='';arr.forEach(x=>{const d=document.createElement('div');d.className='bit'+(x.on?' on':'')+(x.k?(' '+x.k):'');
+  d.innerHTML='<div class="pv">'+(x.pv||'')+'</div><div class="b">'+x.v+'</div>';host.appendChild(d);});}
+document.getElementById('shGo').onclick=()=>{
+  let v=parseInt(document.getElementById('shVal').value,10),n=parseInt(document.getElementById('shN').value,10);
+  const dir=document.getElementById('shDir').value;const note=document.getElementById('shNote');
+  if(isNaN(v)||v<0||v>255||isNaN(n)||n<0){note.innerHTML='⚠️ 数值 0–255，位数 ≥0';return;}
+  const before=toBin(v).split('').map((c,i)=>({v:c,on:c==='1',pv:PV[i]}));
+  bitBoxes(document.getElementById('shBefore'),before);
+  let res,after=[];
+  if(dir==='L'){res=(v<<n)&255;const full=v.toString(2).padStart(8,'0').split('');
+    // after bits + dropped markers
+    const shifted=toBin(res).split('').map((c,i)=>({v:c,on:c==='1',pv:PV[i]}));
+    // 标记右侧补0
+    for(let i=8-n;i<8&&i>=0;i++)if(shifted[i])shifted[i].k=shifted[i].v==='0'?'add':'add';
+    after=shifted;
+    note.innerHTML='左移 '+n+' 位 = ×2^'+n+' = ×'+(2**n)+'。'+(v*(2**n)>255?'⚠️ 高位 1 被移出丢失，结果 '+res+' 不再等于 '+v+'×'+(2**n)+'='+(v*2**n)+'。':' '+v+'×'+(2**n)+' = <b>'+res+'</b> ✅');
+  } else {res=v>>n;const shifted=toBin(res).split('').map((c,i)=>({v:c,on:c==='1',pv:PV[i]}));
+    for(let i=0;i<n&&i<8;i++)shifted[i].k='add';
+    after=shifted;
+    note.innerHTML='右移 '+n+' 位 = ÷2^'+n+' = ÷'+(2**n)+'（整除）。'+v+' ÷ '+(2**n)+' = <b>'+res+'</b>'+(v%(2**n)?'（余数 '+(v%(2**n))+' 被丢掉）':'')+' ✅';}
+  bitBoxes(document.getElementById('shAfter'),after);
+};
+document.getElementById('shGo').click();
+
+/* ===== 补码 ===== */
+document.getElementById('twGo').onclick=()=>{
+  let d=parseInt(document.getElementById('twVal').value,10);const out=document.getElementById('twOut');
+  if(isNaN(d)||d<-128||d>127){out.innerHTML='⚠️ 请输入 −128 到 127 的整数';return;}
+  if(d>=0){out.innerHTML='正数不用变（MSB=0）：\n+'+d+' = <b>'+toBin(d)+'</b>';return;}
+  const pos=-d,pb=toBin(pos),flip=pb.split('').map(c=>c==='1'?'0':'1').join('');
+  const res=((~pos)+1)&255;
+  out.innerHTML='① 写出 +'+pos+' 的 8 位：  '+pb+'\n② 每一位取反：      '+flip+'\n③ 加 1：            '+flip+' + 1\n──────────────\n'+d+' = <b>'+toBin(res)+'</b>';
+};
+document.getElementById('twGo').click();
+document.getElementById('dcGo').onclick=()=>{
+  const s=document.getElementById('dcBin').value.trim();const out=document.getElementById('dcOut');
+  if(!/^[01]{1,8}$/.test(s)){out.innerHTML='⚠️ 请输入最多 8 位的 0/1';return;}
+  const b=s.padStart(8,'0'),v=parseInt(b,2);
+  if(b[0]==='0'){out.innerHTML='MSB=0 → 正数\n'+b+' = '+[...b].map((c,i)=>c==='1'?PV[i]:0).filter(x=>x).join('+')+' = <b>+'+v+'</b>';return;}
+  const flip=[...b].map(c=>c==='1'?'0':'1').join('');const mag=(parseInt(flip,2)+1)&255;
+  out.innerHTML='MSB=1 → 负数\n① 取反：'+flip+'\n② 加 1：'+toBin(mag)+'\n③ 大小 = '+mag+'\n结果 = <b>−'+mag+'</b>';
+};
+document.getElementById('dcGo').click();
+
+/* ===== 测验 ===== */
+const QUIZ=[
+ {q:'为什么计算机用二进制？',o:['二进制算得更快','开关只有两种可靠状态(开/关)','二进制更省电','人类喜欢二进制'],a:1,why:'计算机由开关组成，两种状态最可靠；状态越多越易出错。'},
+ {q:'8 位二进制能表示的最大十进制数是？',o:['127','128','255','256'],a:2,why:'128+64+32+16+8+4+2+1 = 255。'},
+ {q:'每 1 个十六进制位等于几个二进制位？',o:['2','4','8','16'],a:1,why:'1 个 hex 位 = 4 位二进制（一个 nibble）。'},
+ {q:'二进制 11111111 转十进制是？',o:['127','200','255','256'],a:2,why:'全 1 的 8 位 = 255。'},
+ {q:'200 + 80 在 8 位寄存器里会怎样？',o:['得到 280','正常存下 280','溢出，存成错误值','自动变成 255'],a:2,why:'280>255，溢出；存下来的是 280−256 = 24。'},
+ {q:'把二进制左移 3 位，相当于十进制？',o:['×3','×6','×8','÷8'],a:2,why:'左移 n 位 = ×2ⁿ，左移 3 = ×8。'},
+ {q:'右移会发生什么？',o:['×2 并补1','÷2 整除、余数丢弃','数值不变','报错'],a:1,why:'右移 n 位 = ÷2ⁿ（整除），移出的位丢失。'},
+ {q:'用补码表示 −5（8位），第一步是？',o:['直接写 10000101','写出 +5 = 00000101 再翻转加1','写 11111011','把 5 加 128'],a:1,why:'负数：先写正数 00000101，再每位取反、加 1，得 11111011。'},
+ {q:'补码里 MSB（最左位）是 1 表示？',o:['这是正数','这是负数','这是 0','溢出了'],a:1,why:'补码中 MSB=1 表示负数，MSB=0 表示正数。'},
+];
+const qb=document.getElementById('quizbox');let answered=0,correct=0,locked={};
+QUIZ.forEach((it,qi)=>{const d=document.createElement('div');d.className='q';let h='<div class="qh">'+(qi+1)+'. '+it.q+'</div>';
+  it.o.forEach((op,oi)=>h+='<div class="opt" data-q="'+qi+'" data-o="'+oi+'">'+String.fromCharCode(65+oi)+'. '+op+'</div>');
+  h+='<div class="fb" id="fb-'+qi+'"></div>';d.innerHTML=h;qb.appendChild(d);});
+qb.querySelectorAll('.opt').forEach(el=>el.onclick=()=>{const qi=+el.dataset.q,oi=+el.dataset.o,it=QUIZ[qi];if(locked[qi])return;locked[qi]=1;
+  const opts=qb.querySelectorAll('.opt[data-q="'+qi+'"]');const fb=document.getElementById('fb-'+qi);fb.className='fb show';
+  if(oi===it.a){el.classList.add('right');fb.classList.add('ok');fb.innerHTML='✅ 正确！'+it.why;correct++;}
+  else{el.classList.add('wrong');opts[it.a].classList.add('right');fb.classList.add('no');fb.innerHTML='❌ 正确答案是 '+String.fromCharCode(65+it.a)+'。'+it.why;}
+  answered++;document.getElementById('quizscore').textContent='已答 '+answered+' / '+QUIZ.length+'，答对 '+correct+' 题 '+(answered===QUIZ.length?(correct===QUIZ.length?'🎉 满分！':'💪 回顾下错题'):'');});
+</script>
+</body>
+</html>

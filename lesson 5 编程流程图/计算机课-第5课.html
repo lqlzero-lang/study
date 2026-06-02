@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 5 课 · 算法与流程图 | Algorithms & Flowcharts</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --card:#ffffff; --ink:#243044; --muted:#6b7689;
+    --brand:#5b7cfa; --brand2:#8a6dff; --accent:#ff8a3d; --good:#23b26d; --bad:#e8554e;
+    --line:#e6eaf2; --soft:#eef2ff; --code:#0f1730;
+    --shadow:0 8px 28px rgba(40,60,120,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.7;font-size:16px}
+  code,kbd,.mono{font-family:"SF Mono",Menlo,Consolas,"Courier New",monospace}
+  .en{color:var(--brand2);font-style:normal}
+  header.top{background:linear-gradient(120deg,var(--brand),var(--brand2));color:#fff;padding:26px 20px 22px}
+  header.top .wrap{max-width:1080px;margin:0 auto}
+  header.top h1{margin:0;font-size:26px;letter-spacing:.5px}
+  header.top p{margin:6px 0 0;opacity:.92;font-size:14px}
+  nav.tabs{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+  nav.tabs .wrap{max-width:1080px;margin:0 auto;display:flex;gap:4px;padding:8px 12px}
+  nav.tabs button{border:0;background:transparent;color:var(--muted);font-size:14px;font-weight:600;
+    padding:8px 12px;border-radius:10px;cursor:pointer;flex:0 0 auto}
+  nav.tabs button:hover{background:var(--soft);color:var(--ink)}
+  nav.tabs button.active{background:var(--brand);color:#fff}
+  main{max-width:1080px;margin:0 auto;padding:20px 16px 80px}
+  section{display:none;animation:fade .25s ease}
+  section.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2.title{font-size:22px;margin:6px 0 4px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  h2.title .en{font-size:15px}
+  .lead{color:var(--muted);margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:var(--shadow)}
+  .card h3{margin:2px 0 8px;font-size:17px}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+  .pill{display:inline-block;background:var(--soft);color:var(--brand);font-size:12px;font-weight:700;
+    padding:2px 10px;border-radius:999px;margin-right:6px}
+  .defbox{border-left:4px solid var(--brand);background:var(--soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}
+  .defbox b{color:var(--brand2)}
+  ul.clean{margin:8px 0;padding-left:20px}
+  ul.clean li{margin:4px 0}
+  table.t{width:100%;border-collapse:collapse;margin:8px 0;font-size:15px}
+  table.t th,table.t td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  table.t th{background:var(--soft);color:var(--ink)}
+  .tip{font-size:13px;color:var(--muted);margin-top:6px}
+  .btn{border:0;border-radius:10px;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer;color:#fff;background:var(--brand)}
+  .btn:hover{filter:brightness(1.05)}
+  .btn.ghost{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}
+  .btn.warn{background:var(--accent)}
+  .btn.dim{background:#eef1f7;color:var(--muted)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  /* flowchart svg */
+  .flowwrap{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+  .flowwrap .left{flex:1 1 320px;min-width:300px}
+  .flowwrap .right{flex:1 1 280px;min-width:260px}
+  svg.flow{width:100%;height:auto;background:#fbfcff;border:1px solid var(--line);border-radius:14px}
+  svg.flow .shape{fill:#fff;stroke:#9aa6c4;stroke-width:2}
+  svg.flow .term{fill:#eef2ff;stroke:#5b7cfa}
+  svg.flow .lbl{font:600 13px -apple-system,sans-serif;fill:#243044}
+  svg.flow .edge{stroke:#9aa6c4;stroke-width:2;fill:none}
+  svg.flow .elabel{font:700 12px sans-serif;fill:#8a6dff}
+  svg.flow g.node.on .shape{fill:#ffe7cf;stroke:var(--accent);stroke-width:3;filter:drop-shadow(0 0 6px rgba(255,138,61,.6))}
+  .varbox{background:#0f1730;color:#e9edff;border-radius:12px;padding:12px 14px;font-size:14px}
+  .varbox h4{margin:0 0 8px;color:#9fb0ff;font-size:13px;letter-spacing:.5px}
+  table.vars{width:100%;border-collapse:collapse;font-family:"SF Mono",Menlo,monospace;font-size:14px}
+  table.vars td{padding:4px 8px;border-bottom:1px solid #24304f}
+  table.vars td.k{color:#ffd9a8}
+  table.vars tr.changed td{background:#2a3a17;color:#d7 ;}
+  table.vars tr.changed td{background:#33421c}
+  .note{background:#162041;color:#cfe0ff;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:14px;min-height:20px}
+  .outline{background:#0c1330;color:#7CFFB2;border-radius:10px;padding:8px 12px;margin-top:8px;font-family:"SF Mono",monospace;font-size:14px;white-space:pre-wrap;min-height:20px}
+  /* playground */
+  .pgwrap{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}
+  @media(max-width:860px){.pgwrap{grid-template-columns:1fr}}
+  textarea.code{width:100%;min-height:230px;background:#0f1730;color:#e9edff;border:0;border-radius:12px;
+    padding:12px 14px;font-family:"SF Mono",Menlo,monospace;font-size:14px;line-height:1.6;resize:vertical;tab-size:2}
+  textarea.inp{width:100%;min-height:64px;background:#101a36;color:#cfe0ff;border:1px solid #2a3a66;border-radius:10px;
+    padding:8px 12px;font-family:"SF Mono",monospace;font-size:14px;resize:vertical}
+  ol.trace{margin:0;padding:8px 8px 8px 40px;background:#0f1730;color:#aeb8d8;border-radius:12px;
+    font-family:"SF Mono",monospace;font-size:13.5px;line-height:1.65;max-height:240px;overflow:auto}
+  ol.trace li{padding:1px 6px;border-radius:6px;white-space:pre}
+  ol.trace li.cur{background:#33421c;color:#fff}
+  label.fld{font-size:13px;color:var(--muted);font-weight:700;display:block;margin:10px 0 4px}
+  select.sel{padding:8px 10px;border-radius:10px;border:1.5px solid var(--line);font-size:14px;background:#fff}
+  .err{background:#ffe9e7;color:#b3322c;border:1px solid #ffc9c4;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:14px}
+  /* quiz */
+  .q{margin:14px 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}
+  .q .qh{font-weight:700;margin-bottom:8px}
+  .q .opt{display:block;padding:8px 12px;margin:6px 0;border:1.5px solid var(--line);border-radius:10px;cursor:pointer}
+  .q .opt:hover{background:var(--soft)}
+  .q .opt.sel{border-color:var(--brand);background:var(--soft)}
+  .q .opt.right{border-color:var(--good);background:#e9f9f1}
+  .q .opt.wrong{border-color:var(--bad);background:#fdeceb}
+  .q .fb{margin-top:8px;font-size:14px;display:none}
+  .q .fb.show{display:block}
+  .q .fb.ok{color:var(--good)} .q .fb.no{color:var(--bad)}
+  .symcell{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+  .symcell svg{width:130px;height:64px}
+  .symcell b{font-size:14px} .symcell span{font-size:12px;color:var(--muted)}
+  details.acc{border:1px solid var(--line);border-radius:12px;padding:6px 14px;margin:8px 0;background:#fff}
+  details.acc summary{cursor:pointer;font-weight:700;padding:6px 0}
+  details.acc[open]{box-shadow:var(--shadow)}
+  .kbd{background:#eef1f7;border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:13px;font-family:monospace}
+  .parent{background:#fff7ed;border:1px dashed var(--accent);border-radius:14px;padding:14px 18px;margin:16px 0}
+  footer{max-width:1080px;margin:0 auto;padding:20px 16px 60px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <h1>第 5 课 · 算法与流程图</h1>
+  <p>Algorithms &amp; Flowcharts · Cambridge IGCSE Computer Science 0478 · 给认真学习的你 💪</p>
+</div></header>
+
+<nav class="tabs"><div class="wrap" id="tabbar"></div></nav>
+
+<main>
+<!-- ================= 0 导览 ================= -->
+<section id="s-intro" class="show">
+  <h2 class="title">欢迎！这节课在学什么 <span class="en">Welcome</span></h2>
+  <p class="lead">这一页可以直接在浏览器里玩。左右滑动上面的标签切换章节。重点是中间两个：<b>看流程图怎么一步步跑</b>，以及<b>自己写代码、单步运行、看变量变化</b>。</p>
+  <div class="grid g3">
+    <div class="card"><h3>🧠 概念</h3>算法是什么、程序开发周期、把大问题拆小、流程图的 6 个符号。</div>
+    <div class="card"><h3>👀 看它运行</h3>顺序 / 选择 / 循环三种结构，点"单步"看流程图高亮、变量实时变化。</div>
+    <div class="card"><h3>⌨️ 自己动手</h3>在"练习场"里写伪代码，单步或慢放运行，右边看变量表和输出。</div>
+  </div>
+  <div class="card">
+    <h3>本课目标 <span class="en">Today's Goals</span></h3>
+    <ul class="clean">
+      <li>理解什么是<b>算法 <span class="en">algorithm</span></b></li>
+      <li>知道<b>程序开发周期 <span class="en">PDLC</span></b>：分析 → 设计 → 编码 → 测试</li>
+      <li>用<b>结构图 <span class="en">structure diagram</span></b>把问题分解 <span class="en">decomposition</span></li>
+      <li>掌握 6 个<b>流程图符号 <span class="en">flowchart symbols</span></b></li>
+      <li>画出含<b>顺序 / 选择 / 循环 <span class="en">sequence / selection / iteration</span></b>的流程图</li>
+    </ul>
+  </div>
+  <div class="parent">
+    <b>👋 给家长的话：</b>这是一个离线、可交互的网页。直接双击就能打开，断网也能用。孩子可以在"练习场"里随意改代码运行；"小测验"会自动判分。术语都保留了中英对照，方便对照全英文考卷。
+  </div>
+</section>
+
+<!-- ================= 1 算法 ================= -->
+<section id="s-algo">
+  <h2 class="title">1 · 什么是算法 <span class="en">What is an Algorithm?</span></h2>
+  <div class="card">
+    <div class="defbox"><b>算法 Algorithm：</b>一步一步解决问题的指令。<br>
+      ■ <b>有限 finite</b>——必须能停下来 ｜ ■ <b>无歧义 unambiguous</b>——每步只有一个意思 ｜ ■ <b>有输入有输出 input/output</b></div>
+    <h3>算法无处不在</h3>
+    <table class="t">
+      <tr><th>任务</th><th>算法（步骤）</th></tr>
+      <tr><td>泡一杯茶</td><td>烧水 → 放茶包 → 倒水 → 等待 → 取出茶包</td></tr>
+      <tr><td>过马路</td><td>看左 → 看右 → 安全？ → 走过去</td></tr>
+      <tr><td>查字典找词</td><td>翻到中间 → 太前/太后？ → 调整 → 重复</td></tr>
+    </table>
+    <p class="tip">你每天都在用算法，只是没叫它"算法"而已 🙂</p>
+  </div>
+  <div class="card">
+    <h3>算法 ≠ 代码 <span class="en">Algorithm ≠ Code</span></h3>
+    <ul class="clean">
+      <li><b>算法</b>是<b>想法、逻辑</b>；<b>代码 code</b>是<b>用某种语言写出来的实现</b>。</li>
+      <li>同一个算法可以用 Python、Java 等任何语言写出来。</li>
+    </ul>
+    <p>表达算法的三种方式：① 结构图（拆问题）② 流程图（画流程）③ 伪代码 <span class="en">pseudocode</span>（结构化英语，第 6 课）。</p>
+  </div>
+</section>
+
+<!-- ================= 2 PDLC ================= -->
+<section id="s-pdlc">
+  <h2 class="title">2 · 程序开发周期 <span class="en">PDLC</span></h2>
+  <p class="lead">每个程序都要经过这四个阶段，跳过任何一步都会带来更多 bug 和浪费时间。</p>
+  <div class="grid g2">
+    <div class="card"><span class="pill">1 分析 Analysis</span><h3>"我们需要什么？"</h3>
+      <ul class="clean"><li>找出问题：要解决什么？</li><li><b>抽象 abstraction</b>：只关注重要的，忽略无关细节</li><li><b>分解 decomposition</b>：拆成小部分</li><li>找出输入、处理、输出、存储</li></ul></div>
+    <div class="card"><span class="pill">2 设计 Design</span><h3>"我们要怎么解决？"</h3>
+      <ul class="clean"><li>写代码<b>之前</b>先规划</li><li>用结构图、流程图、伪代码描述</li><li>在纸上想清楚，不是在屏幕上</li></ul></div>
+    <div class="card"><span class="pill">3 编码 Coding</span><h3>动手写程序</h3>
+      <ul class="clean"><li>把设计翻译成代码（如 Python）</li><li>边写边测，不要拖到最后</li><li>随手修 bug</li></ul></div>
+    <div class="card"><span class="pill">4 测试 Testing</span><h3>用测试数据检验</h3>
+      <ul class="clean"><li>用测试数据跑完整程序</li><li>每种情况都输出正确吗？</li><li>不同类型的测试数据（第 9 课细讲）</li></ul></div>
+  </div>
+  <div class="card">
+    <h3>🎯 小练习：这是哪个阶段？</h3>
+    <p class="tip">先自己想，再点开看答案。</p>
+    <details class="acc"><summary>1. 为登录流程画流程图</summary>设计 Design（在规划怎么解决）</details>
+    <details class="acc"><summary>2. 列出 app 需要向用户收集哪些数据</summary>分析 Analysis（在确定需要什么）</details>
+    <details class="acc"><summary>3. 用错误密码运行程序看会怎样</summary>测试 Testing</details>
+    <details class="acc"><summary>4. 写 Python 代码检查密码</summary>编码 Coding</details>
+    <details class="acc"><summary>5. 判定按钮颜色与问题无关</summary>分析 Analysis（这就是抽象 abstraction）</details>
+  </div>
+</section>
+
+<!-- ================= 3 分解与结构图 ================= -->
+<section id="s-decomp">
+  <h2 class="title">3 · 分解与结构图 <span class="en">Decomposition &amp; Structure Diagrams</span></h2>
+  <div class="card">
+    <div class="defbox"><b>分解 Decomposition：</b>把复杂问题拆成更小、可以各自独立解决的子问题。一直拆到每块都简单到能直接解决为止。</div>
+    <p><b>结构图</b>把分解过程画出来：树状，<b>上→下</b>是大→小，<b>左→右</b>大致是执行顺序。也叫"自顶向下设计图"。</p>
+  </div>
+  <div class="card">
+    <h3>例：做早餐 <span class="en">Make Breakfast</span></h3>
+    <svg viewBox="0 0 640 230" style="width:100%;height:auto">
+      <style>.b{fill:#eef2ff;stroke:#5b7cfa;stroke-width:1.5}.b2{fill:#fff;stroke:#9aa6c4;stroke-width:1.5}.tx{font:600 13px sans-serif;fill:#243044}.ln{stroke:#9aa6c4;stroke-width:1.5}</style>
+      <rect class="b" x="250" y="10" width="140" height="34" rx="8"/><text class="tx" x="320" y="32" text-anchor="middle">做早餐 Make Breakfast</text>
+      <line class="ln" x1="320" y1="44" x2="110" y2="80"/><line class="ln" x1="320" y1="44" x2="320" y2="80"/><line class="ln" x1="320" y1="44" x2="530" y2="80"/>
+      <rect class="b2" x="40" y="80" width="140" height="32" rx="8"/><text class="tx" x="110" y="100" text-anchor="middle">准备饮料 Drink</text>
+      <rect class="b2" x="250" y="80" width="140" height="32" rx="8"/><text class="tx" x="320" y="100" text-anchor="middle">准备食物 Food</text>
+      <rect class="b2" x="460" y="80" width="140" height="32" rx="8"/><text class="tx" x="530" y="100" text-anchor="middle">上桌 Serve</text>
+      <line class="ln" x1="110" y1="112" x2="70" y2="150"/><line class="ln" x1="110" y1="112" x2="150" y2="150"/>
+      <line class="ln" x1="320" y1="112" x2="280" y2="150"/><line class="ln" x1="320" y1="112" x2="360" y2="150"/>
+      <line class="ln" x1="530" y1="112" x2="490" y2="150"/><line class="ln" x1="530" y1="112" x2="570" y2="150"/>
+      <rect class="b2" x="20" y="150" width="100" height="30" rx="8"/><text class="tx" x="70" y="169" text-anchor="middle">烧水</text>
+      <rect class="b2" x="130" y="150" width="100" height="30" rx="8"/><text class="tx" x="180" y="169" text-anchor="middle">泡茶</text>
+      <rect class="b2" x="230" y="150" width="100" height="30" rx="8"/><text class="tx" x="280" y="169" text-anchor="middle">烤面包</text>
+      <rect class="b2" x="340" y="150" width="100" height="30" rx="8"/><text class="tx" x="390" y="169" text-anchor="middle">涂黄油</text>
+      <rect class="b2" x="450" y="150" width="100" height="30" rx="8"/><text class="tx" x="500" y="169" text-anchor="middle">摆桌子</text>
+      <rect class="b2" x="540" y="150" width="90" height="30" rx="8"/><text class="tx" x="585" y="169" text-anchor="middle">端上菜</text>
+    </svg>
+    <p class="tip">3 个子系统，每个再拆成 2 个小任务——小到可以直接执行。</p>
+  </div>
+  <div class="card">
+    <h3>✏️ 轮到你（在纸上画）</h3>
+    <ul class="clean">
+      <li><b>图书馆系统</b>：搜书（按书名/作者）、借书（刷卡→刷书→更新记录）、还书（刷书→查滞纳金→更新记录）。</li>
+      <li><b>网店结账</b>：查看购物车（看商品/改数量/删除）、付款（输卡号/验证）、配送（填地址/选速度/确认）。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 4 符号 ================= -->
+<section id="s-symbols">
+  <h2 class="title">4 · 流程图的 6 个符号 <span class="en">Flowchart Symbols</span></h2>
+  <div class="card">
+    <div class="grid g3" id="symgrid"></div>
+  </div>
+  <div class="card">
+    <h3>画流程图的规则 <span class="en">Rules</span></h3>
+    <ul class="clean">
+      <li>必须有<b>开始 Start</b> 和 <b>结束 Stop</b>。</li>
+      <li>每个<b>判断 Decision</b> 必须正好有<b>两个出口</b>：Yes/No（或 True/False）。</li>
+      <li>箭头一定要标方向，别含糊。</li>
+      <li>用对形状（判断必须是<b>菱形</b>，不是矩形！）——考试用错形状不给分。</li>
+      <li>保持整洁：流程总体<b>从上到下</b>。</li>
+    </ul>
+    <div class="defbox"><b>子程序 Subroutine：</b>一段有名字、完成特定任务的代码，可以在主程序里随时"调用 call"。也叫<b>过程 procedure</b> 或<b>函数 function</b>。好处：避免重复代码，让程序更好读、好测试、好维护。</div>
+  </div>
+  <div class="card">
+    <h3>🎯 小练习：该用哪个符号？</h3>
+    <details class="acc"><summary>1. 开始程序</summary>终止符 Terminator（椭圆）</details>
+    <details class="acc"><summary>2. 让用户输入名字</summary>输入/输出 Input/Output（平行四边形）</details>
+    <details class="acc"><summary>3. 计算总价</summary>处理 Process（矩形）</details>
+    <details class="acc"><summary>4. 检查年龄是否大于 18</summary>判断 Decision（菱形）</details>
+    <details class="acc"><summary>5. 在屏幕显示结果</summary>输入/输出 Input/Output（平行四边形）</details>
+    <details class="acc"><summary>6. 调用 "CalculateDiscount" 过程</summary>子程序 Subroutine（双边矩形）</details>
+    <details class="acc"><summary>7. 结束程序</summary>终止符 Terminator（椭圆）</details>
+  </div>
+</section>
+
+<!-- ================= 5 顺序 ================= -->
+<section id="s-seq">
+  <h2 class="title">5 · 顺序结构 <span class="en">Sequence</span></h2>
+  <p class="lead">最简单的结构：<b>一步接一步</b>，不分叉、不循环。点"单步"看它怎么跑，右边变量会跟着变。例子：输入两个数，求和。</p>
+  <div class="card">
+    <div class="flowwrap">
+      <div class="left" id="flow-add2-svg"></div>
+      <div class="right">
+        <div class="varbox"><h4>📦 变量 VARIABLES</h4><table class="vars" id="vars-add2"></table>
+          <div class="note" id="note-add2">点"单步 ▶"开始</div>
+          <div class="outline" id="out-add2"></div></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" data-step="add2">单步 ▶</button>
+          <button class="btn warn" data-auto="add2">慢放 ⏩</button>
+          <button class="btn dim" data-reset="add2">重置 ↺</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card"><h3>✏️ 想一想</h3>
+    <ul class="clean"><li>把这个流程图改成"输入长和宽，算长方形面积"——需要改哪几步？</li><li>到右边<b>练习场</b>试着自己写出来！</li></ul></div>
+</section>
+
+<!-- ================= 6 选择 ================= -->
+<section id="s-sel">
+  <h2 class="title">6 · 选择结构 <span class="en">Selection</span></h2>
+  <p class="lead">程序根据<b>条件</b>选择走哪条路，用<b>菱形判断</b>。两个出口 Yes/No，最后再汇合。例子：分数 ≥ 50 就 Pass，否则 Fail。<b>可以改下面的输入分数</b>再跑！</p>
+  <div class="card">
+    <div class="row" style="margin-bottom:10px">
+      <label class="fld" style="margin:0">输入分数 Mark：</label>
+      <input id="in-passfail" type="number" value="72" style="width:90px;padding:6px 10px;border-radius:8px;border:1.5px solid var(--line);font-size:15px">
+    </div>
+    <div class="flowwrap">
+      <div class="left" id="flow-pf-svg"></div>
+      <div class="right">
+        <div class="varbox"><h4>📦 变量 VARIABLES</h4><table class="vars" id="vars-pf"></table>
+          <div class="note" id="note-pf">改好分数，点"单步 ▶"</div>
+          <div class="outline" id="out-pf"></div></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" data-step="pf">单步 ▶</button>
+          <button class="btn warn" data-auto="pf">慢放 ⏩</button>
+          <button class="btn dim" data-reset="pf">重置 ↺</button>
+        </div>
+        <p class="tip" style="margin-top:8px">试试 72 → Pass；再改成 41 → Fail，看菱形走的是 Yes 还是 No。</p>
+      </div>
+    </div>
+  </div>
+  <div class="card"><h3>嵌套选择 <span class="en">Nested Selection</span></h3>
+    <p>多个判断串起来＝嵌套。比如评等级：≥70 → A，否则 ≥50 → B，否则 Fail。到<b>练习场</b>载入"成绩等级"模板试试看。</p></div>
+</section>
+
+<!-- ================= 7 循环 ================= -->
+<section id="s-iter">
+  <h2 class="title">7 · 循环（迭代）结构 <span class="en">Iteration</span></h2>
+  <p class="lead">把一段步骤<b>重复执行</b>，直到满足某个条件。流程图里就是一根箭头<b>绕回</b>前面。例子：输出 1 到 5。盯着右边的 <span class="mono">Counter</span> 看它怎么一次次变大、又怎么在 Counter&gt;5 时跳出循环。</p>
+  <div class="card">
+    <div class="flowwrap">
+      <div class="left" id="flow-c5-svg"></div>
+      <div class="right">
+        <div class="varbox"><h4>📦 变量 VARIABLES</h4><table class="vars" id="vars-c5"></table>
+          <div class="note" id="note-c5">点"单步 ▶"，注意箭头绕回去的那一步</div>
+          <div class="outline" id="out-c5"></div></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" data-step="c5">单步 ▶</button>
+          <button class="btn warn" data-auto="c5">慢放 ⏩</button>
+          <button class="btn dim" data-reset="c5">重置 ↺</button>
+        </div>
+      </div>
+    </div>
+    <p class="tip"><b>计数循环 count-controlled</b>：重复固定次数 ｜ <b>条件循环 condition-controlled</b>：重复到某条件成立。到练习场试试"累加到 0 为止"。</p>
+  </div>
+</section>
+
+<!-- ================= 8 练习场 ================= -->
+<section id="s-play">
+  <h2 class="title">8 · 编程练习场 <span class="en">Playground</span></h2>
+  <p class="lead">在这里<b>自己写代码、运行、看结果</b>！用的是 IGCSE 风格的伪代码。先从下拉框载入一个例子，改一改，点"单步"或"慢放"，右边会实时显示<b>变量值</b>和<b>输出</b>。</p>
+  <div class="card">
+    <div class="row">
+      <label class="fld" style="margin:0">📚 载入例子：</label>
+      <select class="sel" id="pgPick"></select>
+      <button class="btn ghost" id="pgLoad">载入</button>
+    </div>
+    <div class="pgwrap" style="margin-top:12px">
+      <div>
+        <label class="fld">代码 CODE（可以随意修改）</label>
+        <textarea class="code" id="pgCode" spellcheck="false"></textarea>
+        <label class="fld">输入 INPUT（每行一个，按顺序被 INPUT 读取）</label>
+        <textarea class="inp" id="pgInput" spellcheck="false" placeholder="例如：&#10;10&#10;20"></textarea>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" id="pgRun">运行全部 ▶▶</button>
+          <button class="btn ghost" id="pgStep">单步 ▶</button>
+          <button class="btn warn" id="pgSlow">慢放 ⏩</button>
+          <button class="btn dim" id="pgReset">重置 ↺</button>
+        </div>
+        <div class="err" id="pgErr" style="display:none"></div>
+      </div>
+      <div>
+        <label class="fld">执行轨迹（高亮＝下一步要跑的行）</label>
+        <ol class="trace" id="pgTrace"></ol>
+        <div class="varbox" style="margin-top:10px"><h4>📦 变量 VARIABLES</h4>
+          <table class="vars" id="pgVars"></table></div>
+        <label class="fld">输出 OUTPUT</label>
+        <div class="outline" id="pgOut"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>📖 伪代码速查表 <span class="en">Cheat Sheet</span></h3>
+    <table class="t">
+      <tr><th>写法</th><th>意思</th></tr>
+      <tr><td class="mono">x ← 5</td><td>赋值：把 5 放进 x（也可以写 <span class="mono">x = 5</span> 或 <span class="mono">x &lt;- 5</span>）</td></tr>
+      <tr><td class="mono">INPUT x</td><td>从"输入框"读一个值给 x</td></tr>
+      <tr><td class="mono">OUTPUT x, "分"</td><td>输出，多个用逗号隔开</td></tr>
+      <tr><td class="mono">IF 条件 THEN … ELSE … ENDIF</td><td>选择（ELSE 可省略）</td></tr>
+      <tr><td class="mono">WHILE 条件 … ENDWHILE</td><td>先判断再循环</td></tr>
+      <tr><td class="mono">REPEAT … UNTIL 条件</td><td>先做一次再判断，直到条件成立</td></tr>
+      <tr><td class="mono">FOR i ← 1 TO 5 [STEP 2] … NEXT i</td><td>计数循环</td></tr>
+      <tr><td class="mono">+ - * /　MOD　DIV</td><td>加减乘除、取余数、整除</td></tr>
+      <tr><td class="mono">= &lt;&gt; &lt; &gt; &lt;= &gt;=　AND OR NOT</td><td>比较与逻辑（注意：等于是单个 <span class="mono">=</span>）</td></tr>
+    </table>
+    <p class="tip">用 <span class="kbd">//</span> 写注释。字符串用双引号 <span class="mono">"像这样"</span>。</p>
+  </div>
+  <div class="card">
+    <h3>🚀 挑战题（自己写，写完到练习场跑）</h3>
+    <ul class="clean">
+      <li><b>顺序：</b>输入工作小时数和时薪，输出工资（小时 × 时薪）。</li>
+      <li><b>顺序：</b>输入公里数，转换成英里（÷ 1.609）并输出。</li>
+      <li><b>选择：</b>电影票价——12 岁以下 \$5；12–64 岁 \$10；65 岁及以上 \$7。输入年龄，输出票价。</li>
+      <li><b>选择：</b>输入两个数，输出较大的；相等就输出 "Equal"。</li>
+      <li><b>循环：</b>输出 2 到 10 的偶数。</li>
+      <li><b>循环：</b>一直输入数字，遇到 −1 停止，输出一共输入了几个（不含 −1）。</li>
+      <li><b>循环：</b>给玩家 3 次机会猜秘密数字 42，猜中输出 "You win!"，3 次没中输出 "Game over"。</li>
+    </ul>
+    <p class="tip">卡住了？下拉框里有些题的现成答案可以载入对照（先自己试再看哦）。</p>
+  </div>
+</section>
+
+<!-- ================= 9 测验 ================= -->
+<section id="s-quiz">
+  <h2 class="title">9 · 闯关小测验 <span class="en">Quiz</span></h2>
+  <p class="lead">选好答案点"对答案"。错了会告诉你为什么。</p>
+  <div id="quizbox"></div>
+  <div class="card" id="quizscore" style="text-align:center;font-size:18px;font-weight:700"></div>
+</section>
+</main>
+
+<footer>
+  © 给女儿的计算机课 · 基于 Stellan G5 / Cambridge IGCSE 0478 第 5 课内容制作。所有运行都在你自己的浏览器里完成，不联网、不上传。
+</footer>
+
+<script>
+/* =================================================================
+   PART A —— 伪代码解释器（已在 Node/JXA 测过 18 个用例全过）
+   ================================================================= */
+function tokenize(line){
+  const toks=[]; let i=0; const s=line;
+  const isIdStart=c=>/[A-Za-z_]/.test(c), isId=c=>/[A-Za-z0-9_]/.test(c);
+  while(i<s.length){
+    const c=s[i];
+    if(c===' '||c==='\t'||c==='\r'){i++;continue;}
+    if(c==='/'&&s[i+1]==='/'){break;}
+    if(c==='"'){let j=i+1,str='';while(j<s.length&&s[j]!=='"'){str+=s[j];j++;}j++;toks.push({t:'str',v:str});i=j;continue;}
+    if(/[0-9]/.test(c)||(c==='.'&&/[0-9]/.test(s[i+1]))){let j=i,n='';while(j<s.length&&/[0-9.]/.test(s[j])){n+=s[j];j++;}toks.push({t:'num',v:parseFloat(n)});i=j;continue;}
+    if(c==='←'){toks.push({t:'op',v:'←'});i++;continue;}
+    if(c==='<'&&s[i+1]==='-'){toks.push({t:'op',v:'←'});i+=2;continue;}
+    if(c==='<'&&s[i+1]==='>'){toks.push({t:'op',v:'<>'});i+=2;continue;}
+    if(c==='<'&&s[i+1]==='='){toks.push({t:'op',v:'<='});i+=2;continue;}
+    if(c==='>'&&s[i+1]==='='){toks.push({t:'op',v:'>='});i+=2;continue;}
+    if('=<>+-*/(),'.includes(c)){toks.push({t:'op',v:c});i++;continue;}
+    if(isIdStart(c)){let j=i,id='';while(j<s.length&&isId(s[j])){id+=s[j];j++;}
+      const up=id.toUpperCase();
+      const kws=['IF','THEN','ELSE','ENDIF','WHILE','ENDWHILE','DO','REPEAT','UNTIL','FOR','TO','STEP','NEXT','INPUT','OUTPUT','AND','OR','NOT','MOD','DIV','TRUE','FALSE'];
+      toks.push(kws.includes(up)?{t:'kw',v:up}:{t:'id',v:id}); i=j; continue;}
+    throw{msg:'无法识别的字符："'+c+'"'};
+  }
+  return toks;
+}
+function parseExpr(toks){
+  let p=0; const peek=()=>toks[p], next=()=>toks[p++];
+  const expect=v=>{if(!peek()||peek().v!==v)throw{msg:'表达式里缺少 '+v};p++;};
+  function pOr(){let a=pAnd();while(peek()&&peek().v==='OR'){next();a={k:'bin',op:'OR',a,b:pAnd()};}return a;}
+  function pAnd(){let a=pNot();while(peek()&&peek().v==='AND'){next();a={k:'bin',op:'AND',a,b:pNot()};}return a;}
+  function pNot(){if(peek()&&peek().v==='NOT'){next();return{k:'un',op:'NOT',a:pNot()};}return pCmp();}
+  function pCmp(){let a=pAdd();while(peek()&&['=','<>','<','>','<=','>='].includes(peek().v)){const op=next().v;a={k:'bin',op,a,b:pAdd()};}return a;}
+  function pAdd(){let a=pMul();while(peek()&&['+','-'].includes(peek().v)){const op=next().v;a={k:'bin',op,a,b:pMul()};}return a;}
+  function pMul(){let a=pUn();while(peek()&&['*','/','MOD','DIV'].includes(peek().v)){const op=next().v;a={k:'bin',op,a,b:pUn()};}return a;}
+  function pUn(){if(peek()&&peek().v==='-'){next();return{k:'un',op:'-',a:pUn()};}return pPrim();}
+  function pPrim(){const t=peek();if(!t)throw{msg:'表达式不完整'};
+    if(t.t==='num'){next();return{k:'num',v:t.v};}
+    if(t.t==='str'){next();return{k:'str',v:t.v};}
+    if(t.v==='TRUE'){next();return{k:'bool',v:true};}
+    if(t.v==='FALSE'){next();return{k:'bool',v:false};}
+    if(t.t==='id'){next();return{k:'var',name:t.v};}
+    if(t.v==='('){next();const e=pOr();expect(')');return e;}
+    throw{msg:'看不懂："'+t.v+'"'};}
+  const e=pOr(); if(p<toks.length)throw{msg:'多余内容："'+toks.slice(p).map(x=>x.v).join(' ')+'"'}; return e;
+}
+function splitTopCommas(toks){const parts=[];let d=0,cur=[];for(const t of toks){if(t.v==='(')d++;if(t.v===')')d--;if(t.v===','&&d===0){parts.push(cur);cur=[];continue;}cur.push(t);}if(cur.length)parts.push(cur);return parts;}
+function compile(src){
+  const lines=src.split('\n').map((raw,i)=>({raw,no:i+1,toks:tokenize(raw)}));
+  let li=0; const code=[];
+  const skip=()=>{while(li<lines.length&&lines[li].toks.length===0)li++;};
+  const peekKw=()=>{skip();if(li>=lines.length)return null;const t=lines[li].toks[0];return t.t==='kw'?t.v:'_S';};
+  const cur=()=>lines[li], adv=()=>{li++;}, emit=o=>{code.push(o);return code.length-1;};
+  const findIdx=(t,v)=>{for(let i=0;i<t.length;i++)if(t[i].v===v)return i;return -1;};
+  function stmts(stops){while(true){const k=peekKw();if(k===null||stops.includes(k))return;one();}}
+  function one(){
+    const ln=cur(),toks=ln.toks,no=ln.no,head=toks[0];
+    if(head.t==='kw'){switch(head.v){
+      case 'IF':{const ti=findIdx(toks,'THEN');const cond=parseExpr(ti>=0?toks.slice(1,ti):toks.slice(1));adv();
+        const jf=emit({op:'jmpFalse',expr:cond,line:no,target:-1});stmts(['ELSE','ENDIF']);
+        if(peekKw()==='ELSE'){const je=emit({op:'jmp',target:-1});code[jf].target=code.length;adv();stmts(['ENDIF']);code[je].target=code.length;}
+        else code[jf].target=code.length;
+        if(peekKw()==='ENDIF')adv();else throw{msg:'第'+no+'行附近缺少 ENDIF'};break;}
+      case 'WHILE':{let t2=toks.slice(1);if(t2.length&&t2[t2.length-1].v==='DO')t2=t2.slice(0,-1);
+        const cond=parseExpr(t2);const start=code.length;adv();
+        const jf=emit({op:'jmpFalse',expr:cond,line:no,target:-1});stmts(['ENDWHILE']);emit({op:'jmp',target:start});code[jf].target=code.length;
+        if(peekKw()==='ENDWHILE')adv();else throw{msg:'第'+no+'行附近缺少 ENDWHILE'};break;}
+      case 'REPEAT':{adv();const start=code.length;stmts(['UNTIL']);
+        if(peekKw()!=='UNTIL')throw{msg:'REPEAT 缺少 UNTIL'};const ul=cur();const cond=parseExpr(ul.toks.slice(1));const uno=ul.no;adv();
+        emit({op:'jmpFalse',expr:cond,line:uno,target:start});break;}
+      case 'FOR':{const vn=toks[1].v;const ti=findIdx(toks,'TO');const si=findIdx(toks,'STEP');
+        const se=parseExpr(toks.slice(3,ti));const ee=parseExpr(si>=0?toks.slice(ti+1,si):toks.slice(ti+1));
+        const ste=si>=0?parseExpr(toks.slice(si+1)):{k:'num',v:1};const lim='$to_'+vn,stp='$st_'+vn;adv();
+        emit({op:'assign',name:vn,expr:se,line:no});emit({op:'assign',name:lim,expr:ee,line:no,hidden:true});emit({op:'assign',name:stp,expr:ste,line:no,hidden:true});
+        const start=code.length;
+        const cond={k:'bin',op:'OR',
+          a:{k:'bin',op:'AND',a:{k:'bin',op:'>=',a:{k:'var',name:stp},b:{k:'num',v:0}},b:{k:'bin',op:'<=',a:{k:'var',name:vn},b:{k:'var',name:lim}}},
+          b:{k:'bin',op:'AND',a:{k:'bin',op:'<',a:{k:'var',name:stp},b:{k:'num',v:0}},b:{k:'bin',op:'>=',a:{k:'var',name:vn},b:{k:'var',name:lim}}}};
+        const jf=emit({op:'jmpFalse',expr:cond,line:no,target:-1});stmts(['NEXT']);
+        emit({op:'assign',name:vn,expr:{k:'bin',op:'+',a:{k:'var',name:vn},b:{k:'var',name:stp}},line:no});
+        emit({op:'jmp',target:start});code[jf].target=code.length;
+        if(peekKw()==='NEXT')adv();else throw{msg:'FOR 缺少 NEXT'};break;}
+      case 'INPUT':{const name=toks[1].v;adv();emit({op:'input',name,line:no});break;}
+      case 'OUTPUT':{const parts=splitTopCommas(toks.slice(1)).map(parseExpr);adv();emit({op:'output',exprs:parts,line:no});break;}
+      default:throw{msg:'第'+no+'行：不认识的关键字 '+head.v};
+    }} else {
+      if(toks.length>=2&&toks[0].t==='id'&&(toks[1].v==='←'||toks[1].v==='=')){
+        const name=toks[0].v;const expr=parseExpr(toks.slice(2));adv();emit({op:'assign',name,expr,line:no});}
+      else throw{msg:'第'+no+'行：看不懂 → '+ln.raw.trim()};
+    }
+  }
+  stmts([]); return {code,lines};
+}
+function evalAst(n,vars){switch(n.k){
+  case 'num':case 'str':case 'bool':return n.v;
+  case 'var':if(!(n.name in vars))throw{msg:'变量 '+n.name+' 还没有值（要先给它赋值或 INPUT）'};return vars[n.name];
+  case 'un':{const a=evalAst(n.a,vars);return n.op==='-'?-a:!a;}
+  case 'bin':{const a=evalAst(n.a,vars),b=evalAst(n.b,vars);switch(n.op){
+    case '+':return (typeof a==='string'||typeof b==='string')?(''+a)+(''+b):a+b;
+    case '-':return a-b;case '*':return a*b;case '/':return a/b;
+    case 'MOD':return a%b;case 'DIV':return Math.floor(a/b);
+    case '=':return a===b;case '<>':return a!==b;case '<':return a<b;case '>':return a>b;case '<=':return a<=b;case '>=':return a>=b;
+    case 'AND':return a&&b;case 'OR':return a||b;}}
+}throw{msg:'内部错误'};}
+function fmt(v){if(typeof v==='number'){return ''+(Math.round(v*1e9)/1e9);}if(typeof v==='boolean')return v?'TRUE':'FALSE';return ''+v;}
+function makeState(c,inputs){return{code:c.code,pc:0,vars:{},output:[],inputs:inputs.slice(),done:false,changed:null,branch:null,needInput:false};}
+function step(st,promptFn){
+  st.changed=null;st.branch=null;
+  if(st.pc>=st.code.length){st.done=true;return;}
+  const ins=st.code[st.pc];
+  switch(ins.op){
+    case 'assign':{const val=evalAst(ins.expr,st.vars);st.vars[ins.name]=val;if(!ins.hidden)st.changed=ins.name;st.pc++;break;}
+    case 'output':{st.output.push(ins.exprs.map(e=>fmt(evalAst(e,st.vars))).join(''));st.pc++;break;}
+    case 'input':{let v;if(st.inputs.length){v=st.inputs.shift();}else if(promptFn){v=promptFn(ins.name);if(v===null)throw{msg:'已取消输入'};}else{throw{msg:'需要输入，但"输入框"里没有更多数据了'};}
+      if(typeof v==='string'&&v.trim()!==''&&!isNaN(Number(v)))v=Number(v);st.vars[ins.name]=v;st.changed=ins.name;st.pc++;break;}
+    case 'jmp':st.pc=ins.target;break;
+    case 'jmpFalse':{const c=evalAst(ins.expr,st.vars);st.branch=c?'Yes':'No';st.pc=c?st.pc+1:ins.target;break;}
+  }
+  if(st.pc>=st.code.length)st.done=true;
+}
+
+/* =================================================================
+   PART B —— 标签页切换
+   ================================================================= */
+const TABS=[['s-intro','导览'],['s-algo','1 算法'],['s-pdlc','2 开发周期'],['s-decomp','3 分解'],
+  ['s-symbols','4 符号'],['s-seq','5 顺序'],['s-sel','6 选择'],['s-iter','7 循环'],['s-play','8 练习场'],['s-quiz','9 测验']];
+const tabbar=document.getElementById('tabbar');
+TABS.forEach(([id,name])=>{const b=document.createElement('button');b.textContent=name;b.onclick=()=>show(id,b);tabbar.appendChild(b);});
+function show(id,btn){
+  document.querySelectorAll('main section').forEach(s=>s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  tabbar.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+  (btn||tabbar.children[0]).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+tabbar.children[0].classList.add('active');
+
+/* =================================================================
+   PART C —— 6 个符号 SVG
+   ================================================================= */
+const SYMS=[
+  ['终止符','Terminator','开始/结束','<ellipse cx="65" cy="32" rx="55" ry="24" class="b term"/><text x="65" y="37" text-anchor="middle" class="tx">Start/Stop</text>'],
+  ['处理','Process','动作/计算/赋值','<rect x="12" y="10" width="106" height="44" rx="4" class="b"/><text x="65" y="37" text-anchor="middle" class="tx">x ← x+1</text>'],
+  ['输入/输出','Input/Output','数据进/出','<polygon points="24,10 118,10 106,54 12,54" class="b"/><text x="65" y="37" text-anchor="middle" class="tx">INPUT x</text>'],
+  ['判断','Decision','条件，两个出口','<polygon points="65,6 122,32 65,58 8,32" class="b"/><text x="65" y="37" text-anchor="middle" class="tx">x &gt; 0 ?</text>'],
+  ['子程序','Subroutine','调用一段过程','<rect x="12" y="10" width="106" height="44" rx="2" class="b"/><line x1="22" y1="10" x2="22" y2="54" class="ln"/><line x1="108" y1="10" x2="108" y2="54" class="ln"/><text x="65" y="37" text-anchor="middle" class="tx">Call sub</text>'],
+  ['流程线','Flow line','方向','<line x1="20" y1="32" x2="100" y2="32" class="ln"/><polygon points="100,26 116,32 100,38" fill="#9aa6c4"/>'],
+];
+const sg=document.getElementById('symgrid');
+SYMS.forEach(([cn,en,desc,inner])=>{const d=document.createElement('div');d.className='symcell';
+  d.innerHTML='<svg viewBox="0 0 130 64"><style>.b{fill:#eef2ff;stroke:#5b7cfa;stroke-width:2}.term{fill:#e7ecff}.tx{font:600 12px sans-serif;fill:#243044}.ln{stroke:#5b7cfa;stroke-width:2}</style>'+inner+'</svg>'
+    +'<b>'+cn+' <span style="color:#8a6dff;font-weight:600">'+en+'</span></b><span>'+desc+'</span>';
+  sg.appendChild(d);});
+
+/* =================================================================
+   PART D —— 三个动画流程图（用真解释器驱动，保证一致）
+   ================================================================= */
+function visible(vars){const o={};for(const k in vars)if(!k.startsWith('$'))o[k]=vars[k];return o;}
+function buildFrames(src,inputs,lineToNode,clines){
+  const c=compile(src);const st=makeState(c,inputs);const frames=[];
+  frames.push({active:'start',vars:{},note:'开始 Start',out:[]});
+  let guard=0;
+  while(!st.done){
+    const ins=st.code[st.pc];step(st);
+    if(ins.op==='jmp'){if(++guard>5000)break;continue;}
+    const node=lineToNode[ins.line];
+    const txt=(clines&&clines[ins.line])?clines[ins.line]:'';
+    let note=txt;
+    if(st.branch&&ins.op==='jmpFalse')note=txt+'　→ 走 '+(st.branch==='Yes'?'是 Yes':'否 No');
+    frames.push({active:node,vars:visible(st.vars),note,out:st.output.slice(),branch:st.branch});
+    if(++guard>5000)break;
+  }
+  frames.push({active:'stop',vars:visible(st.vars),note:'结束 Stop',out:st.output.slice()});
+  return frames;
+}
+// 渲染变量表
+function renderVars(tbl,vars,changed){
+  tbl.innerHTML='';const ks=Object.keys(vars);
+  if(!ks.length){tbl.innerHTML='<tr><td style="color:#67739c">（还没有变量）</td></tr>';return;}
+  ks.forEach(k=>{const tr=document.createElement('tr');if(k===changed)tr.className='changed';
+    tr.innerHTML='<td class="k">'+k+'</td><td>'+fmt(vars[k])+'</td>';tbl.appendChild(tr);});
+}
+// 通用流程图播放器
+function makePlayer(opts){
+  const {svgHost,frames:framesFn,varsId,noteId,outId}=opts;
+  let frames=[],idx=0,timer=null;
+  const vt=document.getElementById(varsId),nt=document.getElementById(noteId),ot=document.getElementById(outId);
+  function reset(){frames=framesFn();idx=0;stopAuto();render();}
+  function render(){
+    const f=frames[idx];
+    svgHost.querySelectorAll('g.node').forEach(g=>g.classList.toggle('on',g.dataset.id===f.active));
+    renderVars(vt,f.vars,f.changed);
+    nt.textContent='第 '+(idx+1)+'/'+frames.length+' 步：'+f.note;
+    ot.textContent=f.out.length?f.out.join('\n'):'（暂无输出）';
+  }
+  function next(){if(idx<frames.length-1){idx++;render();}else stopAuto();}
+  function stopAuto(){if(timer){clearInterval(timer);timer=null;}}
+  function auto(){if(timer){stopAuto();return;}timer=setInterval(()=>{if(idx>=frames.length-1){stopAuto();return;}next();},850);}
+  return {reset,next,auto,stopAuto};
+}
+
+// --- 流程图 1：顺序 加两个数 ---
+document.getElementById('flow-add2-svg').innerHTML=`
+<svg class="flow" viewBox="0 0 360 380">
+<defs><marker id="ar" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9aa6c4"/></marker></defs>
+<g class="node" data-id="start"><ellipse class="shape term" cx="180" cy="28" rx="62" ry="20"/><text class="lbl" x="180" y="33" text-anchor="middle">开始 Start</text></g>
+<line class="edge" x1="180" y1="48" x2="180" y2="68" marker-end="url(#ar)"/>
+<g class="node" data-id="in1"><polygon class="shape" points="110,72 250,72 238,100 98,100"/><text class="lbl" x="174" y="90" text-anchor="middle">INPUT Number1</text></g>
+<line class="edge" x1="180" y1="100" x2="180" y2="120" marker-end="url(#ar)"/>
+<g class="node" data-id="in2"><polygon class="shape" points="110,124 250,124 238,152 98,152"/><text class="lbl" x="174" y="142" text-anchor="middle">INPUT Number2</text></g>
+<line class="edge" x1="180" y1="152" x2="180" y2="172" marker-end="url(#ar)"/>
+<g class="node" data-id="proc"><rect class="shape" x="78" y="176" width="204" height="30" rx="5"/><text class="lbl" x="180" y="196" text-anchor="middle">Sum ← Number1 + Number2</text></g>
+<line class="edge" x1="180" y1="206" x2="180" y2="226" marker-end="url(#ar)"/>
+<g class="node" data-id="out"><polygon class="shape" points="120,230 240,230 228,258 108,258"/><text class="lbl" x="174" y="248" text-anchor="middle">OUTPUT Sum</text></g>
+<line class="edge" x1="180" y1="258" x2="180" y2="278" marker-end="url(#ar)"/>
+<g class="node" data-id="stop"><ellipse class="shape term" cx="180" cy="300" rx="62" ry="20"/><text class="lbl" x="180" y="305" text-anchor="middle">结束 Stop</text></g>
+</svg>`;
+const add2src='INPUT Number1\nINPUT Number2\nSum ← Number1 + Number2\nOUTPUT Sum';
+const add2map={1:'in1',2:'in2',3:'proc',4:'out'};
+const add2lines={1:'INPUT Number1 → 3',2:'INPUT Number2 → 4',3:'Sum ← 3 + 4',4:'OUTPUT Sum'};
+const pAdd2=makePlayer({svgHost:document.querySelector('#flow-add2-svg svg'),
+  frames:()=>buildFrames(add2src,[3,4],add2map,add2lines),varsId:'vars-add2',noteId:'note-add2',outId:'out-add2'});
+pAdd2.reset();
+
+// --- 流程图 2：选择 Pass/Fail ---
+document.getElementById('flow-pf-svg').innerHTML=`
+<svg class="flow" viewBox="0 0 460 380">
+<defs><marker id="ar2" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9aa6c4"/></marker></defs>
+<g class="node" data-id="start"><ellipse class="shape term" cx="230" cy="26" rx="58" ry="19"/><text class="lbl" x="230" y="31" text-anchor="middle">开始 Start</text></g>
+<line class="edge" x1="230" y1="45" x2="230" y2="64" marker-end="url(#ar2)"/>
+<g class="node" data-id="in"><polygon class="shape" points="170,68 300,68 288,94 158,94"/><text class="lbl" x="229" y="85" text-anchor="middle">INPUT Mark</text></g>
+<line class="edge" x1="230" y1="94" x2="230" y2="116" marker-end="url(#ar2)"/>
+<g class="node" data-id="dec"><polygon class="shape" points="230,118 320,160 230,202 140,160"/><text class="lbl" x="230" y="165" text-anchor="middle">Mark ≥ 50 ?</text></g>
+<line class="edge" x1="140" y1="160" x2="110" y2="160" /><line class="edge" x1="110" y1="160" x2="110" y2="238" marker-end="url(#ar2)"/>
+<text class="elabel" x="118" y="150">是 Yes</text>
+<line class="edge" x1="320" y1="160" x2="350" y2="160" /><line class="edge" x1="350" y1="160" x2="350" y2="238" marker-end="url(#ar2)"/>
+<text class="elabel" x="326" y="150">否 No</text>
+<g class="node" data-id="outPass"><polygon class="shape" points="58,242 162,242 152,268 48,268"/><text class="lbl" x="105" y="259" text-anchor="middle">OUTPUT "Pass"</text></g>
+<g class="node" data-id="outFail"><polygon class="shape" points="300,242 404,242 394,268 290,268"/><text class="lbl" x="347" y="259" text-anchor="middle">OUTPUT "Fail"</text></g>
+<line class="edge" x1="105" y1="268" x2="105" y2="320" /><line class="edge" x1="105" y1="320" x2="178" y2="320" marker-end="url(#ar2)"/>
+<line class="edge" x1="347" y1="268" x2="347" y2="320" /><line class="edge" x1="347" y1="320" x2="282" y2="320" marker-end="url(#ar2)"/>
+<g class="node" data-id="stop"><ellipse class="shape term" cx="230" cy="320" rx="55" ry="19"/><text class="lbl" x="230" y="325" text-anchor="middle">结束 Stop</text></g>
+</svg>`;
+const pfsrc='INPUT Mark\nIF Mark >= 50 THEN\nOUTPUT "Pass"\nELSE\nOUTPUT "Fail"\nENDIF';
+const pfmap={1:'in',2:'dec',3:'outPass',5:'outFail'};
+function pfFrames(){
+  const m=Number(document.getElementById('in-passfail').value);
+  const lines={1:'INPUT Mark → '+m,2:'判断 Mark ≥ 50 ?',3:'OUTPUT "Pass"',5:'OUTPUT "Fail"'};
+  return buildFrames(pfsrc,[m],pfmap,lines);
+}
+const pPf=makePlayer({svgHost:document.querySelector('#flow-pf-svg svg'),frames:pfFrames,varsId:'vars-pf',noteId:'note-pf',outId:'out-pf'});
+pPf.reset();
+document.getElementById('in-passfail').addEventListener('change',()=>pPf.reset());
+
+// --- 流程图 3：循环 1..5 ---
+document.getElementById('flow-c5-svg').innerHTML=`
+<svg class="flow" viewBox="0 0 420 430">
+<defs><marker id="ar3" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9aa6c4"/></marker></defs>
+<g class="node" data-id="start"><ellipse class="shape term" cx="210" cy="26" rx="58" ry="19"/><text class="lbl" x="210" y="31" text-anchor="middle">开始 Start</text></g>
+<line class="edge" x1="210" y1="45" x2="210" y2="64" marker-end="url(#ar3)"/>
+<g class="node" data-id="init"><rect class="shape" x="140" y="68" width="140" height="30" rx="5"/><text class="lbl" x="210" y="88" text-anchor="middle">Counter ← 1</text></g>
+<line class="edge" x1="210" y1="98" x2="210" y2="118" marker-end="url(#ar3)"/>
+<g class="node" data-id="out"><polygon class="shape" points="135,122 285,122 273,150 123,150"/><text class="lbl" x="204" y="140" text-anchor="middle">OUTPUT Counter</text></g>
+<line class="edge" x1="210" y1="150" x2="210" y2="170" marker-end="url(#ar3)"/>
+<g class="node" data-id="inc"><rect class="shape" x="130" y="174" width="160" height="30" rx="5"/><text class="lbl" x="210" y="194" text-anchor="middle">Counter ← Counter + 1</text></g>
+<line class="edge" x1="210" y1="204" x2="210" y2="226" marker-end="url(#ar3)"/>
+<g class="node" data-id="dec"><polygon class="shape" points="210,228 305,272 210,316 115,272"/><text class="lbl" x="210" y="277" text-anchor="middle">Counter &gt; 5 ?</text></g>
+<text class="elabel" x="220" y="340">是 Yes</text>
+<line class="edge" x1="210" y1="316" x2="210" y2="358" marker-end="url(#ar3)"/>
+<g class="node" data-id="stop"><ellipse class="shape term" cx="210" cy="378" rx="58" ry="19"/><text class="lbl" x="210" y="383" text-anchor="middle">结束 Stop</text></g>
+<text class="elabel" x="48" y="262">否 No</text>
+<line class="edge" x1="115" y1="272" x2="45" y2="272"/><line class="edge" x1="45" y1="272" x2="45" y2="136"/><line class="edge" x1="45" y1="136" x2="123" y2="136" marker-end="url(#ar3)"/>
+</svg>`;
+const c5src='Counter ← 1\nREPEAT\nOUTPUT Counter\nCounter ← Counter + 1\nUNTIL Counter > 5';
+const c5map={1:'init',3:'out',4:'inc',5:'dec'};
+const c5lines={1:'Counter ← 1',3:'OUTPUT Counter',4:'Counter ← Counter + 1',5:'判断 Counter > 5 ?'};
+const pC5=makePlayer({svgHost:document.querySelector('#flow-c5-svg svg'),
+  frames:()=>buildFrames(c5src,[],c5map,c5lines),varsId:'vars-c5',noteId:'note-c5',outId:'out-c5'});
+pC5.reset();
+
+const players={add2:pAdd2,pf:pPf,c5:pC5};
+document.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>players[b.dataset.step].next());
+document.querySelectorAll('[data-auto]').forEach(b=>b.onclick=()=>players[b.dataset.auto].auto());
+document.querySelectorAll('[data-reset]').forEach(b=>b.onclick=()=>players[b.dataset.reset].reset());
+
+/* =================================================================
+   PART E —— 练习场
+   ================================================================= */
+const EXAMPLES={
+  '顺序：两数相加':{code:'INPUT Number1\nINPUT Number2\nSum ← Number1 + Number2\nOUTPUT "和是 ", Sum',inp:'3\n4'},
+  '顺序：长方形面积':{code:'INPUT Length\nINPUT Width\nArea ← Length * Width\nOUTPUT "面积 = ", Area',inp:'5\n6'},
+  '顺序：摄氏转华氏':{code:'INPUT Celsius\nFahrenheit ← Celsius * 9 / 5 + 32\nOUTPUT Celsius, "°C = ", Fahrenheit, "°F"',inp:'100'},
+  '顺序：公里转英里':{code:'INPUT Km\nMiles ← Km / 1.609\nOUTPUT Km, " 公里 ≈ ", Miles, " 英里"',inp:'10'},
+  '选择：及格判断':{code:'INPUT Mark\nIF Mark >= 50 THEN\n  OUTPUT "Pass"\nELSE\n  OUTPUT "Fail"\nENDIF',inp:'72'},
+  '选择：成绩等级(嵌套)':{code:'INPUT Mark\nIF Mark >= 70 THEN\n  OUTPUT "A"\nELSE\n  IF Mark >= 50 THEN\n    OUTPUT "B"\n  ELSE\n    OUTPUT "Fail"\n  ENDIF\nENDIF',inp:'65'},
+  '选择：电影票价':{code:'INPUT Age\nIF Age < 12 THEN\n  Price ← 5\nELSE\n  IF Age >= 65 THEN\n    Price ← 7\n  ELSE\n    Price ← 10\n  ENDIF\nENDIF\nOUTPUT "票价 $", Price',inp:'8'},
+  '选择：两数取大':{code:'INPUT A\nINPUT B\nIF A > B THEN\n  OUTPUT A\nELSE\n  IF B > A THEN\n    OUTPUT B\n  ELSE\n    OUTPUT "Equal"\n  ENDIF\nENDIF',inp:'7\n12'},
+  '循环：输出1到5':{code:'Counter ← 1\nWHILE Counter <= 5\n  OUTPUT Counter\n  Counter ← Counter + 1\nENDWHILE',inp:''},
+  '循环：2到10偶数':{code:'FOR n ← 2 TO 10 STEP 2\n  OUTPUT n\nNEXT n',inp:''},
+  '循环：累加到0为止':{code:'Total ← 0\nINPUT Number\nWHILE Number <> 0\n  Total ← Total + Number\n  INPUT Number\nENDWHILE\nOUTPUT "总和 = ", Total',inp:'5\n10\n15\n0'},
+  '循环：5个数求平均':{code:'Total ← 0\nFOR i ← 1 TO 5\n  INPUT Mark\n  Total ← Total + Mark\nNEXT i\nAverage ← Total / 5\nOUTPUT "总分 ", Total, "，平均 ", Average',inp:'60\n70\n80\n90\n100'},
+  '循环：猜数字(3次)':{code:'Secret ← 42\nFound ← FALSE\nFOR t ← 1 TO 3\n  INPUT Guess\n  IF Guess = Secret THEN\n    OUTPUT "You win!"\n    Found ← TRUE\n  ENDIF\nNEXT t\nIF Found = FALSE THEN\n  OUTPUT "Game over"\nENDIF',inp:'10\n42\n7'},
+  '循环：数到-1停':{code:'Count ← 0\nINPUT Number\nWHILE Number <> -1\n  Count ← Count + 1\n  INPUT Number\nENDWHILE\nOUTPUT "一共输入了 ", Count, " 个数"',inp:'4\n9\n2\n-1'},
+  '循环：阶乘 5!':{code:'f ← 1\nFOR i ← 1 TO 5\n  f ← f * i\nNEXT i\nOUTPUT "5! = ", f',inp:''},
+  '循环：九九乘法表(单行)':{code:'n ← 7\nFOR i ← 1 TO 9\n  OUTPUT n, " x ", i, " = ", n * i\nNEXT i',inp:''},
+};
+const pgPick=document.getElementById('pgPick');
+Object.keys(EXAMPLES).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;pgPick.appendChild(o);});
+const pgCode=document.getElementById('pgCode'),pgInput=document.getElementById('pgInput'),
+  pgTrace=document.getElementById('pgTrace'),pgVars=document.getElementById('pgVars'),
+  pgOut=document.getElementById('pgOut'),pgErr=document.getElementById('pgErr');
+function loadExample(){const e=EXAMPLES[pgPick.value];pgCode.value=e.code;pgInput.value=e.inp;pgResetState();}
+document.getElementById('pgLoad').onclick=loadExample;
+let pgState=null,pgCompiled=null,pgTimer=null;
+function showErr(m){pgErr.style.display='block';pgErr.textContent='⚠️ '+m;}
+function clearErr(){pgErr.style.display='none';}
+function pgResetState(){pgStopAuto();pgState=null;pgCompiled=null;clearErr();renderTrace(-1);renderVars(pgVars,{},null);pgOut.textContent='（暂无输出）';}
+function inputsArr(){return pgInput.value.split('\n').map(s=>s.trim()).filter(s=>s!=='');}
+function renderTrace(curLine){
+  pgTrace.innerHTML='';
+  pgCode.value.split('\n').forEach((ln,i)=>{const li=document.createElement('li');
+    li.textContent=ln||' ';if(i+1===curLine)li.className='cur';pgTrace.appendChild(li);});
+}
+function ensureCompiled(){
+  if(pgState)return true;
+  try{pgCompiled=compile(pgCode.value);pgState=makeState(pgCompiled,inputsArr());clearErr();
+    renderTrace(pgState.pc<pgState.code.length?pgState.code[pgState.pc].line:-1);
+    renderVars(pgVars,{},null);pgOut.textContent='（暂无输出）';return true;
+  }catch(e){showErr(e.msg||e);return false;}
+}
+function refresh(){
+  renderVars(pgVars,visible(pgState.vars),pgState.changed);
+  pgOut.textContent=pgState.output.length?pgState.output.join('\n'):'（暂无输出）';
+  renderTrace(!pgState.done&&pgState.pc<pgState.code.length?pgState.code[pgState.pc].line:-1);
+}
+function pgStep(){if(!ensureCompiled())return;if(pgState.done){return;}
+  try{step(pgState,(n)=>window.prompt('INPUT '+n+'：'));refresh();}
+  catch(e){showErr(e.msg||e);pgStopAuto();}}
+function pgRun(){if(!ensureCompiled())return;let g=0;
+  try{while(!pgState.done){step(pgState,(n)=>window.prompt('INPUT '+n+'：'));if(++g>200000){showErr('运行步数太多，可能是死循环');break;}}refresh();}
+  catch(e){showErr(e.msg||e);}}
+function pgStopAuto(){if(pgTimer){clearInterval(pgTimer);pgTimer=null;document.getElementById('pgSlow').textContent='慢放 ⏩';}}
+function pgSlow(){if(pgTimer){pgStopAuto();return;}if(!ensureCompiled())return;
+  document.getElementById('pgSlow').textContent='暂停 ⏸';
+  pgTimer=setInterval(()=>{if(pgState.done){pgStopAuto();return;}
+    try{step(pgState,(n)=>window.prompt('INPUT '+n+'：'));refresh();}catch(e){showErr(e.msg||e);pgStopAuto();}},700);}
+document.getElementById('pgRun').onclick=pgRun;
+document.getElementById('pgStep').onclick=pgStep;
+document.getElementById('pgSlow').onclick=pgSlow;
+document.getElementById('pgReset').onclick=pgResetState;
+pgCode.addEventListener('input',pgResetState);
+pgInput.addEventListener('input',pgResetState);
+// 默认载入第一个
+pgPick.value=Object.keys(EXAMPLES)[8]; loadExample();
+
+/* =================================================================
+   PART F —— 小测验
+   ================================================================= */
+const QUIZ=[
+  {q:'"为登录功能画流程图"属于程序开发周期的哪个阶段？',o:['分析 Analysis','设计 Design','编码 Coding','测试 Testing'],a:1,why:'画流程图是在规划"怎么解决"，属于设计阶段。'},
+  {q:'流程图里表示"判断/条件"必须用哪个形状？',o:['矩形 Rectangle','菱形 Diamond','平行四边形','椭圆 Ellipse'],a:1,why:'判断 Decision 一定是菱形，且有 Yes/No 两个出口。'},
+  {q:'下面哪个不是算法必须具备的性质？',o:['有限（会停下来）','无歧义','运行得越快越好','有输入和输出'],a:2,why:'算法要求有限、无歧义、有输入输出；"运行快"是优化目标，不是定义要求。'},
+  {q:'"分解 Decomposition"指的是？',o:['把程序翻译成机器码','把大问题拆成可独立解决的小问题','删除无关细节','反复测试程序'],a:1,why:'分解＝把复杂问题拆小；"删除无关细节"是抽象 abstraction。'},
+  {q:'这段循环输出什么？<br><span class="mono">Counter ← 1<br>WHILE Counter &lt;= 3<br>&nbsp;&nbsp;OUTPUT Counter<br>&nbsp;&nbsp;Counter ← Counter + 1<br>ENDWHILE</span>',o:['1 2 3','1 2 3 4','0 1 2','只有 1'],a:0,why:'Counter 从 1 到 3 各输出一次，等于 4 时条件不满足、退出。'},
+  {q:'"先做一次，再判断要不要继续"对应哪种循环？',o:['WHILE … ENDWHILE','REPEAT … UNTIL','FOR … NEXT','IF … ENDIF'],a:1,why:'REPEAT…UNTIL 是后判断循环，至少执行一次。'},
+  {q:'判断分数：<span class="mono">IF Mark &gt;= 50</span> 当 Mark=50 时走哪条路？',o:['Yes（≥包含等于）','No','报错','两条都走'],a:0,why:'>= 表示"大于或等于"，50 满足，走 Yes。这是常见易错点！'},
+  {q:'流程图里少了 Stop 终止符，会怎样？',o:['没关系','不符合规则，考试不给分','程序更快','自动补上'],a:1,why:'每个流程图必须同时有 Start 和 Stop，否则不规范。'},
+];
+const qb=document.getElementById('quizbox');let answered=0,correct=0;
+QUIZ.forEach((item,qi)=>{
+  const d=document.createElement('div');d.className='q';
+  let html='<div class="qh">'+(qi+1)+'. '+item.q+'</div>';
+  item.o.forEach((op,oi)=>html+='<div class="opt" data-q="'+qi+'" data-o="'+oi+'">'+String.fromCharCode(65+oi)+'. '+op+'</div>');
+  html+='<div class="fb" id="fb-'+qi+'"></div>';
+  d.innerHTML=html;qb.appendChild(d);
+});
+let picked={};
+qb.querySelectorAll('.opt').forEach(el=>{el.onclick=()=>{
+  const qi=+el.dataset.q,oi=+el.dataset.o;const item=QUIZ[qi];
+  const opts=qb.querySelectorAll('.opt[data-q="'+qi+'"]');
+  if(picked[qi]!==undefined && picked[qi].locked)return;
+  opts.forEach(o=>o.classList.remove('sel','right','wrong'));
+  el.classList.add('sel');
+  const fb=document.getElementById('fb-'+qi);fb.className='fb show';
+  if(oi===item.a){el.classList.add('right');fb.classList.add('ok');fb.innerHTML='✅ 正确！'+item.why;}
+  else{el.classList.add('wrong');opts[item.a].classList.add('right');fb.classList.add('no');fb.innerHTML='❌ 正确答案是 '+String.fromCharCode(65+item.a)+'。'+item.why;}
+  if(!(picked[qi]&&picked[qi].locked)){answered++;if(oi===item.a)correct++;picked[qi]={locked:true};
+    document.getElementById('quizscore').textContent='已答 '+answered+' / '+QUIZ.length+' 题，答对 '+correct+' 题 '+(answered===QUIZ.length?(correct===QUIZ.length?'🎉 满分！':'💪 再回顾一下错题'):'');}
+}});
+</script>
+</body>
+</html>

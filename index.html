@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📚 学习小站 · Study Hub</title>
+<style>
+  :root{--bg:#f4f6fb;--card:#fff;--ink:#222b3d;--muted:#6b7689;--line:#e6eaf2;--shadow:0 10px 30px rgba(40,60,120,.10);}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  .en{color:#8a8fb0;font-weight:600}
+  header.hero{background:linear-gradient(125deg,#6c5ce7 0%,#3a86ff 45%,#2bb4a8 100%);color:#fff;padding:46px 20px 40px;text-align:center}
+  header.hero h1{margin:0;font-size:32px;letter-spacing:1px}
+  header.hero p{margin:10px 0 0;opacity:.92;font-size:15px}
+  main{max-width:1080px;margin:0 auto;padding:8px 16px 70px}
+  .subject{margin:34px 0}
+  .shead{display:flex;align-items:center;gap:12px;margin:0 4px 14px}
+  .shead .ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;box-shadow:var(--shadow)}
+  .shead h2{margin:0;font-size:22px}.shead .sub{font-size:13px;color:var(--muted)}
+  .shead .count{margin-left:auto;font-size:13px;color:var(--muted);background:#fff;border:1px solid var(--line);padding:4px 12px;border-radius:999px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+  a.lcard{display:block;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden}
+  a.lcard:hover{transform:translateY(-4px);box-shadow:0 16px 38px rgba(40,60,120,.18)}
+  a.lcard .bar{position:absolute;left:0;top:0;bottom:0;width:6px}
+  .lcard .badge{font-size:12px;font-weight:800;color:#fff;padding:3px 10px;border-radius:999px;display:inline-block}
+  .lcard h3{margin:10px 0 2px;font-size:17px}
+  .lcard .ten{font-size:12px;color:var(--muted);margin-bottom:8px}
+  .lcard .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .lcard .tag{font-size:11px;background:#f0f2fa;color:#5a6480;padding:2px 8px;border-radius:6px}
+  .lcard .extra{margin-top:10px;font-size:12.5px;color:#3a86ff;font-weight:700}
+  .soon{background:repeating-linear-gradient(45deg,#fafbff,#fafbff 12px,#f3f5fc 12px,#f3f5fc 24px);border:1.5px dashed var(--line);border-radius:16px;padding:22px;text-align:center;color:var(--muted)}
+  .soon b{color:var(--ink)} .soon .topics{margin-top:8px;font-size:13px}
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:20px 16px 50px}
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>📚 学习小站</h1>
+  <p>Study Hub · 自己动手玩的互动课件 · 持续建设中 🚧</p>
+</header>
+<main id="app"></main>
+<footer>用 ❤️ 做给你的学习小站 · 全部在浏览器本地运行，可“添加到主屏幕”当 App 用</footer>
+
+<script>
+const SUBJECTS=[
+  {name:'计算机', en:'Computer Science', icon:'💻', color:'#3a86ff', sub:'Cambridge IGCSE CS 0478',
+   lessons:[
+     {n:'第 1 课', title:'进制与二进制运算', en:'Number Systems', color:'#6c5ce7',
+      href:'lesson 1 课程介绍/计算机课-第1课.html', tags:['二进制','十六进制','加法/溢出','移位','补码']},
+     {n:'第 3 课', title:'文字、声音与图像', en:'Text, Sound & Images', color:'#e8590c',
+      href:'lesson 3 文字 音视频/计算机课-第3课.html', tags:['ASCII','采样','RGB','色深']},
+     {n:'第 4 课', title:'数据存储与压缩', en:'Data Storage & Compression', color:'#2bb4a8',
+      href:'lesson 4 数据存储及压缩/计算机课-第4课.html', tags:['存储单位','文件大小','有损/无损','RLE']},
+     {n:'第 5 课', title:'算法与流程图', en:'Algorithms & Flowcharts', color:'#5b7cfa',
+      href:'lesson 5 编程流程图/计算机课-第5课.html', tags:['流程图','顺序/选择/循环','伪代码练习场'],
+      extra:{label:'▶ 流程图动画演示（手动输入运行）', href:'lesson 5 编程流程图/练习场习题流程图演示.html'}},
+   ]},
+  {name:'物理', en:'Physics', icon:'🔬', color:'#e8554e', sub:'即将开始', lessons:[], soon:true,
+   topics:'力与运动 · 能量 · 电学 · 波 · 热学 …'},
+  {name:'人工智能', en:'AI', icon:'🤖', color:'#9b5de5', sub:'即将开始', lessons:[], soon:true,
+   topics:'什么是 AI · 机器学习直觉 · 神经网络 · 大模型怎么工作 …'},
+];
+
+const app=document.getElementById('app');
+SUBJECTS.forEach(s=>{
+  const sec=document.createElement('section');sec.className='subject';
+  sec.innerHTML='<div class="shead"><div class="ic" style="background:'+s.color+'">'+s.icon+'</div>'+
+    '<div><h2>'+s.name+' <span class="en">'+s.en+'</span></h2><div class="sub">'+s.sub+'</div></div>'+
+    '<div class="count">'+(s.soon?'敬请期待':s.lessons.length+' 课')+'</div></div>';
+  if(s.soon){
+    sec.innerHTML+='<div class="soon">🚧 <b>'+s.name+'</b> 板块持续建设中<div class="topics">计划主题：'+(s.topics||'')+'</div></div>';
+  }else{
+    const grid=document.createElement('div');grid.className='cards';
+    s.lessons.forEach(l=>{
+      const a=document.createElement('a');a.className='lcard';a.href=encodeURI(l.href);
+      let html='<div class="bar" style="background:'+l.color+'"></div>'+
+        '<span class="badge" style="background:'+l.color+'">'+l.n+'</span>'+
+        '<h3>'+l.title+'</h3><div class="ten">'+l.en+'</div>'+
+        '<div class="tags">'+l.tags.map(t=>'<span class="tag">'+t+'</span>').join('')+'</div>';
+      if(l.extra)html+='<div class="extra">'+l.extra.label+'</div>';
+      a.innerHTML=html;
+      if(l.extra){a.addEventListener('click',e=>{ // 点底部"演示"链接走子页面，否则进主课
+        const r=a.querySelector('.extra').getBoundingClientRect();
+        if(e.clientY>=r.top&&e.clientY<=r.bottom){e.preventDefault();location.href=encodeURI(l.extra.href);}
+      });}
+      grid.appendChild(a);
+    });
+    sec.appendChild(grid);
+  }
+  app.appendChild(sec);
+});
+</script>
+</body>
+</html>
